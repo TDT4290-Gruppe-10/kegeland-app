@@ -21,6 +21,15 @@ module.exports = {
   },
   plugins: ['react', '@typescript-eslint', 'import', 'prettier'],
   rules: {
+    '@typescript-eslint/no-restricted-imports': [
+      'warn',
+      {
+        name: 'react-redux',
+        importNames: ['useSelector', 'useDispatch'],
+        message:
+          'Use typed hooks `useAppDispatch` and `useAppSelector` instead.',
+      },
+    ],
     'import/order': [
       'error',
       {
@@ -49,7 +58,17 @@ module.exports = {
     },
     'import/resolver': {
       alias: {
-        map: [['@state', './app/src/state'], [('@hooks', './app/src/hooks')]],
+        map: [
+          ['@assets', './app/assets'],
+          ['@components', './app/src/components'],
+          ['@constants', './app/src/constants'],
+          ['@containers', './app/src/containers'],
+          ['@hooks', './app/src/hooks'],
+          ['@routes', './app/src/routes'],
+          ['@state', './app/src/state'],
+          ['@utils', './app/src/utils'],
+          ['@views', './app/src/views'],
+        ],
       },
       typescript: {
         alwaysTryTypes: true,
