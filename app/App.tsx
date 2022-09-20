@@ -4,9 +4,10 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {SafeAreaProvider, SafeAreaView} from 'react-native-safe-area-context';
 import {Provider as ReduxProvider} from 'react-redux';
-import {store} from '@state/store';
-import WithBluetooth from '@hoc/WithBluetooth';
-import ConnectDeviceContainer from '@containers/ConnectDeviceContainer';
+
+import {store} from '~state/store';
+import WithBluetooth from '~hoc/WithBluetooth';
+import ConnectDeviceContainer from '~containers/ConnectDeviceContainer';
 
 function HomeScreen() {
   return (

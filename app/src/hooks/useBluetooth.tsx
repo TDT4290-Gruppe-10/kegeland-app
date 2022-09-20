@@ -1,14 +1,15 @@
-import {ANDROID_PERMISSIONS} from '@constants/permissions';
+import {useEffect} from 'react';
+import {NativeEventEmitter, NativeModules, Platform} from 'react-native';
+import BleManager, {Peripheral} from 'react-native-ble-manager';
+
 import {
   addAvailableDevice,
   setError,
   setReady,
   stopDeviceScan,
-} from '@state/ducks/bluetooth/bluetooth.reducer';
-import checkAndroidPermission from '@utils/checkAndroidPermission';
-import {useEffect} from 'react';
-import {NativeEventEmitter, NativeModules, Platform} from 'react-native';
-import BleManager, {Peripheral} from 'react-native-ble-manager';
+} from '~state/ducks/bluetooth/bluetooth.reducer';
+import {ANDROID_PERMISSIONS} from '~constants/permissions';
+import checkAndroidPermission from '~utils/checkAndroidPermission';
 
 import useAppDispatch from './useAppDispatch';
 

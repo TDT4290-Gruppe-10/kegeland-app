@@ -1,6 +1,7 @@
 import BleManager from 'react-native-ble-manager';
 import {createAsyncThunk} from '@reduxjs/toolkit';
-import {ALLOW_DUPLICATE_DEVICES, SCAN_TIME} from '@constants/bluetooth';
+
+import {ALLOW_DUPLICATE_DEVICES, SCAN_TIME} from '~constants/bluetooth';
 
 export const startDeviceScan = createAsyncThunk(
   'bluetooth/scanForDevices',

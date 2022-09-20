@@ -1,6 +1,7 @@
 import React from 'react';
 import {ListItem, Text} from '@rneui/themed';
-import {BluetoothDevice} from '@state/ducks/bluetooth/bluetooth.interface';
+
+import {BluetoothDevice} from '~state/ducks/bluetooth/bluetooth.interface';
 
 export type BluetoothDeviceItemProps = {
   device: BluetoothDevice;

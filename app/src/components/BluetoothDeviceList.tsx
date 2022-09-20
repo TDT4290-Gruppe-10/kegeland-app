@@ -1,6 +1,7 @@
-import {BluetoothDevice} from '@state/ducks/bluetooth/bluetooth.interface';
 import React from 'react';
 import {ScrollView} from 'react-native';
+
+import {BluetoothDevice} from '~state/ducks/bluetooth/bluetooth.interface';
 
 import BluetoothDeviceItem from './BluetoothDeviceItem';
 

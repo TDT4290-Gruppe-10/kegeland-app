@@ -1,5 +1,6 @@
-import useBluetooth from '@hooks/useBluetooth';
 import React from 'react';
+
+import useBluetooth from '~hooks/useBluetooth';
 
 export type WithBluetoothProps = {
   children: React.ReactNode;

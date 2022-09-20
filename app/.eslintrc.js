@@ -6,10 +6,10 @@ module.exports = {
   extends: [
     '@react-native-community',
     'standard',
+    'prettier',
     'plugin:import/errors',
     'plugin:import/warnings',
     'plugin:import/typescript',
-    'prettier',
   ],
   parser: '@typescript-eslint/parser',
   parserOptions: {
@@ -19,7 +19,7 @@ module.exports = {
     ecmaVersion: 'latest',
     sourceType: 'module',
   },
-  plugins: ['react', '@typescript-eslint', 'import', 'prettier'],
+  plugins: ['react', '@typescript-eslint', 'prettier', 'import'],
   rules: {
     '@typescript-eslint/no-restricted-imports': [
       'warn',
@@ -42,6 +42,20 @@ module.exports = {
           'index',
           'unknown',
         ],
+        pathGroups: [
+          {
+            pattern: '~*/**/*',
+            group: 'internal',
+          },
+          {
+            pattern: '~*/**/*.*',
+            group: 'internal',
+          },
+          {
+            pattern: './*',
+            group: 'unknown',
+          },
+        ],
         'newlines-between': 'always',
       },
     ],
@@ -59,16 +73,16 @@ module.exports = {
     'import/resolver': {
       alias: {
         map: [
-          ['@assets', './app/assets'],
-          ['@components', './app/src/components'],
-          ['@constants', './app/src/constants'],
-          ['@containers', './app/src/containers'],
-          ['@hoc', './app/src/hoc'],
-          ['@hooks', './app/src/hooks'],
-          ['@routes', './app/src/routes'],
-          ['@state', './app/src/state'],
-          ['@utils', './app/src/utils'],
-          ['@views', './app/src/views'],
+          ['~assets', './app/assets'],
+          ['~components', './app/src/components'],
+          ['~constants', './app/src/constants'],
+          ['~containers', './app/src/containers'],
+          ['~hoc', './app/src/hoc'],
+          ['~hooks', './app/src/hooks'],
+          ['~routes', './app/src/routes'],
+          ['~state', './app/src/state'],
+          ['~utils', './app/src/utils'],
+          ['~views', './app/src/views'],
         ],
       },
       typescript: {
