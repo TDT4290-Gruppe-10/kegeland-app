@@ -2,12 +2,10 @@ import {combineReducers, configureStore} from '@reduxjs/toolkit';
 import logger from 'redux-logger';
 
 import bluetoothReducer from './ducks/bluetooth/bluetooth.reducer';
-import counterReducer from './ducks/counter/counter.reducer';
 import rootSaga, {sagaMiddleware} from './rootSaga';
 
 const rootReducer = combineReducers({
   bluetooth: bluetoothReducer,
-  counter: counterReducer,
 });
 
 export const store = configureStore({
