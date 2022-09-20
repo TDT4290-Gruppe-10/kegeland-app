@@ -2,6 +2,7 @@ import {combineReducers, configureStore} from '@reduxjs/toolkit';
 import logger from 'redux-logger';
 
 import counterReducer from './ducks/counter/counter.reducer';
+import rootSaga, {sagaMiddleware} from './rootSaga';
 
 const rootReducer = combineReducers({
   counter: counterReducer,
@@ -10,10 +11,12 @@ const rootReducer = combineReducers({
 export const store = configureStore({
   reducer: rootReducer,
   middleware: getDefaultMiddleware => {
-    return getDefaultMiddleware().concat(logger);
+    return getDefaultMiddleware().concat(logger).concat(sagaMiddleware);
   },
-  devTools: true, // process.env.NODE_ENV !== 'production',
+  devTools: process.env.NODE_ENV !== 'production',
 });
+
+sagaMiddleware.run(rootSaga);
 
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
