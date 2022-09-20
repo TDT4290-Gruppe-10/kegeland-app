@@ -46,10 +46,11 @@ module.exports = {
       },
     ],
     'prettier/prettier': 'error',
-    'react-hooks/exhaustive-deps': 0,
-    'react/no-unstable-nested-components': 0,
     'import/default': 0,
     'import/no-unresolved': 0,
+    'react/react-in-jsx-scope': 0,
+    'react/no-unstable-nested-components': 0,
+    'react-hooks/exhaustive-deps': 0,
   },
   settings: {
     'import/ignore': ['react-native'],
