@@ -1,8 +1,22 @@
 // prettier-ignore
 {
+    
     "extends": "@tsconfig/react-native/tsconfig.json",
     "compilerOptions": {
       "types": ["node"],
-      "skipLibCheck": true
-    }
+      "skipLibCheck": true,
+      "baseUrl": ".",
+      "paths": {
+        "@assets/*": ["./assets/*"],
+        "@components/*": ["./src/components/*"],
+        "@constants/*": ["./src/constants/*"],
+        "@containers/*": ["./src/containers/*"],
+        "@hooks/*": ["./src/hooks/*"],
+        "@routes/*": ["./src/routes/*"],
+        "@state/*": ["./src/state/*"],
+        "@utils/*": ["./src/utils/*"],
+        "@views/*": ["./src/views/*"],
+      }
+    },
+    "exclude": ["node_modules", "dist"]
   }
