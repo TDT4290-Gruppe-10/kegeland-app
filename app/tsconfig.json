@@ -1,8 +1,14 @@
 // prettier-ignore
 {
+    
     "extends": "@tsconfig/react-native/tsconfig.json",
     "compilerOptions": {
       "types": ["node"],
-      "skipLibCheck": true
+      "skipLibCheck": true,
+      "baseUrl": ".",
+      "paths": {
+        "@hooks/*": ["./src/hooks/*"],
+        "@state/*": ["./src/state/*"]
+      }
     }
   }

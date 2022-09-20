@@ -6,7 +6,8 @@ module.exports = {
   extends: [
     '@react-native-community',
     'standard',
-    'plugin:import/recommended',
+    'plugin:import/errors',
+    'plugin:import/warnings',
     'plugin:import/typescript',
     'prettier',
   ],
@@ -39,12 +40,24 @@ module.exports = {
     'react-hooks/exhaustive-deps': 0,
     'react/no-unstable-nested-components': 0,
     'import/default': 0,
+    'import/no-unresolved': 0,
   },
   settings: {
+    'import/ignore': ['react-native'],
+    'import/parsers': {
+      '@typescript-eslint/parser': ['.ts', '.tsx'],
+    },
     'import/resolver': {
+      alias: {
+        map: [['@state', './app/src/state'], [('@hooks', './app/src/hooks')]],
+      },
       typescript: {
         alwaysTryTypes: true,
         project: 'tsconfig.json',
+      },
+      node: {
+        project: 'tsconfig.json',
+        extensions: ['.ts', '.tsx', '.js', '.jsx', '.json'],
       },
     },
   },
