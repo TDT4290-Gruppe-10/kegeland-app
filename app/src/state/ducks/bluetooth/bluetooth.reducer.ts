@@ -1,12 +1,26 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 
-import {connectDevice, startDeviceScan} from './bluetooth.actions';
-import {BluetoothDevice, BluetoothState} from './bluetooth.interface';
+import {
+  connectDevice,
+  disconnectDevice,
+  startDeviceScan,
+  startNotification,
+  stopNotification,
+} from './bluetooth.actions';
+import {
+  batchUpdateCharacteristics,
+  initConnectedDevice,
+  removeUnconnectedDevices,
+} from './bluetooth.helpers';
+import {
+  BatchedDeviceCharacteristics,
+  BluetoothDevice,
+  BluetoothState,
+} from './bluetooth.interface';
 
 const initialState: BluetoothState = {
   isReady: false,
   isScanning: false,
-  isConnecting: false,
   devices: {},
   error: null,
 };
@@ -28,6 +42,12 @@ export const bluetoothSlice = createSlice({
       const key = action.payload.id;
       state.devices[key] = action.payload;
     },
+    updateCharacteristics: (
+      state,
+      action: PayloadAction<BatchedDeviceCharacteristics>,
+    ) => {
+      state.devices = batchUpdateCharacteristics(state.devices, action.payload);
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -39,18 +59,45 @@ export const bluetoothSlice = createSlice({
         state.error = 'Could not start scanning';
       })
       .addCase(connectDevice.pending, (state, action) => {
-        state.isConnecting = true;
         const key = action.meta.arg;
         state.devices[key].state = 'connecting';
       })
-      .addCase(connectDevice.rejected, (state) => {
-        state.isConnecting = false;
+      .addCase(connectDevice.rejected, (state, action) => {
         state.error = 'Could not connect';
+        const key = action.meta.arg;
+        state.devices[key].state = 'connecting';
       })
       .addCase(connectDevice.fulfilled, (state, action) => {
-        state.isConnecting = false;
         const key = action.meta.arg;
-        state.devices[key].state = 'connected';
+        // state.isScanning = false;
+        state.devices[key] = initConnectedDevice(state.devices[key]);
+        state.devices = removeUnconnectedDevices(state.devices);
+      })
+      .addCase(disconnectDevice.pending, (state, action) => {
+        const key = action.meta.arg;
+        state.devices[key].state = 'disconnecting';
+      })
+      .addCase(disconnectDevice.rejected, (state) => {
+        state.error = 'Could not disconnect';
+        // TODO: disconnect by force
+      })
+      .addCase(disconnectDevice.fulfilled, (state, action) => {
+        const key = action.meta.arg;
+        state.devices[key].state = 'available';
+      })
+      .addCase(startNotification.rejected, (state) => {
+        state.error = 'Could not start notification';
+      })
+      .addCase(startNotification.fulfilled, (state, action) => {
+        const key = action.meta.arg.id;
+        state.devices[key].active = true;
+      })
+      .addCase(stopNotification.rejected, (state) => {
+        state.error = 'Could not stop notification';
+      })
+      .addCase(stopNotification.fulfilled, (state, action) => {
+        const key = action.meta.arg.id;
+        state.devices[key].active = false;
       });
   },
 });
