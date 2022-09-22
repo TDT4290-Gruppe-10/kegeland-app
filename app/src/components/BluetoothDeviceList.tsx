@@ -3,25 +3,22 @@ import {ScrollView} from 'react-native';
 
 import {BluetoothDevice} from '~state/ducks/bluetooth/bluetooth.interface';
 
-import BluetoothDeviceItem from './BluetoothDeviceItem';
+import BluetoothDeviceItem, {
+  BluetoothDeviceItemProps,
+} from './BluetoothDeviceItem';
 
 export type BluetoothDeviceListProps = {
   devices: BluetoothDevice[];
-  connect: (id: string) => void;
-};
+} & Omit<BluetoothDeviceItemProps, 'device'>;
 
 const BluetoothDeviceList: React.FC<BluetoothDeviceListProps> = ({
   devices,
-  connect,
+  ...props
 }) => {
   return (
     <ScrollView>
       {devices.map((device) => (
-        <BluetoothDeviceItem
-          key={device.id}
-          device={device}
-          connect={connect}
-        />
+        <BluetoothDeviceItem key={device.id} device={device} {...props} />
       ))}
     </ScrollView>
   );
