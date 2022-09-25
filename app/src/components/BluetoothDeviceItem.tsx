@@ -1,5 +1,5 @@
 import React from 'react';
-import {ListItem, Text} from '@rneui/themed';
+import {Text} from 'react-native-paper';
 
 import {BluetoothDevice} from '~state/ducks/bluetooth/bluetooth.interface';
 
@@ -9,32 +9,10 @@ export type BluetoothDeviceItemProps = {
   disconnect: (id: string) => void;
 };
 
-const BluetoothDeviceItem: React.FC<BluetoothDeviceItemProps> = ({
-  device,
-  connect,
-  disconnect,
-}) => {
-  const {id, name, state} = device;
+const BluetoothDeviceItem: React.FC<BluetoothDeviceItemProps> = ({device}) => {
+  const {name} = device;
 
-  const handlePress = () => {
-    switch (state) {
-      case 'connected':
-        disconnect(id);
-        break;
-      default:
-        connect(id);
-    }
-  };
-
-  return (
-    <ListItem delayLongPress={1000} onLongPress={() => handlePress()}>
-      <ListItem.Content>
-        <ListItem.Title>{name}</ListItem.Title>
-        <ListItem.Subtitle>{id}</ListItem.Subtitle>
-        <Text>{state}</Text>
-      </ListItem.Content>
-    </ListItem>
-  );
+  return <Text>{name}</Text>;
 };
 
 export default BluetoothDeviceItem;

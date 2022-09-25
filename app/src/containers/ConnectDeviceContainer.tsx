@@ -1,8 +1,8 @@
 import * as React from 'react';
-import {Button, Text} from '@rneui/themed';
 import {useCallback, useState, useEffect} from 'react';
 import {View} from 'react-native';
 import {find} from 'lodash';
+import {Button, Text} from 'react-native-paper';
 
 import useAppDispatch from '~hooks/useAppDispatch';
 import useAppSelector from '~hooks/useAppSelector';
@@ -72,14 +72,13 @@ const ConnectDeviceContainer: React.FC = () => {
 
   return (
     <View>
-      <Button title="scan" onPress={() => dispatch(startDeviceScan([]))} />
+      <Button onPress={() => dispatch(startDeviceScan([]))}>Scan</Button>
       <BluetoothDeviceList {...mapStateToProps} />
       {device && (
         <View>
-          <Button
-            title={device.active ? 'Stop notify' : 'Start notify'}
-            onPress={() => handlePress(device)}
-          />
+          <Button onPress={() => handlePress(device)}>
+            {device.active ? 'Stop notify' : 'Start notify'}
+          </Button>
           <Text>{JSON.stringify(device, undefined, 2)}</Text>
         </View>
       )}
