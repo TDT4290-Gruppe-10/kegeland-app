@@ -8,8 +8,6 @@ import {
   SCAN_TIME,
 } from '~constants/bluetooth';
 
-import {bluetoothSlice} from './bluetooth.reducer';
-
 export const startNotification = createAsyncThunk(
   'bluetooth/startNotification',
   async ({id, profileKey}: {id: string; profileKey: ProfileKey}) => {
@@ -49,14 +47,3 @@ export const disconnectDevice = createAsyncThunk(
   'bluetooth/disconnectDevice',
   async (id: string) => BleManager.disconnect(id),
 );
-
-export const sagaActionConstants = {
-  START_NOTIFICATION_REQUEST: startNotification.pending.type,
-  START_NOTIFICATION_FULFILLED: startNotification.fulfilled.type,
-  NOTIFICATION_STOP: stopNotification.fulfilled.type,
-  BLUETOOTH_SERVICES_READY: bluetoothSlice.actions.setReady.type,
-  UPDATE_CHARACTERISTICS: bluetoothSlice.actions.updateCharacteristics.type,
-  SCAN_FOR_DEVICE_START: startDeviceScan.fulfilled.type,
-  SCAN_FOR_DEVICE_STOP: bluetoothSlice.actions.stopDeviceScan.type,
-  ADD_AVAILABLE_DEVICE: bluetoothSlice.actions.addAvailableDevice.type,
-};
