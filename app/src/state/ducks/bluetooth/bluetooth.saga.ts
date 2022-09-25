@@ -5,12 +5,28 @@ import {put, take, fork, cancel, all, cancelled} from 'redux-saga/effects';
 
 import {ProfileKey} from '~constants/bluetooth';
 
-import {sagaActionConstants} from './bluetooth.actions';
 import {initDevice} from './bluetooth.helpers';
 import {
   createDeviceStreamChannel,
   createNotificationStreamChannel,
 } from './bluetooth.channels';
+import {
+  startDeviceScan,
+  startNotification,
+  stopNotification,
+} from './bluetooth.actions';
+import {bluetoothSlice} from './bluetooth.reducer';
+
+const sagaActionConstants = {
+  START_NOTIFICATION_REQUEST: startNotification.pending.type,
+  START_NOTIFICATION_FULFILLED: startNotification.fulfilled.type,
+  NOTIFICATION_STOP: stopNotification.fulfilled.type,
+  BLUETOOTH_SERVICES_READY: bluetoothSlice.actions.setReady.type,
+  UPDATE_CHARACTERISTICS: bluetoothSlice.actions.updateCharacteristics.type,
+  SCAN_FOR_DEVICE_START: startDeviceScan.fulfilled.type,
+  SCAN_FOR_DEVICE_STOP: bluetoothSlice.actions.stopDeviceScan.type,
+  ADD_AVAILABLE_DEVICE: bluetoothSlice.actions.addAvailableDevice.type,
+};
 
 function* handleNotificationRequest(
   deviceId: string,
