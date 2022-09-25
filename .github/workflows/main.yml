@@ -1,6 +1,6 @@
 # This is a basic workflow to help you get started with Actions
 
-name: CI
+name: CI/CD
 
 # Controls when the workflow will run
 on:
@@ -47,6 +47,14 @@ jobs:
       
       - name: Install dependencies
         run: yarn install
+
+      - name: Lint files
+        run: yarn lint
       
       - name: Run tests
-        run: yarn test
+        run: yarn test --coverage
+        
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v3.1.1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
