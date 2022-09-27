@@ -2,10 +2,12 @@ import {combineReducers, configureStore} from '@reduxjs/toolkit';
 import logger from 'redux-logger';
 
 import bluetoothReducer from './ducks/bluetooth/bluetooth.reducer';
+import settingsReducer from './ducks/settings/settings.reducer';
 
 import rootSaga, {sagaMiddleware} from './rootSaga';
 
 const rootReducer = combineReducers({
+  settings: settingsReducer,
   bluetooth: bluetoothReducer,
 });
 

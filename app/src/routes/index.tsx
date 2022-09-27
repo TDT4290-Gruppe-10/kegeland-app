@@ -2,6 +2,7 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import React from 'react';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
+import withThemedNavigation from '~hoc/withThemedNavigation';
 import HomeScreen from '~views/HomeScreen';
 
 import AuthRoutes from './AuthRoutes';
@@ -16,14 +17,16 @@ const tabIcons: Record<keyof RootTabParamList, string> = {
 
 const Tab = createBottomTabNavigator<RootTabParamList>();
 
-const Router: React.FC = () => {
+const Router: React.FC<any> = (props: any) => {
   return (
     <Tab.Navigator
+      {...props}
       initialRouteName="Home"
       screenOptions={({route}) => ({
         tabBarIcon: ({color, size}) => {
           return <Icon name={tabIcons[route.name]} size={size} color={color} />;
         },
+        tabBarShowLabel: false,
       })}>
       <Tab.Screen name="Home" component={HomeScreen} />
       <Tab.Screen
@@ -40,4 +43,6 @@ const Router: React.FC = () => {
   );
 };
 
-export default Router;
+const ThemedRouter = withThemedNavigation(Router);
+
+export default ThemedRouter;
