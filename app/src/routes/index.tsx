@@ -6,10 +6,12 @@ import HomeScreen from '~views/HomeScreen';
 
 import AuthRoutes from './AuthRoutes';
 import {RootTabParamList} from './interface';
+import SettingsRoutes from './SettingsRoutes';
 
 const tabIcons: Record<keyof RootTabParamList, string> = {
   Home: 'home',
-  Auth: 'person',
+  AuthStack: 'person',
+  SettingsStack: 'settings',
 };
 
 const Tab = createBottomTabNavigator<RootTabParamList>();
@@ -25,8 +27,13 @@ const Router: React.FC = () => {
       })}>
       <Tab.Screen name="Home" component={HomeScreen} />
       <Tab.Screen
-        name="Auth"
+        name="AuthStack"
         component={AuthRoutes}
+        options={{headerShown: false}}
+      />
+      <Tab.Screen
+        name="SettingsStack"
+        component={SettingsRoutes}
         options={{headerShown: false}}
       />
     </Tab.Navigator>
