@@ -1,31 +1,30 @@
 import React from 'react';
-import {List, Surface} from 'react-native-paper';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import Icon from 'react-native-vector-icons/MaterialIcons';
 
+import SettingsSection from '~components/SettingsSection';
 import ThemeSwitch from '~components/ThemeSwitch';
 import {SettingsScreenProps} from '~routes/interface';
 
-export const SettingsScreen: React.FC<SettingsScreenProps> = () => {
+const Setting = SettingsSection.Item;
+
+export const SettingsScreen: React.FC<SettingsScreenProps<'Settings'>> = () => {
   return (
     <SafeAreaView>
-      <Surface style={{margin: 10, paddingHorizontal: 10, borderRadius: 15}}>
-        <List.Section>
-          <List.Subheader>Display</List.Subheader>
-          <List.Item
-            left={(props) => (
-              <Icon
-                {...props}
-                size={20}
-                name="brightness-4"
-                style={{alignSelf: 'center'}}
-              />
-            )}
-            title="Theme"
-            right={(props) => <ThemeSwitch {...props} />}
-          />
-        </List.Section>
-      </Surface>
+      <SettingsSection title="Display">
+        <SettingsSection.Item
+          title="Theme"
+          icon="brightness-4"
+          render={(props) => <ThemeSwitch {...props} />}
+        />
+      </SettingsSection>
+
+      <SettingsSection title="Devices">
+        <Setting
+          title="Connect device"
+          icon="bluetooth"
+          route="Connect device"
+        />
+      </SettingsSection>
     </SafeAreaView>
   );
 };

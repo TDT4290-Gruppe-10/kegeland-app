@@ -18,6 +18,7 @@ export type AuthStackParamList = {
  */
 export type SettingsStackParamList = {
   Settings: undefined;
+  'Connect device': undefined;
 };
 
 /**
@@ -25,8 +26,8 @@ export type SettingsStackParamList = {
  */
 export type RootTabParamList = {
   Home: undefined;
-  AuthStack: NavigatorScreenParams<AuthStackParamList>;
-  SettingsStack: NavigatorScreenParams<SettingsStackParamList>;
+  AuthStack: NavigatorScreenParams<AuthStackParamList> | undefined;
+  SettingsStack: NavigatorScreenParams<SettingsStackParamList> | undefined;
 };
 
 /**
