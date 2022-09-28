@@ -1,15 +1,13 @@
-import {useNavigation} from '@react-navigation/native';
 import React from 'react';
 import {List} from 'react-native-paper';
 
-import {SettingsStackParamList} from '~routes/interface';
-
 import Icon from './Icon';
 
-type ItemProps = {
+type ListItemProps = {
   icon: string;
   title: string;
-  route?: keyof SettingsStackParamList;
+  isRoute?: boolean;
+  onPress?: () => void;
   render?: (props: {
     color: string;
     style?:
@@ -21,27 +19,20 @@ type ItemProps = {
   }) => React.ReactNode;
 };
 
-const Item: React.FC<ItemProps> = (props) => {
-  const nav = useNavigation<any>();
-
-  console.log(nav);
-  if (!props.render && !props.route) {
+const ListItem: React.FC<ListItemProps> = (props) => {
+  if (!props.render && !props.isRoute) {
     throw new Error(
-      "'Item' in component SettingsSection must have either a 'render'- or 'route'-prop defined",
+      "'Item' in component SettingsSection must have either a 'render'- or 'isRoute'=true defined",
     );
   }
 
   return (
     <List.Item
-      onPress={
-        props.route
-          ? () => nav.navigate(props.route as keyof SettingsStackParamList)
-          : undefined
-      }
+      onPress={props.onPress}
       left={({color}) => <Icon color={color} icon={props.icon} />}
       title={props.title}
       right={
-        props.route
+        props.isRoute
           ? ({color}) => <Icon color={color} icon="chevron-right" />
           : props.render
       }
@@ -49,4 +40,4 @@ const Item: React.FC<ItemProps> = (props) => {
   );
 };
 
-export default Item;
+export default ListItem;

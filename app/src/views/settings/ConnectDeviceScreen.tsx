@@ -1,7 +1,12 @@
 import React from 'react';
+import {SafeAreaView} from 'react-native';
 
-const ConnectDeviceScreen: React.FC = () => {
-  return <></>;
+import {SettingsScreenProps} from '~routes/interface';
+
+const ConnectDeviceScreen: React.FC<
+  SettingsScreenProps<'Connect device'>
+> = () => {
+  return <SafeAreaView />;
 };
 
 export default ConnectDeviceScreen;

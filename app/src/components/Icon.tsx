@@ -2,7 +2,12 @@ import React from 'react';
 import {StyleSheet} from 'react-native';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 
-const Icon: React.FC<{color: string; icon: string}> = (props) => {
+type IconProps = {
+  color?: string;
+  icon: string;
+};
+
+const Icon: React.FC<IconProps> = (props) => {
   return (
     <MaterialIcon
       color={props.color}

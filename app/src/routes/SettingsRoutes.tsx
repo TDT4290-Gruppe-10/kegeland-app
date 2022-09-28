@@ -2,7 +2,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 import React from 'react';
 
 import ConnectDeviceScreen from '~views/settings/ConnectDeviceScreen';
-import {SettingsScreen} from '~views/settings/SettingsScreen';
+import SettingsScreen from '~views/settings/SettingsScreen';
 
 import {SettingsStackParamList} from './interface';
 
