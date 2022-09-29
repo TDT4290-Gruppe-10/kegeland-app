@@ -53,6 +53,7 @@ export const createDeviceStreamChannel = (): EventChannel<Peripheral> =>
             emitter(peripheral);
           }
         } else {
+          // Exit channel on state change
           emitter(END);
         }
       },
