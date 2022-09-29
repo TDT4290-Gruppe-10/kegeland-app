@@ -1,17 +1,12 @@
 import React from 'react';
-import {SafeAreaView} from 'react-native';
-import {Text} from 'react-native-paper';
 
+import ResetPasswordForm from '~components/ResetPasswordForm';
 import {AuthScreenProps} from '~routes/interface';
 
 const ForgotPasswordScreen: React.FC<
   AuthScreenProps<'Forgot password'>
 > = () => {
-  return (
-    <SafeAreaView>
-      <Text>Forgot Password Screen</Text>
-    </SafeAreaView>
-  );
+  return <ResetPasswordForm />;
 };
 
 export default ForgotPasswordScreen;

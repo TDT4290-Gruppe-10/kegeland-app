@@ -1,15 +1,10 @@
 import React from 'react';
-import {SafeAreaView} from 'react-native';
-import {Text} from 'react-native-paper';
 
+import RegisterForm from '~components/RegisterForm';
 import {AuthScreenProps} from '~routes/interface';
 
 const RegisterScreen: React.FC<AuthScreenProps<'Register'>> = () => {
-  return (
-    <SafeAreaView>
-      <Text>Register Screen</Text>
-    </SafeAreaView>
-  );
+  return <RegisterForm />;
 };
 
 export default RegisterScreen;
