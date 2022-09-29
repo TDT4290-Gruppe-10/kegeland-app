@@ -1,7 +1,8 @@
-import {Button, TextInput} from 'react-native-paper';
-import React, {useState} from 'react';
+// import {useDispatch, useSelector} from 'react-redux';
+import {useForm, Controller} from 'react-hook-form';
+import {Button, HelperText, TextInput} from 'react-native-paper';
+import React from 'react';
 import {
-  Alert,
   StyleSheet,
   View,
   Text,
@@ -10,36 +11,39 @@ import {
   TouchableOpacity,
   ScrollView,
 } from 'react-native';
-import {useNavigation} from '@react-navigation/native';
+import {NavigationProp, useNavigation} from '@react-navigation/native';
 
-import {AuthScreenProps} from '~routes/interface';
+import {AuthStackParamList} from '~routes/interface';
+import {
+  ERROR_MESSAGES,
+  REGEX,
+  PASSWORD_MIN_LENGTH,
+} from '~constants/userForm/userFields';
+
+// import {userLogin} from '../state/ducks/auth/auth.actions';
+
+interface FormData {
+  email: string;
+  password: string;
+}
 
 const LoginForm: React.FC = () => {
-  const [userEmail, setUserEmail] = useState('');
-  const [userPassword, setUserPassword] = useState('');
-  const [errortext, setErrortext] = useState('');
-  const {navigation} = useNavigation<AuthScreenProps<'Login'>>();
+  const nav = useNavigation<NavigationProp<AuthStackParamList>>();
+  console.log(nav);
+  // const dispatch = useDispatch();
 
-  // const passwordInputRef = createRef();
+  const {
+    control,
+    handleSubmit,
+    formState: {errors},
+  } = useForm<FormData>({
+    mode: 'onChange',
+  });
 
-  const handleSubmitPress = () => {
-    setErrortext('');
-    if (!userEmail) {
-      Alert.alert('Please fill Email');
-      return;
-    }
-    if (!userPassword) {
-      Alert.alert('Please fill Password');
-      return;
-    }
-    const dataToSend: any = {email: userEmail, password: userPassword};
-    let formBody: any = [];
-    for (const key in dataToSend) {
-      const encodedKey = encodeURIComponent(key);
-      const encodedValue = encodeURIComponent(dataToSend[key]);
-      formBody.push(encodedKey + '=' + encodedValue);
-    }
-    formBody = formBody.join('&');
+  const submitForm = (data: FormData) => {
+    data.email = data.email.toLowerCase();
+    console.log();
+    // dispatch(userLogin({email, password}));
   };
 
   return (
@@ -47,36 +51,78 @@ const LoginForm: React.FC = () => {
       <View style={{alignSelf: 'center', width: '85%'}}>
         <KeyboardAvoidingView enabled>
           <View style={styles.SectionStyle}>
-            <TextInput
-              theme={{colors: {primary: '#D25660', placeholder: '#8b9cb5'}}}
-              style={styles.inputStyle}
-              mode="outlined"
-              onChangeText={(UserEmail) => setUserEmail(UserEmail)}
-              placeholder="Enter email"
-              autoCapitalize="none"
-              keyboardType="email-address"
-              returnKeyType="next"
-              blurOnSubmit={false}
+            <Controller
+              control={control}
+              defaultValue=""
+              name="email"
+              rules={{
+                required: {message: ERROR_MESSAGES.REQUIRED, value: true},
+                pattern: {
+                  value: REGEX.email,
+                  message: ERROR_MESSAGES.EMAIL_INVALID,
+                },
+              }}
+              render={({field: {onChange, onBlur, value}}) => (
+                <>
+                  <TextInput
+                    theme={{
+                      colors: {primary: '#D25660', placeholder: '#8b9cb5'},
+                    }}
+                    style={styles.inputStyle}
+                    mode="outlined"
+                    placeholder="Enter email"
+                    autoCapitalize="none"
+                    keyboardType="email-address"
+                    returnKeyType="next"
+                    blurOnSubmit={false}
+                    value={value}
+                    onBlur={onBlur}
+                    onChangeText={(e) => onChange(e)}
+                  />
+                  <HelperText type="error">{errors.email?.message}</HelperText>
+                </>
+              )}
             />
           </View>
           <View style={styles.SectionStyle}>
-            <TextInput
-              theme={{colors: {primary: '#D25660', placeholder: '#8b9cb5'}}}
-              style={styles.inputStyle}
-              mode="outlined"
-              onChangeText={(UserPassword) => setUserPassword(UserPassword)}
-              placeholder="Enter Password"
-              placeholderTextColor="#8b9cb5"
-              keyboardType="default"
-              onSubmitEditing={Keyboard.dismiss}
-              blurOnSubmit={false}
-              secureTextEntry={true}
-              returnKeyType="next"
+            <Controller
+              control={control}
+              defaultValue=""
+              name="password"
+              rules={{
+                required: {message: ERROR_MESSAGES.REQUIRED, value: true},
+                minLength: {
+                  value: PASSWORD_MIN_LENGTH,
+                  message: 'Password must have at least 6 characters',
+                },
+              }}
+              render={({field: {onChange, onBlur, value}}) => (
+                <>
+                  <TextInput
+                    theme={{
+                      colors: {primary: '#D25660', placeholder: '#8b9cb5'},
+                    }}
+                    style={styles.inputStyle}
+                    mode="outlined"
+                    placeholder="Enter Password"
+                    placeholderTextColor="#8b9cb5"
+                    keyboardType="default"
+                    onSubmitEditing={Keyboard.dismiss}
+                    blurOnSubmit={false}
+                    autoCapitalize="none"
+                    secureTextEntry={true}
+                    returnKeyType="next"
+                    value={value}
+                    onBlur={onBlur}
+                    onChangeText={(e) => onChange(e)}
+                  />
+                  <HelperText type="error">
+                    {errors.password?.message}
+                  </HelperText>
+                </>
+              )}
             />
           </View>
-          {errortext !== '' ? (
-            <Text style={styles.errorTextStyle}>{errortext}</Text>
-          ) : null}
 
           <TouchableOpacity
             style={{
@@ -87,7 +133,7 @@ const LoginForm: React.FC = () => {
             <Text
               style={styles.buttonTextStyle}
               onPress={() => {
-                navigation.navigate('Forgot password');
+                nav.navigate('Forgot password');
               }}>
               Forgot password?
             </Text>
@@ -96,7 +142,7 @@ const LoginForm: React.FC = () => {
           <Button
             mode="contained"
             style={styles.containerStyle}
-            onPress={handleSubmitPress}
+            onPress={handleSubmit(submitForm)}
             uppercase={false}>
             <Text style={{fontSize: 16}}>Login</Text>
           </Button>
@@ -111,7 +157,7 @@ const LoginForm: React.FC = () => {
               <Text
                 style={styles.buttonTextStyle}
                 onPress={() => {
-                  navigation.navigate('Register');
+                  nav.navigate('Register');
                 }}>
                 Sign up here
               </Text>

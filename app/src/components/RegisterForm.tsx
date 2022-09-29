@@ -1,7 +1,7 @@
-import {Button, TextInput} from 'react-native-paper';
-import React, {useState} from 'react';
+import {useForm, Controller} from 'react-hook-form';
+import {Button, HelperText, TextInput} from 'react-native-paper';
+import React from 'react';
 import {
-  Alert,
   StyleSheet,
   View,
   Text,
@@ -11,161 +11,191 @@ import {
 import {useNavigation} from '@react-navigation/native';
 
 import {AuthScreenProps} from '~routes/interface';
+import {
+  ERROR_MESSAGES,
+  REGEX,
+  PASSWORD_MIN_LENGTH,
+} from '~constants/userForm/userFields';
+interface FormData {
+  name: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
+}
 
 const RegisterForm: React.FC = () => {
-  const [userName, setUserName] = useState('');
-  const [userEmail, setUserEmail] = useState('');
-  const [userPassword, setUserPassword] = useState('');
-  const [userConfirmPassword, setUserConfirmPassword] = useState('');
-  // const [errortext, setErrortext] = useState('');
-  // const [isRegistraionSuccess, setIsRegistraionSuccess] = useState(false);
-  //
-  // const emailInputRef = createRef();
-  // const ageInputRef = createRef();
-  // const addressInputRef = createRef();
-  // const passwordInputRef = createRef();
   const {navigation} = useNavigation<AuthScreenProps<'Register'>>();
 
-  // const clearPasswords = () => {};
+  // const {loading, error} = useSelector((state: any) => state.user);
 
-  const handleSubmitButton = () => {
-    // setErrortext('');
-    if (!userName) {
-      Alert.alert('Please fill Name');
-      return;
-    }
-    if (!userEmail) {
-      Alert.alert('Please fill Email');
-      return;
-    }
-    if (!userPassword) {
-      Alert.alert('Please fill Password');
-      return;
-    }
-    if (!userConfirmPassword) {
-      Alert.alert('Please confirm Password');
-      return;
-    }
-    if (userPassword !== userConfirmPassword) {
-      Alert.alert('Passwords does not match');
-      return;
-    }
-    const dataToSend: any = {
-      name: userName,
-      email: userEmail,
-      password: userPassword,
-    };
+  // const dispatch = useDispatch();
 
-    let formBody: any = [];
-    for (const key in dataToSend) {
-      const encodedKey = encodeURIComponent(key);
-      const encodedValue = encodeURIComponent(dataToSend[key]);
-      formBody.push(encodedKey + '=' + encodedValue);
-    }
-    formBody = formBody.join('&');
+  const {
+    control,
+    handleSubmit,
+    formState: {errors},
+  } = useForm<FormData>({
+    mode: 'onChange',
+  });
+
+  const submitForm = (data: FormData) => {
+    console.log(data);
     navigation.navigate('Login');
   };
-  // if (isRegistraionSuccess) {
-  //   return (
-  //     <View
-  //       style={{
-  //         flex: 1,
-  //         backgroundColor: '#307ecc',
-  //         justifyContent: 'center',
-  //       }}>
-  //       <Image
-  //         source={require('../Image/success.png')}
-  //         style={{
-  //           height: 150,
-  //           resizeMode: 'contain',
-  //           alignSelf: 'center',
-  //         }}
-  //       />
-  //       <Text style={styles.successTextStyle}>Registration Successful</Text>
-  //       <TouchableOpacity style={styles.buttonStyle} activeOpacity={0.5}>
-  //         <Text style={styles.buttonTextStyle}>Login Now</Text>
-  //       </TouchableOpacity>
-  //     </View>
-  //   );
-  // }
+
   return (
     <ScrollView style={styles.mainBody}>
       <View style={{alignSelf: 'center', width: '85%'}}>
         <KeyboardAvoidingView enabled>
           <View style={styles.SectionStyle}>
-            <TextInput
-              theme={{colors: {primary: '#D25660', placeholder: '#8b9cb5'}}}
-              style={styles.inputStyle}
-              mode="outlined"
-              onChangeText={(UserName) => setUserName(UserName)}
-              placeholder="Enter Name"
-              placeholderTextColor="#8b9cb5"
-              autoCapitalize="sentences"
-              returnKeyType="next"
-              // onSubmitEditing={() =>
-              //   emailInputRef.current && emailInputRef.current.focus()
-              // }
-              blurOnSubmit={false}
+            <Controller
+              control={control}
+              defaultValue=""
+              name="name"
+              rules={{
+                required: {message: ERROR_MESSAGES.REQUIRED, value: true},
+                pattern: {
+                  value: REGEX.personalName,
+                  message: ERROR_MESSAGES.NAME_INVALID,
+                },
+              }}
+              render={({field: {onChange, onBlur, value}}) => (
+                <>
+                  <TextInput
+                    theme={{
+                      colors: {primary: '#D25660', placeholder: '#8b9cb5'},
+                    }}
+                    style={styles.inputStyle}
+                    mode="outlined"
+                    placeholder="Enter Name"
+                    placeholderTextColor="#8b9cb5"
+                    autoCapitalize="sentences"
+                    returnKeyType="next"
+                    onChangeText={(e) => onChange(e)}
+                    blurOnSubmit={false}
+                    value={value}
+                    onBlur={onBlur}
+                  />
+                  <HelperText type="error">{errors.name?.message}</HelperText>
+                </>
+              )}
             />
           </View>
           <View style={styles.SectionStyle}>
-            <TextInput
-              theme={{colors: {primary: '#D25660', placeholder: '#8b9cb5'}}}
-              style={styles.inputStyle}
-              mode="outlined"
-              onChangeText={(UserEmail) => setUserEmail(UserEmail)}
-              underlineColorAndroid="#f000"
-              placeholder="Enter Email"
-              autoCapitalize="none"
-              placeholderTextColor="#8b9cb5"
-              keyboardType="email-address"
-              returnKeyType="next"
-              // onSubmitEditing={() =>
-              //   passwordInputRef.current && passwordInputRef.current.focus()
-              // }
-              blurOnSubmit={false}
+            <Controller
+              control={control}
+              defaultValue=""
+              name="email"
+              rules={{
+                required: {
+                  message: ERROR_MESSAGES.REQUIRED,
+                  value: true,
+                },
+                pattern: {
+                  value: REGEX.email,
+                  message: ERROR_MESSAGES.EMAIL_INVALID,
+                },
+              }}
+              render={({field: {onChange, onBlur, value}}) => (
+                <>
+                  <TextInput
+                    theme={{
+                      colors: {primary: '#D25660', placeholder: '#8b9cb5'},
+                    }}
+                    style={styles.inputStyle}
+                    mode="outlined"
+                    underlineColorAndroid="#f000"
+                    placeholder="Enter Email"
+                    autoCapitalize="none"
+                    placeholderTextColor="#8b9cb5"
+                    keyboardType="email-address"
+                    returnKeyType="next"
+                    blurOnSubmit={false}
+                    onChangeText={(e) => onChange(e)}
+                    value={value}
+                    onBlur={onBlur}
+                  />
+                  <HelperText type="error">{errors.email?.message}</HelperText>
+                </>
+              )}
             />
           </View>
           <View style={styles.SectionStyle}>
-            <TextInput
-              theme={{colors: {primary: '#D25660', placeholder: '#8b9cb5'}}}
-              style={styles.inputStyle}
-              mode="outlined"
-              onChangeText={(UserPassword) => setUserPassword(UserPassword)}
-              underlineColorAndroid="#f000"
-              placeholder="Enter Password"
-              placeholderTextColor="#8b9cb5"
-              returnKeyType="next"
-              secureTextEntry={true}
-              // onSubmitEditing={() =>
-              //   ageInputRef.current && ageInputRef.current.focus()
-              // }
-              blurOnSubmit={false}
+            <Controller
+              control={control}
+              defaultValue=""
+              name="password"
+              rules={{
+                required: {message: ERROR_MESSAGES.REQUIRED, value: true},
+                minLength: {
+                  value: PASSWORD_MIN_LENGTH,
+                  message: 'Password must have at least 6 characters',
+                },
+              }}
+              render={({field: {onChange, onBlur, value}}) => (
+                <>
+                  <TextInput
+                    theme={{
+                      colors: {primary: '#D25660', placeholder: '#8b9cb5'},
+                    }}
+                    style={styles.inputStyle}
+                    mode="outlined"
+                    underlineColorAndroid="#f000"
+                    placeholder="Enter Password"
+                    placeholderTextColor="#8b9cb5"
+                    value={value}
+                    secureTextEntry={true}
+                    autoCapitalize="none"
+                    onBlur={onBlur}
+                    onChangeText={(e) => onChange(e)}
+                  />
+                  <HelperText type="error">
+                    {errors.password?.message}
+                  </HelperText>
+                </>
+              )}
             />
           </View>
           <View style={styles.SectionStyle}>
-            <TextInput
-              theme={{colors: {primary: '#D25660', placeholder: '#8b9cb5'}}}
-              style={styles.inputStyle}
-              mode="outlined"
-              onChangeText={(UserConfirmPassword) =>
-                setUserConfirmPassword(UserConfirmPassword)
-              }
-              underlineColorAndroid="#f000"
-              placeholder="Confirm Password"
-              placeholderTextColor="#8b9cb5"
-              returnKeyType="next"
-              secureTextEntry={true}
-              // onSubmitEditing={() =>
-              //   ageInputRef.current && ageInputRef.current.focus()
-              // }
-              blurOnSubmit={false}
+            <Controller
+              control={control}
+              defaultValue=""
+              name="confirmPassword"
+              rules={{
+                required: {message: ERROR_MESSAGES.REQUIRED, value: true},
+              }}
+              render={({field: {onChange, onBlur, value}}) => (
+                <>
+                  <TextInput
+                    theme={{
+                      colors: {primary: '#D25660', placeholder: '#8b9cb5'},
+                    }}
+                    style={styles.inputStyle}
+                    mode="outlined"
+                    underlineColorAndroid="#f000"
+                    placeholder="Confirm Password"
+                    placeholderTextColor="#8b9cb5"
+                    returnKeyType="next"
+                    secureTextEntry={true}
+                    blurOnSubmit={false}
+                    onChangeText={(e) => onChange(e)}
+                    value={value}
+                    onBlur={onBlur}
+                    autoCapitalize="none"
+                  />
+                  <HelperText type="error">
+                    {errors.confirmPassword?.message}
+                  </HelperText>
+                </>
+              )}
             />
           </View>
+
           <Button
             mode="contained"
             style={styles.containerStyle}
-            onPress={handleSubmitButton}
+            onPress={handleSubmit(submitForm)}
+            // disabled={!formState.isValid}
             uppercase={false}>
             <Text style={{fontSize: 16}}>Register</Text>
           </Button>

@@ -1,7 +1,7 @@
-import {Button, TextInput} from 'react-native-paper';
-import React, {useState} from 'react';
+import {useForm, Controller} from 'react-hook-form';
+import {Button, HelperText, TextInput} from 'react-native-paper';
+import React from 'react';
 import {
-  Alert,
   StyleSheet,
   View,
   Text,
@@ -11,28 +11,24 @@ import {
 import {useNavigation} from '@react-navigation/native';
 
 import {AuthScreenProps} from '~routes/interface';
+import {ERROR_MESSAGES} from '~constants/userForm/userFields';
+interface FormData {
+  email: string;
+}
 
 const ResetPasswordForm: React.FC = () => {
-  const [userEmail, setUserEmail] = useState('');
-  const [errortext, setErrortext] = useState('');
   const {navigation} = useNavigation<AuthScreenProps<'Forgot password'>>();
 
-  // const passwordInputRef = createRef();
+  const {
+    control,
+    handleSubmit,
+    formState: {errors},
+  } = useForm<FormData>({
+    mode: 'onChange',
+  });
 
-  const handleSubmitPress = () => {
-    setErrortext('');
-    if (!userEmail) {
-      Alert.alert('Please fill Email');
-      return;
-    }
-    const dataToSend: any = {email: userEmail};
-    let formBody: any = [];
-    for (const key in dataToSend) {
-      const encodedKey = encodeURIComponent(key);
-      const encodedValue = encodeURIComponent(dataToSend[key]);
-      formBody.push(encodedKey + '=' + encodedValue);
-    }
-    formBody = formBody.join('&');
+  const submitForm = (data: FormData) => {
+    console.log(data);
     navigation.navigate('Login');
   };
 
@@ -41,25 +37,40 @@ const ResetPasswordForm: React.FC = () => {
       <View style={{alignSelf: 'center', width: '85%'}}>
         <KeyboardAvoidingView enabled>
           <View style={styles.SectionStyle}>
-            <TextInput
-              theme={{colors: {primary: '#D25660', placeholder: '#8b9cb5'}}}
-              style={styles.inputStyle}
-              mode="outlined"
-              onChangeText={(UserEmail) => setUserEmail(UserEmail)}
-              placeholder="Enter Email"
-              autoCapitalize="none"
-              keyboardType="email-address"
-              returnKeyType="next"
-              blurOnSubmit={false}
+            <Controller
+              control={control}
+              defaultValue=""
+              name="email"
+              rules={{
+                required: {message: ERROR_MESSAGES.REQUIRED, value: true},
+              }}
+              render={({field: {onChange, onBlur, value}}) => (
+                <>
+                  <TextInput
+                    theme={{
+                      colors: {primary: '#D25660', placeholder: '#8b9cb5'},
+                    }}
+                    style={styles.inputStyle}
+                    mode="outlined"
+                    placeholder="Enter Email"
+                    autoCapitalize="none"
+                    keyboardType="email-address"
+                    returnKeyType="next"
+                    blurOnSubmit={false}
+                    value={value}
+                    onBlur={onBlur}
+                    onChangeText={(e) => onChange(e)}
+                  />
+                  <HelperText type="error">{errors.email?.message}</HelperText>
+                </>
+              )}
             />
           </View>
-          {errortext !== '' ? (
-            <Text style={styles.errorTextStyle}>{errortext}</Text>
-          ) : null}
+
           <Button
             mode="contained"
             style={styles.containerStyle}
-            onPress={handleSubmitPress}
+            onPress={handleSubmit(submitForm)}
             uppercase={false}>
             <Text style={{fontSize: 16}}>Reset Password</Text>
           </Button>
