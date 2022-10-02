@@ -8,14 +8,15 @@ import {
   KeyboardAvoidingView,
   ScrollView,
 } from 'react-native';
-import {useNavigation} from '@react-navigation/native';
 
-import {AuthScreenProps} from '~routes/interface';
 import {
   ERROR_MESSAGES,
   REGEX,
   PASSWORD_MIN_LENGTH,
 } from '~constants/userForm/userFields';
+import useAppDispatch from '~hooks/useAppDispatch';
+import {signUpUser} from '~state/ducks/auth/auth.actions';
+import {UserRole} from '~constants/auth';
 interface FormData {
   name: string;
   email: string;
@@ -24,11 +25,7 @@ interface FormData {
 }
 
 const RegisterForm: React.FC = () => {
-  const {navigation} = useNavigation<AuthScreenProps<'Register'>>();
-
-  // const {loading, error} = useSelector((state: any) => state.user);
-
-  // const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const {
     control,
@@ -39,8 +36,8 @@ const RegisterForm: React.FC = () => {
   });
 
   const submitForm = (data: FormData) => {
-    console.log(data);
-    navigation.navigate('Login');
+    const {email, password} = data;
+    dispatch(signUpUser({email, password, roles: [UserRole.PATIENT]}));
   };
 
   return (

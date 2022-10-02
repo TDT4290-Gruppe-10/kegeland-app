@@ -19,8 +19,8 @@ import {
   REGEX,
   PASSWORD_MIN_LENGTH,
 } from '~constants/userForm/userFields';
-
-// import {userLogin} from '../state/ducks/auth/auth.actions';
+import useAppDispatch from '~hooks/useAppDispatch';
+import {signInUser} from '~state/ducks/auth/auth.actions';
 
 interface FormData {
   email: string;
@@ -29,8 +29,7 @@ interface FormData {
 
 const LoginForm: React.FC = () => {
   const nav = useNavigation<NavigationProp<AuthStackParamList>>();
-  console.log(nav);
-  // const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const {
     control,
@@ -41,9 +40,7 @@ const LoginForm: React.FC = () => {
   });
 
   const submitForm = (data: FormData) => {
-    data.email = data.email.toLowerCase();
-    console.log();
-    // dispatch(userLogin({email, password}));
+    dispatch(signInUser(data));
   };
 
   return (

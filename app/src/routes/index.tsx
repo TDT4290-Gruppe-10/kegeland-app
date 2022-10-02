@@ -1,7 +1,9 @@
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import React from 'react';
+import React, {useEffect} from 'react';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
+import useAppDispatch from '~hooks/useAppDispatch';
+import {initializeAuthState} from '~state/ducks/auth/auth.actions';
 import HomeScreen from '~views/HomeScreen';
 
 import AuthRoutes from './AuthRoutes';
@@ -15,6 +17,10 @@ const tabIcons: Record<keyof RootTabParamList, string> = {
 const Tab = createBottomTabNavigator<RootTabParamList>();
 
 const Router: React.FC = () => {
+  const dispatch = useAppDispatch();
+  useEffect(() => {
+    dispatch(initializeAuthState());
+  }, []);
   return (
     <Tab.Navigator
       initialRouteName="Home"

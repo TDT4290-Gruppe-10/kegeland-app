@@ -1,47 +1,69 @@
 import {createSlice} from '@reduxjs/toolkit';
 
-import {registerUser, userLogin} from './auth.actions';
+import {initializeAuthState, signInUser, signUpUser} from './auth.actions';
 import {AuthState} from './auth.interface';
 
 const initialState: AuthState = {
+  ready: false,
   loading: false,
-  userInfo: {},
-  userToken: null,
-  error: null,
-  success: false,
+  isSignedIn: false,
+  authUser: undefined,
+  userDetails: undefined,
+  error: undefined,
 };
 
 const userSlice = createSlice({
-  name: 'user',
+  name: 'auth',
   initialState,
   reducers: {},
   extraReducers: (builder) => {
+    builder.addCase(initializeAuthState.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(initializeAuthState.fulfilled, (state, {payload}) => {
+      state.ready = true;
+      if (!payload) {
+        state.isSignedIn = false;
+        state.authUser = undefined;
+        state.userDetails = undefined;
+      }
+    });
+    builder.addCase(initializeAuthState.rejected, (state, {error}) => {
+      state.loading = false;
+      state.error = error.message;
+    });
     builder
-      .addCase(userLogin.pending, (state) => {
+      .addCase(signInUser.pending, (state) => {
         state.loading = true;
-        state.error = null;
+        state.error = undefined;
       })
-      .addCase(userLogin.fulfilled, (state, {payload}) => {
+      .addCase(signInUser.fulfilled, (state, {payload}) => {
+        const {id, email} = payload;
         state.loading = false;
-        state.userInfo = payload;
-        state.userToken = payload.userToken;
+        state.isSignedIn = true;
+        state.authUser = {id, email};
+        state.userDetails = payload.details;
+        state.error = undefined;
       })
-      .addCase(userLogin.rejected, (state) => {
+      .addCase(signInUser.rejected, (state, action) => {
         state.loading = false;
-        state.error = 'Hoo Lee Fuk';
+        state.error = action.error.message;
       })
-      // register user reducer...
-      .addCase(registerUser.pending, (state) => {
+      .addCase(signUpUser.pending, (state) => {
         state.loading = true;
-        state.error = null;
+        state.error = undefined;
       })
-      .addCase(registerUser.fulfilled, (state) => {
+      .addCase(signUpUser.fulfilled, (state, {payload}) => {
+        const {id, email} = payload;
         state.loading = false;
-        state.success = true; // registration successful
+        state.isSignedIn = true;
+        state.authUser = {id, email};
+        state.userDetails = payload.details;
+        state.error = undefined;
       })
-      .addCase(registerUser.rejected, (state) => {
+      .addCase(signUpUser.rejected, (state, {error}) => {
         state.loading = false;
-        state.error = 'Som tin wong';
+        state.error = error.message;
       });
   },
 });
