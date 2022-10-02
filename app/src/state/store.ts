@@ -14,6 +14,7 @@ import {
 
 import bluetoothReducer from './ducks/bluetooth/bluetooth.reducer';
 import userReducer from './ducks/auth/auth.reducer';
+import settingsReducer from './ducks/settings/settings.reducer';
 
 import rootSaga, {sagaMiddleware} from './rootSaga';
 
@@ -26,6 +27,7 @@ const persistConfig = {
 
 const rootReducer = combineReducers({
   auth: userReducer,
+  settings: settingsReducer,
   bluetooth: bluetoothReducer,
 });
 

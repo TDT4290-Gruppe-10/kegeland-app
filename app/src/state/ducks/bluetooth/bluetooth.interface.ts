@@ -28,7 +28,8 @@ export type BluetoothDevice = {
 export interface BluetoothState {
   isReady: boolean;
   isScanning: boolean;
-  devices: Record<string, BluetoothDevice>;
+  connectedDevices: Record<string, BluetoothDevice>;
+  availableDevices: Record<string, BluetoothDevice>;
   error: string | null;
 }
 
