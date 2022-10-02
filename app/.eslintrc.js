@@ -62,6 +62,8 @@ module.exports = {
     'prettier/prettier': 'error',
     'import/default': 0,
     'import/no-unresolved': 0,
+    'no-unused-vars': 0,
+    '@typescript-eslint/no-unused-vars': 'error',
     'react/no-unstable-nested-components': 0,
     'react-hooks/exhaustive-deps': 0,
   },
