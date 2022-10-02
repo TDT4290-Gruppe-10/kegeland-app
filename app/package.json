@@ -11,6 +11,7 @@
     "prepare": "cd .. && husky install ./app/.husky"
   },
   "dependencies": {
+    "@react-native-async-storage/async-storage": "^1.17.10",
     "@react-navigation/bottom-tabs": "^6.4.0",
     "@react-navigation/native": "^6.0.13",
     "@react-navigation/stack": "^6.3.1",
@@ -39,6 +40,7 @@
     "@testing-library/jest-native": "^4.0.12",
     "@testing-library/react-native": "^11.1.0",
     "@tsconfig/react-native": "^2.0.2",
+    "@types/axios": "^0.14.0",
     "@types/jest": "^29.0.3",
     "@types/lodash": "^4.14.185",
     "@types/node": "^18.7.18",
@@ -67,6 +69,7 @@
     "metro-react-native-babel-preset": "^0.66.2",
     "prettier": "^2.7.1",
     "react-test-renderer": "17.0.2",
+    "redux-persist": "^6.0.0",
     "typescript": "^4.8.3"
   }
 }
