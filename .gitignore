@@ -62,3 +62,6 @@ buck-out/
 # Jest
 .jest/
 coverage/
+
+# Environment
+.env
