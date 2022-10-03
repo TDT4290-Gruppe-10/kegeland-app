@@ -12,10 +12,14 @@ const initialState: AuthState = {
   error: undefined,
 };
 
-const userSlice = createSlice({
+const authSlice = createSlice({
   name: 'auth',
   initialState,
-  reducers: {},
+  reducers: {
+    clearError: (state) => {
+      state.error = undefined;
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(initializeAuthState.pending, (state) => {
       state.loading = true;
@@ -68,4 +72,6 @@ const userSlice = createSlice({
   },
 });
 
-export default userSlice.reducer;
+export const {clearError} = authSlice.actions;
+
+export default authSlice.reducer;

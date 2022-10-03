@@ -9,6 +9,7 @@ import {
   LoginResponse,
   RegisterDTO,
   RegisterResponse,
+  ResetPasswordDTO,
 } from './auth.interface';
 
 export const initializeAuthState = createAsyncThunk<boolean>(
@@ -37,4 +38,11 @@ export const signUpUser = createAsyncThunk(
         return res;
       },
     ),
+);
+
+export const resetPassword = createAsyncThunk(
+  'auth/resetPassword',
+  async (data: ResetPasswordDTO) => {
+    apiCaller<void>('auth/reset', 'POST', data);
+  },
 );

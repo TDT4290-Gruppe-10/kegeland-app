@@ -42,3 +42,5 @@ export type LoginResponse = {
 export type RegisterDTO = LoginDTO & UserDetails;
 
 export type RegisterResponse = LoginResponse;
+
+export type ResetPasswordDTO = Pick<LoginDTO, 'email'>;
