@@ -1,242 +1,143 @@
-import {useForm, Controller} from 'react-hook-form';
-import {Button, HelperText, TextInput} from 'react-native-paper';
-import React from 'react';
-import {
-  StyleSheet,
-  View,
-  Text,
-  KeyboardAvoidingView,
-  ScrollView,
-} from 'react-native';
+import {useForm} from 'react-hook-form';
+import {Button} from 'react-native-paper';
+import React, {useCallback} from 'react';
+import {KeyboardAvoidingView, StyleSheet, View} from 'react-native';
+import {yupResolver} from '@hookform/resolvers/yup';
+import {useFocusEffect} from '@react-navigation/native';
+import {ScrollView} from 'react-native-gesture-handler';
+import * as yup from 'yup';
 
-import {
-  ERROR_MESSAGES,
-  REGEX,
-  PASSWORD_MIN_LENGTH,
-} from '~constants/userForm/userFields';
 import useAppDispatch from '~hooks/useAppDispatch';
 import {signUpUser} from '~state/ducks/auth/auth.actions';
+import {RegisterDTO} from '~state/ducks/auth/auth.interface';
 import {UserRole} from '~constants/auth';
-interface FormData {
-  name: string;
+import useAppSelector from '~hooks/useAppSelector';
+import {clearError} from '~state/ducks/auth/auth.reducer';
+
+import FormInput from './FormInput';
+import FormError from './FormError';
+
+type FormData = {
+  firstName?: string;
+  lastName?: string;
   email: string;
   password: string;
   confirmPassword: string;
-}
+};
+
+const schema = yup.object({
+  firstName: yup.string().nullable().notRequired().label('First name'),
+  lastName: yup
+    .string()
+    .when('firstName', {
+      is: (firstName: string) => firstName.length > 0,
+      then: yup.string().nullable().required(),
+      otherwise: yup.string().nullable().notRequired(),
+    })
+    .label('Last name'),
+  email: yup.string().nullable().email().required().label('Email'),
+  password: yup.string().nullable().required().min(6).label('Password'),
+  confirmPassword: yup
+    .string()
+    .nullable()
+    .required()
+    .oneOf([yup.ref('password'), null], 'Passwords must match')
+    .label('Confirm password'),
+});
 
 const RegisterForm: React.FC = () => {
   const dispatch = useAppDispatch();
-
-  const {
-    control,
-    handleSubmit,
-    formState: {errors},
-  } = useForm<FormData>({
-    mode: 'onChange',
+  const {error, loading} = useAppSelector(({auth}) => auth);
+  const {control, handleSubmit, formState, reset} = useForm<FormData>({
+    mode: 'onSubmit',
+    resolver: yupResolver(schema),
   });
 
-  const submitForm = (data: FormData) => {
-    const {email, password} = data;
-    dispatch(signUpUser({email, password, roles: [UserRole.PATIENT]}));
+  useFocusEffect(
+    useCallback(() => {
+      return () => {
+        reset();
+        dispatch(clearError());
+      };
+    }, []),
+  );
+
+  const onSubmit = (data: FormData) => {
+    const {firstName, lastName, email, password} = data;
+    const payload: RegisterDTO = {
+      email,
+      password,
+      roles: [UserRole.PATIENT],
+    };
+    if (firstName && lastName) {
+      payload.name = {firstName, lastName};
+    }
+    dispatch(signUpUser(payload));
   };
 
   return (
-    <ScrollView style={styles.mainBody}>
-      <View style={{alignSelf: 'center', width: '85%'}}>
-        <KeyboardAvoidingView enabled>
-          <View style={styles.SectionStyle}>
-            <Controller
-              control={control}
-              defaultValue=""
-              name="name"
-              rules={{
-                required: {message: ERROR_MESSAGES.REQUIRED, value: true},
-                pattern: {
-                  value: REGEX.personalName,
-                  message: ERROR_MESSAGES.NAME_INVALID,
-                },
-              }}
-              render={({field: {onChange, onBlur, value}}) => (
-                <>
-                  <TextInput
-                    theme={{
-                      colors: {primary: '#D25660', placeholder: '#8b9cb5'},
-                    }}
-                    style={styles.inputStyle}
-                    mode="outlined"
-                    placeholder="Enter Name"
-                    placeholderTextColor="#8b9cb5"
-                    autoCapitalize="sentences"
-                    returnKeyType="next"
-                    onChangeText={(e) => onChange(e)}
-                    blurOnSubmit={false}
-                    value={value}
-                    onBlur={onBlur}
-                  />
-                  <HelperText type="error">{errors.name?.message}</HelperText>
-                </>
-              )}
-            />
-          </View>
-          <View style={styles.SectionStyle}>
-            <Controller
-              control={control}
-              defaultValue=""
-              name="email"
-              rules={{
-                required: {
-                  message: ERROR_MESSAGES.REQUIRED,
-                  value: true,
-                },
-                pattern: {
-                  value: REGEX.email,
-                  message: ERROR_MESSAGES.EMAIL_INVALID,
-                },
-              }}
-              render={({field: {onChange, onBlur, value}}) => (
-                <>
-                  <TextInput
-                    theme={{
-                      colors: {primary: '#D25660', placeholder: '#8b9cb5'},
-                    }}
-                    style={styles.inputStyle}
-                    mode="outlined"
-                    underlineColorAndroid="#f000"
-                    placeholder="Enter Email"
-                    autoCapitalize="none"
-                    placeholderTextColor="#8b9cb5"
-                    keyboardType="email-address"
-                    returnKeyType="next"
-                    blurOnSubmit={false}
-                    onChangeText={(e) => onChange(e)}
-                    value={value}
-                    onBlur={onBlur}
-                  />
-                  <HelperText type="error">{errors.email?.message}</HelperText>
-                </>
-              )}
-            />
-          </View>
-          <View style={styles.SectionStyle}>
-            <Controller
-              control={control}
-              defaultValue=""
-              name="password"
-              rules={{
-                required: {message: ERROR_MESSAGES.REQUIRED, value: true},
-                minLength: {
-                  value: PASSWORD_MIN_LENGTH,
-                  message: 'Password must have at least 6 characters',
-                },
-              }}
-              render={({field: {onChange, onBlur, value}}) => (
-                <>
-                  <TextInput
-                    theme={{
-                      colors: {primary: '#D25660', placeholder: '#8b9cb5'},
-                    }}
-                    style={styles.inputStyle}
-                    mode="outlined"
-                    underlineColorAndroid="#f000"
-                    placeholder="Enter Password"
-                    placeholderTextColor="#8b9cb5"
-                    value={value}
-                    secureTextEntry={true}
-                    autoCapitalize="none"
-                    onBlur={onBlur}
-                    onChangeText={(e) => onChange(e)}
-                  />
-                  <HelperText type="error">
-                    {errors.password?.message}
-                  </HelperText>
-                </>
-              )}
-            />
-          </View>
-          <View style={styles.SectionStyle}>
-            <Controller
-              control={control}
-              defaultValue=""
-              name="confirmPassword"
-              rules={{
-                required: {message: ERROR_MESSAGES.REQUIRED, value: true},
-              }}
-              render={({field: {onChange, onBlur, value}}) => (
-                <>
-                  <TextInput
-                    theme={{
-                      colors: {primary: '#D25660', placeholder: '#8b9cb5'},
-                    }}
-                    style={styles.inputStyle}
-                    mode="outlined"
-                    underlineColorAndroid="#f000"
-                    placeholder="Confirm Password"
-                    placeholderTextColor="#8b9cb5"
-                    returnKeyType="next"
-                    secureTextEntry={true}
-                    blurOnSubmit={false}
-                    onChangeText={(e) => onChange(e)}
-                    value={value}
-                    onBlur={onBlur}
-                    autoCapitalize="none"
-                  />
-                  <HelperText type="error">
-                    {errors.confirmPassword?.message}
-                  </HelperText>
-                </>
-              )}
-            />
-          </View>
+    <ScrollView style={styles.wrapper}>
+      <KeyboardAvoidingView enabled>
+        <View style={styles.form}>
+          <FormInput
+            state={formState}
+            control={control}
+            name="firstName"
+            placeholder="First name"
+          />
+          <FormInput
+            state={formState}
+            control={control}
+            name="lastName"
+            placeholder="Last name"
+          />
+          <FormInput
+            state={formState}
+            control={control}
+            name="email"
+            placeholder="Email"
+            keyboardType="email-address"
+          />
+          <FormInput
+            state={formState}
+            control={control}
+            name="password"
+            placeholder="Password"
+          />
+          <FormInput
+            state={formState}
+            control={control}
+            name="confirmPassword"
+            placeholder="Confirm password"
+          />
 
-          <Button
-            mode="contained"
-            style={styles.containerStyle}
-            onPress={handleSubmit(submitForm)}
-            // disabled={!formState.isValid}
-            uppercase={false}>
-            <Text style={{fontSize: 16}}>Register</Text>
-          </Button>
-        </KeyboardAvoidingView>
-      </View>
+          <FormError error={error} />
+        </View>
+
+        <Button
+          mode="contained"
+          loading={loading}
+          onPress={handleSubmit(onSubmit)}>
+          Register
+        </Button>
+      </KeyboardAvoidingView>
     </ScrollView>
   );
 };
 
-export default RegisterForm;
-
 const styles = StyleSheet.create({
-  mainBody: {
-    paddingVertical: 60,
+  wrapper: {
     flex: 1,
+    flexDirection: 'column',
     alignContent: 'center',
-  },
-  SectionStyle: {
-    height: 80,
-    justifyContent: 'center',
-  },
-  buttonStyle: {
-    backgroundColor: '#D25660',
-    borderRadius: 5,
-  },
-  containerStyle: {
-    width: 230,
-    alignSelf: 'center',
-    marginVertical: 20,
-    backgroundColor: '#D25660',
-  },
-  inputStyle: {
-    fontSize: 14,
-    height: 35,
-  },
-  errorTextStyle: {
-    color: 'red',
-    textAlign: 'center',
-    fontSize: 14,
-  },
-  successTextStyle: {
-    color: 'white',
-    textAlign: 'center',
-    fontSize: 18,
+    height: '100%',
     padding: 30,
   },
+  form: {
+    justifyContent: 'center',
+    paddingTop: 15,
+    paddingBottom: 30,
+  },
 });
+
+export default RegisterForm;
