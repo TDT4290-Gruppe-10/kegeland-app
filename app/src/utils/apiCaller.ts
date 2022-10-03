@@ -20,7 +20,11 @@ export const apiCaller = <T = unknown>(
       if (err instanceof Error) {
         if (axios.isAxiosError(err)) {
           if (isApiError(err)) {
-            throw new Error(err.response?.data.message[0]);
+            let message = err.response?.data.message;
+            if (message instanceof Array) {
+              message = message[0];
+            }
+            throw new Error(message);
           }
         }
         throw new Error(err.message);

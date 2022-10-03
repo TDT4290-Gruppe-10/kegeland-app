@@ -2,7 +2,7 @@ import {AxiosError} from 'axios';
 
 interface ApiErrorDTO {
   statusCode: number;
-  message: string[];
+  message: string[] | string;
   error: string;
 }
 
