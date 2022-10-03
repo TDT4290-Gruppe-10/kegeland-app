@@ -13,7 +13,7 @@ import {
 } from 'redux-persist';
 
 import bluetoothReducer from './ducks/bluetooth/bluetooth.reducer';
-import userReducer from './ducks/auth/auth.reducer';
+import authReducer from './ducks/auth/auth.reducer';
 import settingsReducer from './ducks/settings/settings.reducer';
 
 import rootSaga, {sagaMiddleware} from './rootSaga';
@@ -26,7 +26,7 @@ const persistConfig = {
 };
 
 const rootReducer = combineReducers({
-  auth: userReducer,
+  auth: authReducer,
   settings: settingsReducer,
   bluetooth: bluetoothReducer,
 });
