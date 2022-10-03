@@ -15,7 +15,12 @@ type Theme = typeof defaultLightTheme;
 
 export const lightTheme: Theme = {
   ...defaultLightTheme,
-  colors: {...defaultLightTheme.colors, primary: '#D25660'},
+  roundness: 15,
+  colors: {
+    ...defaultLightTheme.colors,
+    primary: '#D25660',
+    text: '#333',
+  },
 };
 export const darkTheme: Theme = {
   ...defaultDarkTheme,
