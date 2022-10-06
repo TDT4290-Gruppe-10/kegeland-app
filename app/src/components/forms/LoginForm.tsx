@@ -1,7 +1,7 @@
 import {useForm} from 'react-hook-form';
-import {Button, Text, useTheme} from 'react-native-paper';
+import {Text, useTheme} from 'react-native-paper';
 import React, {useCallback} from 'react';
-import {KeyboardAvoidingView, StyleSheet, View} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import {yupResolver} from '@hookform/resolvers/yup';
 import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import * as yup from 'yup';
@@ -12,6 +12,7 @@ import useAppDispatch from '~hooks/useAppDispatch';
 import {signInUser} from '~state/ducks/auth/auth.actions';
 import useAppSelector from '~hooks/useAppSelector';
 import {clearError} from '~state/ducks/auth/auth.reducer';
+import Button from '~components/Button';
 
 import FormInput from './FormInput';
 import FormError from './FormError';
@@ -50,86 +51,68 @@ const LoginForm: React.FC = () => {
   };
 
   return (
-    <ScrollView style={styles.wrapper}>
-      <KeyboardAvoidingView enabled>
-        <View style={styles.form}>
-          <FormInput
-            state={formState}
-            control={control}
-            name="email"
-            placeholder="Email"
-            keyboardType="email-address"
-          />
-          <FormInput
-            state={formState}
-            control={control}
-            name="password"
-            placeholder="Password"
-          />
-          <View style={styles.forgotPasswordSection}>
-            <TouchableOpacity
-              onPress={() => navigation.navigate('Forgot password')}>
-              <Text>Forgot Password?</Text>
-            </TouchableOpacity>
-          </View>
+    <ScrollView>
+      <View style={styles.form}>
+        <FormInput
+          state={formState}
+          control={control}
+          name="email"
+          placeholder="Email"
+          icon="at"
+          keyboardType="email-address"
+        />
+        <FormInput
+          state={formState}
+          control={control}
+          name="password"
+          placeholder="Password"
+          secureTextEntry
+          icon="lock-outline"
+        />
+      </View>
 
-          <FormError error={error} />
-        </View>
-
-        <Button
-          mode="contained"
-          loading={loading}
-          onPress={handleSubmit(onSubmit)}>
-          Sign in
-        </Button>
-
-        <View style={[styles.loginSection]}>
-          <Text style={styles.signUpText}>Don't have an account? </Text>
-          <Text
-            onPress={() => navigation.navigate('Register')}
-            style={[
-              styles.signUpText,
-              styles.signUpBtn,
-              {color: colors.primary},
-            ]}>
-            Sign up
+      <View style={styles.forgotPasswordSection}>
+        <TouchableOpacity
+          onPress={() => navigation.navigate('Forgot password')}>
+          <Text style={[styles.forgotPasswordText, {color: colors.primary}]}>
+            Forgot Password?
           </Text>
-        </View>
-      </KeyboardAvoidingView>
+        </TouchableOpacity>
+      </View>
+
+      <Button
+        mode="contained"
+        loading={loading}
+        onPress={handleSubmit(onSubmit)}>
+        Sign in
+      </Button>
+      <FormError error={error} />
     </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
-  wrapper: {
-    flex: 1,
-    flexDirection: 'column',
-    alignContent: 'center',
-    height: '100%',
-    padding: 30,
-  },
   form: {
+    alignContent: 'center',
     justifyContent: 'center',
-    paddingTop: 15,
-    paddingBottom: 30,
+    marginTop: 15,
   },
   forgotPasswordSection: {
     flexDirection: 'row',
-    justifyContent: 'flex-end',
+    justifyContent: 'center',
     fontSize: 16,
+    marginTop: 10,
+    marginBottom: 50,
+  },
+  forgotPasswordText: {
+    fontStyle: 'italic',
+    fontSize: 15,
+    fontWeight: '700',
   },
   loginSection: {
     flexDirection: 'row',
     justifyContent: 'center',
-    paddingVertical: 15,
-  },
-  signUpText: {
-    textAlignVertical: 'center',
-    fontSize: 16,
-  },
-  signUpBtn: {
-    fontSize: 17,
-    fontWeight: '700',
+    marginVertical: 15,
   },
 });
 

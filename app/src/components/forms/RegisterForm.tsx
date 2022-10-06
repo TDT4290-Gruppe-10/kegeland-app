@@ -1,7 +1,6 @@
 import {useForm} from 'react-hook-form';
-import {Button} from 'react-native-paper';
 import React, {useCallback} from 'react';
-import {KeyboardAvoidingView, StyleSheet, View} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import {yupResolver} from '@hookform/resolvers/yup';
 import {useFocusEffect} from '@react-navigation/native';
 import {ScrollView} from 'react-native-gesture-handler';
@@ -13,6 +12,7 @@ import {RegisterDTO} from '~state/ducks/auth/auth.interface';
 import {UserRole} from '~constants/auth';
 import useAppSelector from '~hooks/useAppSelector';
 import {clearError} from '~state/ducks/auth/auth.reducer';
+import Button from '~components/Button';
 
 import FormInput from './FormInput';
 import FormError from './FormError';
@@ -46,8 +46,8 @@ const schema = yup.object({
 });
 
 const RegisterForm: React.FC = () => {
-  const dispatch = useAppDispatch();
   const {error, loading} = useAppSelector(({auth}) => auth);
+  const dispatch = useAppDispatch();
   const {control, handleSubmit, formState, reset} = useForm<FormData>({
     mode: 'onSubmit',
     resolver: yupResolver(schema),
@@ -76,67 +76,81 @@ const RegisterForm: React.FC = () => {
   };
 
   return (
-    <ScrollView style={styles.wrapper}>
-      <KeyboardAvoidingView enabled>
-        <View style={styles.form}>
-          <FormInput
-            state={formState}
-            control={control}
-            name="firstName"
-            placeholder="First name"
-          />
-          <FormInput
-            state={formState}
-            control={control}
-            name="lastName"
-            placeholder="Last name"
-          />
-          <FormInput
-            state={formState}
-            control={control}
-            name="email"
-            placeholder="Email"
-            keyboardType="email-address"
-          />
-          <FormInput
-            state={formState}
-            control={control}
-            name="password"
-            placeholder="Password"
-          />
-          <FormInput
-            state={formState}
-            control={control}
-            name="confirmPassword"
-            placeholder="Confirm password"
-          />
-
-          <FormError error={error} />
-        </View>
-
-        <Button
-          mode="contained"
-          loading={loading}
-          onPress={handleSubmit(onSubmit)}>
-          Register
-        </Button>
-      </KeyboardAvoidingView>
+    <ScrollView>
+      <View style={styles.form}>
+        <FormInput
+          state={formState}
+          control={control}
+          name="firstName"
+          placeholder="First name"
+        />
+        <FormInput
+          state={formState}
+          control={control}
+          name="lastName"
+          placeholder="Last name"
+        />
+        <FormInput
+          state={formState}
+          control={control}
+          name="email"
+          placeholder="Email"
+          icon="at"
+          keyboardType="email-address"
+        />
+        <FormInput
+          state={formState}
+          control={control}
+          secureTextEntry
+          name="password"
+          icon="lock"
+          placeholder="Password"
+        />
+        <FormInput
+          state={formState}
+          control={control}
+          name="confirmPassword"
+          placeholder="Confirm password"
+          icon="lock-check"
+          secureTextEntry
+        />
+      </View>
+      <Button
+        mode="contained"
+        loading={loading}
+        onPress={handleSubmit(onSubmit)}>
+        Register
+      </Button>
+      <FormError error={error} />
     </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
+  form: {
+    alignContent: 'center',
+    justifyContent: 'center',
+    marginVertical: 15,
+  },
   wrapper: {
     flex: 1,
-    flexDirection: 'column',
-    alignContent: 'center',
-    height: '100%',
-    padding: 30,
+    marginVertical: 30,
   },
-  form: {
+  formWrapper: {
+    flex: 1,
+  },
+  signInSection: {
+    flexDirection: 'row',
     justifyContent: 'center',
-    paddingTop: 15,
-    paddingBottom: 30,
+    marginBottom: 30,
+  },
+  signInText: {
+    textAlignVertical: 'center',
+    fontSize: 16,
+  },
+  signInBtn: {
+    fontSize: 17,
+    fontWeight: '700',
   },
 });
 
