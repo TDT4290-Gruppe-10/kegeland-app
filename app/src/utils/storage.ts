@@ -23,6 +23,16 @@ export const storeTokens = async ({
   );
 };
 
+export const retrieveToken = async (token: Token) => {
+  let res = null;
+  res = await AsyncStorage.getItem(token, (err) => {
+    if (err) {
+      throw new Error(`Failed to retrieve token, '${token}'`);
+    }
+  });
+  return res;
+};
+
 export const retrieveTokens = async () => {
   let values = null;
   values = await AsyncStorage.multiGet(Object.values(Token), (err) => {

@@ -1,7 +1,7 @@
 import {createAsyncThunk} from '@reduxjs/toolkit';
 
 import {apiCaller} from '~utils/apiCaller';
-import {retrieveTokens, storeTokens} from '~utils/storage';
+import {removeTokens, retrieveTokens, storeTokens} from '~utils/storage';
 
 import {allTokensExist} from './auth.helpers';
 import {
@@ -27,6 +27,13 @@ export const signInUser = createAsyncThunk(
       await storeTokens(res.tokens);
       return res;
     }),
+);
+
+export const signOutUser = createAsyncThunk('auth/signOutUser', async () =>
+  apiCaller<void>('auth/logout', 'POST').then(async (res) => {
+    await removeTokens();
+    return res;
+  }),
 );
 
 export const signUpUser = createAsyncThunk(
