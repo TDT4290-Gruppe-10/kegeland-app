@@ -1,17 +1,60 @@
 import React from 'react';
-import {SafeAreaView} from 'react-native';
-import {Button, Text} from 'react-native-paper';
+import {StyleSheet, View} from 'react-native';
+import {TouchableOpacity} from 'react-native-gesture-handler';
+import {Text, useTheme} from 'react-native-paper';
 
+import AvoidKeyboard from '~components/AvoidKeyboard';
+import LoginForm from '~components/forms/LoginForm';
+import PageWrapper from '~components/PageWrapper';
 import {AuthScreenProps} from '~routes/interface';
 
 const LoginScreen: React.FC<AuthScreenProps<'Login'>> = ({navigation}) => {
+  const {colors} = useTheme();
   return (
-    <SafeAreaView>
-      <Text>Login Screen</Text>
-
-      <Button onPress={() => navigation.navigate('Register')}>Register</Button>
-    </SafeAreaView>
+    <PageWrapper title="Sign In">
+      <AvoidKeyboard style={styles.wrapper}>
+        <View style={styles.formWrapper}>
+          <LoginForm />
+        </View>
+        <View style={styles.signUpSection}>
+          <Text style={styles.signUpText}>Don't have an account? </Text>
+          <TouchableOpacity onPress={() => navigation.navigate('Register')}>
+            <Text
+              style={[
+                styles.signUpText,
+                styles.signUpBtn,
+                {color: colors.primary},
+              ]}>
+              Sign up
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </AvoidKeyboard>
+    </PageWrapper>
   );
 };
+
+const styles = StyleSheet.create({
+  wrapper: {
+    flex: 1,
+    marginVertical: 30,
+  },
+  formWrapper: {
+    flex: 1,
+  },
+  signUpSection: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    marginBottom: 30,
+  },
+  signUpText: {
+    textAlignVertical: 'center',
+    fontSize: 16,
+  },
+  signUpBtn: {
+    fontSize: 17,
+    fontWeight: '700',
+  },
+});
 
 export default LoginScreen;

@@ -30,7 +30,6 @@ const DeviceListItem: React.FC<DeviceListItemProps> = ({device}) => {
         dispatch(connectDevice(device.id));
     }
   };
-  console.log(capitalize(device.state));
   return (
     <ListItem
       title={device.name}

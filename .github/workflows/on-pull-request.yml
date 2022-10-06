@@ -1,6 +1,6 @@
 # This is a basic workflow to help you get started with Actions
 
-name: Run tests
+name: CI/CD
 
 # Controls when the workflow will run
 on:
@@ -58,3 +58,4 @@ jobs:
         uses: codecov/codecov-action@v3.1.1
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
+          verbose: true

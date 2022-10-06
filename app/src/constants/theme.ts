@@ -4,7 +4,7 @@ import {
   DefaultTheme as NavigationLightTheme,
 } from '@react-navigation/native';
 import {
-  DarkTheme as PaperDarkTheme,
+  MD3DarkTheme as PaperDarkTheme,
   DefaultTheme as PaperLightTheme,
 } from 'react-native-paper';
 
@@ -15,9 +15,15 @@ type Theme = typeof defaultLightTheme;
 
 export const lightTheme: Theme = {
   ...defaultLightTheme,
-  colors: {...defaultLightTheme.colors, primary: '#D25660'},
+  roundness: 3,
+  colors: {
+    ...defaultLightTheme.colors,
+    primary: '#00b0ff', // '#D25660',
+    text: '#333',
+  },
 };
 export const darkTheme: Theme = {
   ...defaultDarkTheme,
+  roundness: 3,
   colors: {...defaultDarkTheme.colors, primary: '#D25660'},
 };

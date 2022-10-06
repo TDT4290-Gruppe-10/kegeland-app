@@ -18,7 +18,8 @@
     "baseUrl": ".",
     "types": [
       "node",
-      "jest"
+      "jest",
+      "react"
     ],
     "paths": {
       "~assets/*": [

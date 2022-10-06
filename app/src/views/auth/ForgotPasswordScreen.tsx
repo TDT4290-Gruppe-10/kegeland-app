@@ -1,17 +1,33 @@
 import React from 'react';
-import {SafeAreaView} from 'react-native';
-import {Text} from 'react-native-paper';
+import {StyleSheet, View} from 'react-native';
 
+import AvoidKeyboard from '~components/AvoidKeyboard';
+import PageWrapper from '~components/PageWrapper';
+import ResetPasswordForm from '~components/forms/ResetPasswordForm';
 import {AuthScreenProps} from '~routes/interface';
 
 const ForgotPasswordScreen: React.FC<
   AuthScreenProps<'Forgot password'>
 > = () => {
   return (
-    <SafeAreaView>
-      <Text>Forgot Password Screen</Text>
-    </SafeAreaView>
+    <PageWrapper title="Reset Password">
+      <AvoidKeyboard style={styles.wrapper}>
+        <View style={styles.formWrapper}>
+          <ResetPasswordForm />
+        </View>
+      </AvoidKeyboard>
+    </PageWrapper>
   );
 };
+
+const styles = StyleSheet.create({
+  wrapper: {
+    flex: 1,
+    marginVertical: 30,
+  },
+  formWrapper: {
+    flex: 1,
+  },
+});
 
 export default ForgotPasswordScreen;
