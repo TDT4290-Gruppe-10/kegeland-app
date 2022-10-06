@@ -1,13 +1,17 @@
 import React from 'react';
+import {StyleProp, TextStyle} from 'react-native';
 import {List} from 'react-native-paper';
 
 import Icon from './Icon';
 
 type ListItemProps = {
-  icon: string;
+  icon?: string;
+  iconSize?: number;
+  iconStyle?: StyleProp<TextStyle>;
   title: string;
   isRoute?: boolean;
   onPress?: () => void;
+  onLongPress?: () => void;
   render?: (props: {
     color: string;
     style?:
@@ -20,16 +24,37 @@ type ListItemProps = {
 };
 
 const ListItem: React.FC<ListItemProps> = (props) => {
-  if (!props.render && !props.isRoute) {
-    throw new Error(
-      "'Item' in component SettingsSection must have either a 'render'- or 'isRoute'=true defined",
-    );
-  }
+  const handleOnPress =
+    props.onPress || props.onLongPress
+      ? () => {
+          if (props.onLongPress) return () => null;
+          return props.onPress && props.onPress();
+        }
+      : undefined;
+
+  const handleOnLongPress = props.onLongPress
+    ? () => {
+        return props.onLongPress && props.onLongPress();
+      }
+    : undefined;
 
   return (
     <List.Item
-      onPress={props.onPress}
-      left={({color}) => <Icon color={color} icon={props.icon} />}
+      onPress={handleOnPress}
+      onLongPress={handleOnLongPress}
+      delayLongPress={500}
+      left={
+        props.icon
+          ? ({color}) => (
+              <Icon
+                color={color}
+                icon={props.icon as string}
+                size={props.iconSize}
+                style={props.iconStyle}
+              />
+            )
+          : undefined
+      }
       title={props.title}
       right={
         props.isRoute

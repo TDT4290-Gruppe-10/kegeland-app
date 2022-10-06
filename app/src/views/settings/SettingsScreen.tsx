@@ -1,4 +1,5 @@
 import React from 'react';
+import {ScrollView} from 'react-native-gesture-handler';
 import {List} from 'react-native-paper';
 import {SafeAreaView} from 'react-native-safe-area-context';
 
@@ -12,26 +13,28 @@ const SettingsScreen: React.FC<SettingsScreenProps<'Settings'>> = ({
 }) => {
   return (
     <SafeAreaView>
-      <Section title="Display">
-        <List.Section>
-          <ListItem
-            title="Theme"
-            icon="brightness-4"
-            render={(props) => <ThemeSwitch {...props} />}
-          />
-        </List.Section>
-      </Section>
+      <ScrollView>
+        <Section title="Display">
+          <List.Section>
+            <ListItem
+              title="Theme"
+              icon="brightness-4"
+              render={(props) => <ThemeSwitch {...props} />}
+            />
+          </List.Section>
+        </Section>
 
-      <Section title="Devices">
-        <List.Section>
-          <ListItem
-            title="Connect device"
-            icon="bluetooth"
-            isRoute
-            onPress={() => navigation.navigate('Connect device')}
-          />
-        </List.Section>
-      </Section>
+        <Section title="Devices">
+          <List.Section>
+            <ListItem
+              title="Connect device"
+              icon="bluetooth"
+              isRoute
+              onPress={() => navigation.navigate('Connect device')}
+            />
+          </List.Section>
+        </Section>
+      </ScrollView>
     </SafeAreaView>
   );
 };
