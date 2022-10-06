@@ -22,7 +22,7 @@ const persistConfig = {
   key: 'root',
   version: 1,
   storage: AsyncStorage,
-  whitelist: [],
+  whitelist: ['auth'],
 };
 
 const rootReducer = combineReducers({
