@@ -14,11 +14,20 @@ export type AuthStackParamList = {
 };
 
 /**
+ * Navigation interface for settings routes
+ */
+export type SettingsStackParamList = {
+  Settings: undefined;
+  'Connect device': undefined;
+};
+
+/**
  * Base navigation interface
  */
 export type RootTabParamList = {
   Home: undefined;
-  Auth: NavigatorScreenParams<AuthStackParamList>;
+  AuthStack: NavigatorScreenParams<AuthStackParamList> | undefined;
+  SettingsStack: NavigatorScreenParams<SettingsStackParamList> | undefined;
 };
 
 /**
@@ -35,5 +44,15 @@ export type AuthScreenProps<
   RouteName extends keyof AuthStackParamList = keyof AuthStackParamList,
 > = CompositeScreenProps<
   StackScreenProps<AuthStackParamList, RouteName>,
+  BottomTabScreenProps<RootTabParamList>
+>;
+
+/**
+ * Interface for screens under the settings-stack
+ */
+export type SettingsScreenProps<
+  RouteName extends keyof SettingsStackParamList = keyof SettingsStackParamList,
+> = CompositeScreenProps<
+  StackScreenProps<SettingsStackParamList, RouteName>,
   BottomTabScreenProps<RootTabParamList>
 >;

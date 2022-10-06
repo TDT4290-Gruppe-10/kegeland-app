@@ -10,7 +10,6 @@ import {
 import {
   batchUpdateCharacteristics,
   initConnectedDevice,
-  removeUnconnectedDevices,
 } from './bluetooth.helpers';
 import {
   BatchedDeviceCharacteristics,
@@ -21,7 +20,8 @@ import {
 const initialState: BluetoothState = {
   isReady: false,
   isScanning: false,
-  devices: {},
+  connectedDevices: {},
+  availableDevices: {},
   error: null,
 };
 
@@ -40,13 +40,16 @@ export const bluetoothSlice = createSlice({
     },
     addAvailableDevice: (state, action: PayloadAction<BluetoothDevice>) => {
       const key = action.payload.id;
-      state.devices[key] = action.payload;
+      state.availableDevices[key] = action.payload;
     },
     updateCharacteristics: (
       state,
       action: PayloadAction<BatchedDeviceCharacteristics>,
     ) => {
-      state.devices = batchUpdateCharacteristics(state.devices, action.payload);
+      state.connectedDevices = batchUpdateCharacteristics(
+        state.connectedDevices,
+        action.payload,
+      );
     },
   },
   extraReducers: (builder) => {
@@ -60,22 +63,23 @@ export const bluetoothSlice = createSlice({
       })
       .addCase(connectDevice.pending, (state, action) => {
         const key = action.meta.arg;
-        state.devices[key].state = 'connecting';
+        state.availableDevices[key].state = 'connecting';
       })
       .addCase(connectDevice.rejected, (state, action) => {
         state.error = 'Could not connect';
         const key = action.meta.arg;
-        state.devices[key].state = 'connecting';
+        state.availableDevices[key].state = 'available';
       })
       .addCase(connectDevice.fulfilled, (state, action) => {
         const key = action.meta.arg;
         // state.isScanning = false;
-        state.devices[key] = initConnectedDevice(state.devices[key]);
-        state.devices = removeUnconnectedDevices(state.devices);
+        const device = initConnectedDevice(state.availableDevices[key]);
+        delete state.availableDevices[key];
+        state.connectedDevices[key] = device;
       })
       .addCase(disconnectDevice.pending, (state, action) => {
         const key = action.meta.arg;
-        state.devices[key].state = 'disconnecting';
+        state.connectedDevices[key].state = 'disconnecting';
       })
       .addCase(disconnectDevice.rejected, (state) => {
         state.error = 'Could not disconnect';
@@ -83,21 +87,24 @@ export const bluetoothSlice = createSlice({
       })
       .addCase(disconnectDevice.fulfilled, (state, action) => {
         const key = action.meta.arg;
-        state.devices[key].state = 'available';
+        const device = state.connectedDevices[key];
+        device.state = 'available';
+        delete state.connectedDevices[key];
+        state.availableDevices[key] = device;
       })
       .addCase(startNotification.rejected, (state) => {
         state.error = 'Could not start notification';
       })
       .addCase(startNotification.fulfilled, (state, action) => {
         const key = action.meta.arg.id;
-        state.devices[key].active = true;
+        state.connectedDevices[key].active = true;
       })
       .addCase(stopNotification.rejected, (state) => {
         state.error = 'Could not stop notification';
       })
       .addCase(stopNotification.fulfilled, (state, action) => {
         const key = action.meta.arg.id;
-        state.devices[key].active = false;
+        state.connectedDevices[key].active = false;
       });
   },
 });

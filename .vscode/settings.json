@@ -9,6 +9,6 @@
     "editor.codeActionsOnSave": {
       "source.fixAll.eslint": true
     },
-    "files.eol": "\r\n"
+    "files.eol": "\n"
   }
   
