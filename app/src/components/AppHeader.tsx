@@ -1,0 +1,48 @@
+import {StackHeaderProps} from '@react-navigation/stack';
+import React from 'react';
+import {StyleSheet} from 'react-native';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import {TouchableOpacity} from 'react-native-gesture-handler';
+import {Appbar, Text} from 'react-native-paper';
+
+type AppHeaderProps = StackHeaderProps;
+
+const AppHeader: React.FC<AppHeaderProps> = ({navigation, back}) => {
+  return back ? (
+    <Appbar.Header style={styles.wrapper}>
+      <TouchableOpacity style={styles.back} onPress={() => navigation.goBack()}>
+        <Icon
+          size={30}
+          style={styles.backIcon}
+          color="#0081cb"
+          name="chevron-left"
+        />
+        <Text style={styles.backTitle}>{back.title}</Text>
+      </TouchableOpacity>
+    </Appbar.Header>
+  ) : null;
+};
+
+const styles = StyleSheet.create({
+  wrapper: {
+    padding: 0,
+    justifyContent: 'flex-start',
+  },
+  back: {
+    flex: 1,
+    flexDirection: 'row',
+    alignSelf: 'center',
+    alignItems: 'center',
+    alignContent: 'center',
+  },
+  backIcon: {
+    paddingTop: 3,
+  },
+  backTitle: {
+    color: '#0081cb',
+    fontWeight: '500',
+    fontSize: 18,
+  },
+});
+
+export default AppHeader;
