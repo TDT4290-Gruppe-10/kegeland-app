@@ -7,6 +7,7 @@ import {
   ProfileKey,
   SCAN_TIME,
 } from '~constants/bluetooth';
+import {getAllServiceIds} from '~utils/bluetooth';
 
 export const startNotification = createAsyncThunk(
   'bluetooth/startNotification',
@@ -42,12 +43,14 @@ export const stopNotification = createAsyncThunk(
 
 export const startDeviceScan = createAsyncThunk(
   'bluetooth/scanForDevices',
-  async (serviceUUIDs: string[]) =>
-    BleManager.scan(serviceUUIDs, SCAN_TIME, ALLOW_DUPLICATE_DEVICES).catch(
-      () => {
-        throw new Error('Failed to start the scan');
-      },
-    ),
+  async () =>
+    BleManager.scan(
+      getAllServiceIds(),
+      SCAN_TIME,
+      ALLOW_DUPLICATE_DEVICES,
+    ).catch(() => {
+      throw new Error('Failed to start the scan');
+    }),
 );
 
 export const forceStopDeviceScan = createAsyncThunk(

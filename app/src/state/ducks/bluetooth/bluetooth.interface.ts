@@ -1,3 +1,5 @@
+import {Peripheral} from 'react-native-ble-manager';
+
 import {ProfileKey} from '~constants/bluetooth';
 
 export type DeviceConnectionState =
@@ -14,6 +16,10 @@ export type BatchedDeviceCharacteristics = Record<
   string,
   DeviceCharacteristics
 >;
+
+export type ValidPeripheral = Peripheral & {
+  type: string;
+};
 
 export type BluetoothDevice = {
   id: string;

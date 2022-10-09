@@ -1,11 +1,9 @@
 import {AnyAction} from '@reduxjs/toolkit';
 import {has} from 'lodash';
-import {Peripheral} from 'react-native-ble-manager';
 import {put, take, fork, cancel, all, cancelled} from 'redux-saga/effects';
 
 import {ProfileKey} from '~constants/bluetooth';
 
-import {initDevice} from './bluetooth.helpers';
 import {
   createDeviceStreamChannel,
   createNotificationStreamChannel,
@@ -16,6 +14,7 @@ import {
   stopNotification,
 } from './bluetooth.actions';
 import {bluetoothSlice} from './bluetooth.reducer';
+import {ValidPeripheral} from './bluetooth.interface';
 
 const sagaActionConstants = {
   SET_ERROR: bluetoothSlice.actions.setError.type,
@@ -57,14 +56,14 @@ function* handleNotificationRequest(
   }
 }
 
-function* handleDeviceScan(): Generator<AnyAction, void, Peripheral> {
+function* handleDeviceScan(): Generator<AnyAction, void, ValidPeripheral> {
   const channel = createDeviceStreamChannel();
   try {
     while (true) {
       const peripheral = yield take(channel);
       yield put({
         type: sagaActionConstants.ADD_AVAILABLE_DEVICE,
-        payload: initDevice(peripheral, 'femfit'),
+        payload: peripheral,
       });
     }
   } catch (err) {

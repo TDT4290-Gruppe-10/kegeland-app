@@ -1,6 +1,5 @@
 import {PayloadAction} from '@reduxjs/toolkit';
-import {forEach, reduce, merge, size} from 'lodash';
-import {Peripheral} from 'react-native-ble-manager';
+import {forEach, reduce, merge, size, capitalize} from 'lodash';
 
 import {ProfileKey} from '~constants/bluetooth';
 import {getCharacteristics, getProfile} from '~utils/bluetooth';
@@ -10,6 +9,7 @@ import {
   BluetoothDevice,
   BluetoothState,
   DeviceCharacteristics,
+  ValidPeripheral,
 } from './bluetooth.interface';
 import {orderDevicesByState} from './bluetooth.utils';
 
@@ -38,31 +38,24 @@ export const batchUpdateCharacteristics = (
   return devices;
 };
 
-export const initDevice = (
-  peripheral: Peripheral,
-  deviceType: string,
-): BluetoothDevice => {
-  const {id, name, rssi} = peripheral;
-  return {
-    id,
-    name: name || 'NO NAME',
-    rssi,
-    type: deviceType,
-    active: false,
-    state: 'available',
-    characteristics: {},
-  };
-};
-
 export const addAvailableDeviceReducer = (
   state: BluetoothState,
-  action: PayloadAction<BluetoothDevice>,
+  action: PayloadAction<ValidPeripheral>,
 ) => {
   const deviceId = action.payload.id;
   if (
     !(deviceId in state.connectedDevices || deviceId in state.availableDevices)
   ) {
-    state.availableDevices[deviceId] = action.payload;
+    const {id, rssi, type} = action.payload;
+    state.availableDevices[deviceId] = {
+      id,
+      name: capitalize(type),
+      rssi,
+      type,
+      active: false,
+      state: 'available',
+      characteristics: {},
+    };
   }
 };
 
