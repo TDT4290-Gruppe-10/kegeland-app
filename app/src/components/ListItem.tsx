@@ -5,14 +5,15 @@ import {List, useTheme} from 'react-native-paper';
 import Icon from './Icon';
 import ListItemSkeleton from './ListItemSkeleton';
 
-type ListItemProps = {
+type ListItemProps = Omit<
+  React.ComponentProps<typeof List.Item>,
+  'onLongPress'
+> & {
   icon?: string;
   iconSize?: number;
   iconStyle?: StyleProp<TextStyle>;
-  title: string | undefined;
   isRoute?: boolean;
   loading?: boolean;
-  onPress?: () => void;
   onLongPress?: () => void;
   render?: (props: {
     color: string;
@@ -25,46 +26,56 @@ type ListItemProps = {
   }) => React.ReactNode;
 };
 
-const ListItem: React.FC<ListItemProps> = (props) => {
+const ListItem: React.FC<ListItemProps> = ({
+  icon,
+  iconSize,
+  iconStyle,
+  isRoute,
+  loading,
+  onLongPress,
+  render,
+  ...props
+}) => {
   const {colors} = useTheme();
   const handleOnPress =
-    props.onPress || props.onLongPress
+    props.onPress || onLongPress
       ? () => {
-          if (props.onLongPress) return () => null;
+          if (onLongPress) return () => null;
           return props.onPress && props.onPress();
         }
       : undefined;
 
-  const handleOnLongPress = props.onLongPress
+  const handleOnLongPress = onLongPress
     ? () => {
-        return props.onLongPress && props.onLongPress();
+        return onLongPress && onLongPress();
       }
     : undefined;
 
-  return props.loading ? (
+  return loading ? (
     <ListItemSkeleton />
   ) : (
     <List.Item
+      {...props}
       onPress={handleOnPress}
       onLongPress={handleOnLongPress}
       delayLongPress={500}
       left={
-        props.icon
+        icon
           ? () => (
               <Icon
                 color={colors.primary}
-                icon={props.icon as string}
-                size={props.iconSize}
-                style={props.iconStyle}
+                icon={icon as string}
+                size={iconSize}
+                style={iconStyle}
               />
             )
           : undefined
       }
       title={props.title}
       right={
-        props.isRoute
+        isRoute
           ? ({color}) => <Icon color={color} icon="chevron-right" />
-          : props.render
+          : render
       }
     />
   );
