@@ -20,7 +20,7 @@ const ConnectDeviceScreen: React.FC<
   const {availableDevices} = useAppSelector((state) => state.bluetooth);
 
   useEffect(() => {
-    dispatch(startDeviceScan([]));
+    dispatch(startDeviceScan());
 
     return () => {
       dispatch(forceStopDeviceScan());

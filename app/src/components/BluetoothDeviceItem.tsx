@@ -35,16 +35,16 @@ const BluetoothDeviceItem: React.FC<BluetoothDeviceItemProps> = ({
         dispatch(connectDevice(device.id));
     }
   };
-
   return (
     <ListItem
       title={device.name}
       onLongPress={handlePress}
       {...props}
+      titleStyle={[styles.title, {color: colors.text}]}
       render={(renderProps) => (
         <Text
           {...renderProps}
-          style={[styles.deviceState, {color: colors.text}]}>
+          style={[styles.deviceState, {color: colors.primary}]}>
           {capitalize(device.state)}
         </Text>
       )}
@@ -53,9 +53,12 @@ const BluetoothDeviceItem: React.FC<BluetoothDeviceItemProps> = ({
 };
 
 const styles = StyleSheet.create({
+  title: {
+    fontWeight: '500',
+  },
   deviceState: {
-    fontSize: 13,
-    fontWeight: '400',
+    fontSize: 14,
+    fontWeight: '700',
     alignSelf: 'center',
   },
 });
