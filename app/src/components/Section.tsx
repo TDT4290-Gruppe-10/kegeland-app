@@ -1,17 +1,18 @@
 import React from 'react';
-import {StyleSheet} from 'react-native';
-import {Surface, Title, useTheme} from 'react-native-paper';
+import {StyleSheet, ViewStyle} from 'react-native';
+import {Divider, Surface, Title} from 'react-native-paper';
 
 type SectionProps = {
   title: string;
+  style?: ViewStyle;
   children?: React.ReactNode;
 };
 
-const Section: React.FC<SectionProps> = ({title, children}) => {
-  const {colors} = useTheme();
+const Section: React.FC<SectionProps> = ({title, children, ...props}) => {
   return (
-    <Surface style={styles.surface}>
-      <Title style={[{color: colors.placeholder}, styles.title]}>{title}</Title>
+    <Surface style={[styles.surface, props.style]}>
+      <Title style={styles.title}>{title}</Title>
+      <Divider />
       {children}
     </Surface>
   );
@@ -23,7 +24,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     borderRadius: 15,
   },
-  title: {fontSize: 14, paddingHorizontal: 10},
+  title: {
+    fontSize: 15,
+    fontWeight: '700',
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+  },
 });
 
 export default Section;
