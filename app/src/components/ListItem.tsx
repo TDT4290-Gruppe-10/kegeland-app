@@ -1,15 +1,17 @@
 import React from 'react';
 import {StyleProp, TextStyle} from 'react-native';
-import {List} from 'react-native-paper';
+import {List, useTheme} from 'react-native-paper';
 
 import Icon from './Icon';
+import ListItemSkeleton from './ListItemSkeleton';
 
 type ListItemProps = {
   icon?: string;
   iconSize?: number;
   iconStyle?: StyleProp<TextStyle>;
-  title: string;
+  title: string | undefined;
   isRoute?: boolean;
+  loading?: boolean;
   onPress?: () => void;
   onLongPress?: () => void;
   render?: (props: {
@@ -24,6 +26,7 @@ type ListItemProps = {
 };
 
 const ListItem: React.FC<ListItemProps> = (props) => {
+  const {colors} = useTheme();
   const handleOnPress =
     props.onPress || props.onLongPress
       ? () => {
@@ -38,16 +41,18 @@ const ListItem: React.FC<ListItemProps> = (props) => {
       }
     : undefined;
 
-  return (
+  return props.loading ? (
+    <ListItemSkeleton />
+  ) : (
     <List.Item
       onPress={handleOnPress}
       onLongPress={handleOnLongPress}
       delayLongPress={500}
       left={
         props.icon
-          ? ({color}) => (
+          ? () => (
               <Icon
-                color={color}
+                color={colors.primary}
                 icon={props.icon as string}
                 size={props.iconSize}
                 style={props.iconStyle}
@@ -63,6 +68,10 @@ const ListItem: React.FC<ListItemProps> = (props) => {
       }
     />
   );
+};
+
+ListItem.defaultProps = {
+  iconSize: 24,
 };
 
 export default ListItem;
