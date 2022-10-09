@@ -2,16 +2,11 @@ import React from 'react';
 
 import useBluetooth from '~hooks/useBluetooth';
 
-export type WithBluetoothProps = {
-  children: React.ReactNode;
-} & any;
+const withBluetooth =
+  <P extends object>(Component: React.FC<P>): React.FC<P> =>
+  (props) => {
+    useBluetooth();
+    return <Component {...props} />;
+  };
 
-/**
- * Higher-order component for wrapping sub-components with bluetooth functionality
- * @param param0 any params
- * @returns children component wrapped with bluetooth functionality
- */
-const WithBluetooth: React.FC<WithBluetoothProps> = ({children}) =>
-  useBluetooth() && children;
-
-export default WithBluetooth;
+export default withBluetooth;

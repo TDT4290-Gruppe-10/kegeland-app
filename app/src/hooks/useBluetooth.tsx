@@ -3,6 +3,7 @@ import {NativeEventEmitter, NativeModules, Platform} from 'react-native';
 import BleManager from 'react-native-ble-manager';
 
 import {
+  deviceDisconnected,
   setError,
   setReady,
   stopDeviceScan,
@@ -26,8 +27,11 @@ const useBluetooth = () => {
    * Updates state in redux store when scan stopped
    */
   const handleStopScan = () => {
-    console.log('Stopped scanning');
     dispatch(stopDeviceScan());
+  };
+
+  const handleDisconnectedPeripheral = ({peripheral}: {peripheral: string}) => {
+    dispatch(deviceDisconnected(peripheral));
   };
 
   /**
@@ -46,6 +50,10 @@ const useBluetooth = () => {
     );
 
     bleManagerEmitter.addListener('BleManagerStopScan', handleStopScan);
+    bleManagerEmitter.addListener(
+      'BleManagerDisconnectPeripheral',
+      handleDisconnectedPeripheral,
+    );
 
     // Verify the app's permissions
     verifyPermissions().then(() => dispatch(setReady()));
@@ -53,6 +61,7 @@ const useBluetooth = () => {
     // Remove listeners when the component is unmounted
     return () => {
       bleManagerEmitter.removeAllListeners('BleManagerStopScan');
+      bleManagerEmitter.removeAllListeners('BleManagerDisconnectPeripheral');
     };
   }, []);
 

@@ -30,7 +30,7 @@ export interface BluetoothState {
   isScanning: boolean;
   connectedDevices: Record<string, BluetoothDevice>;
   availableDevices: Record<string, BluetoothDevice>;
-  error: string | null;
+  error: string | undefined;
 }
 
 export type DeviceNotification = {

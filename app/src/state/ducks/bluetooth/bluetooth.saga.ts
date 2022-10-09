@@ -18,6 +18,7 @@ import {
 import {bluetoothSlice} from './bluetooth.reducer';
 
 const sagaActionConstants = {
+  SET_ERROR: bluetoothSlice.actions.setError.type,
   START_NOTIFICATION_REQUEST: startNotification.pending.type,
   START_NOTIFICATION_FULFILLED: startNotification.fulfilled.type,
   NOTIFICATION_STOP: stopNotification.fulfilled.type,
@@ -43,7 +44,14 @@ function* handleNotificationRequest(
       });
     }
   } catch (err) {
-    console.log(err);
+    let msg = 'An unknown error has occurred';
+    if (err instanceof Error) {
+      msg = err.message;
+    }
+    yield put({
+      type: sagaActionConstants.SET_ERROR,
+      payload: msg,
+    });
   } finally {
     channel.close();
   }
@@ -60,7 +68,14 @@ function* handleDeviceScan(): Generator<AnyAction, void, Peripheral> {
       });
     }
   } catch (err) {
-    console.log(err);
+    let msg = 'An unknown error has occurred';
+    if (err instanceof Error) {
+      msg = err.message;
+    }
+    yield put({
+      type: sagaActionConstants.SET_ERROR,
+      payload: msg,
+    });
   } finally {
     if (yield cancelled()) {
       channel.close();
@@ -71,7 +86,6 @@ function* handleDeviceScan(): Generator<AnyAction, void, Peripheral> {
 export function* watchDeviceScanRequest(): any {
   while (yield take(sagaActionConstants.SCAN_FOR_DEVICE_START)) {
     const task = yield fork(handleDeviceScan);
-
     yield take(sagaActionConstants.SCAN_FOR_DEVICE_STOP);
     yield cancel(task);
   }
@@ -93,8 +107,8 @@ export function* watchNotificationStartRequest(): Generator<
       runningTasks[profileKey] = task;
     }
 
-    const foo = yield take(sagaActionConstants.NOTIFICATION_STOP);
-    yield cancel(runningTasks[foo.meta.arg.profileKey]);
+    const stopCall = yield take(sagaActionConstants.NOTIFICATION_STOP);
+    yield cancel(runningTasks[stopCall.meta.arg.profileKey]);
   }
 }
 
