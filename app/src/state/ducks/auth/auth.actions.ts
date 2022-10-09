@@ -29,12 +29,19 @@ export const signInUser = createAsyncThunk(
     }),
 );
 
-export const signOutUser = createAsyncThunk('auth/signOutUser', async () =>
-  apiCaller<void>('auth/logout', 'POST').then(async (res) => {
-    await removeTokens();
+export const signOutUser = createAsyncThunk('auth/signOutUser', async () => {
+  try {
+    const res = await apiCaller<void>('auth/logout', 'POST');
     return res;
-  }),
-);
+  } catch (err) {
+    if (err instanceof Error) {
+      throw err;
+    }
+    throw new Error('An unknown error has occurred');
+  } finally {
+    await removeTokens();
+  }
+});
 
 export const signUpUser = createAsyncThunk(
   'auth/signUpUser',
