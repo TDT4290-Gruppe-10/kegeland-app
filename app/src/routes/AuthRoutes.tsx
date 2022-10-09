@@ -2,6 +2,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 import React from 'react';
 
 import AppHeader from '~components/AppHeader';
+import withAuthPortal from '~hoc/withAuthPortal';
 import ForgotPasswordScreen from '~views/auth/ForgotPasswordScreen';
 import LoginScreen from '~views/auth/LoginScreen';
 import RegisterScreen from '~views/auth/RegisterScreen';
@@ -18,11 +19,14 @@ const AuthRoutes: React.FC = () => {
         header: (props) => <AppHeader {...props} />,
         headerShown: true,
       }}>
-      <AuthStack.Screen name="Login" component={LoginScreen} />
-      <AuthStack.Screen name="Register" component={RegisterScreen} />
+      <AuthStack.Screen name="Login" component={withAuthPortal(LoginScreen)} />
+      <AuthStack.Screen
+        name="Register"
+        component={withAuthPortal(RegisterScreen)}
+      />
       <AuthStack.Screen
         name="Forgot password"
-        component={ForgotPasswordScreen}
+        component={withAuthPortal(ForgotPasswordScreen)}
       />
     </AuthStack.Navigator>
   );
