@@ -12,9 +12,9 @@ import {
   REGISTER,
 } from 'redux-persist';
 
+import appReducer from './ducks/app/app.reducer';
 import bluetoothReducer from './ducks/bluetooth/bluetooth.reducer';
 import authReducer from './ducks/auth/auth.reducer';
-import settingsReducer from './ducks/settings/settings.reducer';
 
 import rootSaga, {sagaMiddleware} from './rootSaga';
 
@@ -22,12 +22,12 @@ const persistConfig = {
   key: 'root',
   version: 1,
   storage: AsyncStorage,
-  whitelist: ['auth'],
+  whitelist: ['app', 'auth'],
 };
 
 const rootReducer = combineReducers({
+  app: appReducer,
   auth: authReducer,
-  settings: settingsReducer,
   bluetooth: bluetoothReducer,
 });
 
