@@ -1,9 +1,21 @@
-import {keys} from 'lodash';
+import {chain, keys} from 'lodash';
 
-import {BLE_PROFILES, ProfileKey} from '~constants/bluetooth';
+import {BLE_PROFILES, PERIPHERAL_MAP, ProfileKey} from '~constants/bluetooth';
 
 export const getProfile = (key: ProfileKey) => {
   return BLE_PROFILES[key];
+};
+
+export const getAllServiceIds = () => {
+  return keys(PERIPHERAL_MAP);
+};
+
+export const getPeripheralType = (serviceUUIDs: string[]) => {
+  const key = chain(serviceUUIDs)
+    .filter((uuid) => uuid in PERIPHERAL_MAP)
+    .first()
+    .value();
+  return key ? PERIPHERAL_MAP[key] : undefined;
 };
 
 export const getNotificationChannels = (key: ProfileKey) => {
