@@ -17,12 +17,12 @@ const getTheme = (isDarkMode: boolean) => {
 const withThemedNavigation =
   <P extends object>(Component: React.FC<P>): React.FC<P> =>
   (props) => {
-    const {isDarkMode} = useAppSelector((state) => state.settings);
-    const [theme, setTheme] = useState(getTheme(isDarkMode));
+    const {darkMode} = useAppSelector((state) => state.app.settings);
+    const [theme, setTheme] = useState(getTheme(darkMode));
 
     useEffect(() => {
-      setTheme(getTheme(isDarkMode));
-    }, [isDarkMode]);
+      setTheme(getTheme(darkMode));
+    }, [darkMode]);
 
     return (
       <PaperProvider theme={theme}>
