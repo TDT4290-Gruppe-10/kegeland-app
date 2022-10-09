@@ -1,6 +1,6 @@
 import React from 'react';
 import {StyleProp, StyleSheet, TextStyle} from 'react-native';
-import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
+import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 type IconProps = {
   color?: string;
