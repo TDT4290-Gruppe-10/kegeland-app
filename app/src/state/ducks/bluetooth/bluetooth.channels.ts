@@ -5,10 +5,12 @@ import {END, EventChannel, eventChannel} from 'redux-saga';
 import {UPDATE_INTERVAL_MS} from '~constants/bluetooth';
 import {bleManagerEmitter} from '~hooks/useBluetooth';
 import {store} from '~state/store';
+import {getPeripheralType} from '~utils/bluetooth';
 
 import {
   BatchedDeviceCharacteristics,
   DeviceNotification,
+  ValidPeripheral,
 } from './bluetooth.interface';
 
 export const createNotificationStreamChannel = (
@@ -42,15 +44,18 @@ export const createNotificationStreamChannel = (
   });
 };
 
-export const createDeviceStreamChannel = (): EventChannel<Peripheral> =>
-  eventChannel<Peripheral>((emitter) => {
+export const createDeviceStreamChannel = (): EventChannel<ValidPeripheral> =>
+  eventChannel<ValidPeripheral>((emitter) => {
     bleManagerEmitter.addListener(
       'BleManagerDiscoverPeripheral',
       (peripheral: Peripheral) => {
         const {isScanning} = store.getState().bluetooth;
         if (isScanning) {
-          if (peripheral.advertising.isConnectable) {
-            emitter(peripheral);
+          const type = getPeripheralType(
+            peripheral.advertising.serviceUUIDs || [],
+          );
+          if (type && peripheral.advertising.isConnectable) {
+            emitter({...peripheral, type});
           }
         } else {
           // Exit channel on state change

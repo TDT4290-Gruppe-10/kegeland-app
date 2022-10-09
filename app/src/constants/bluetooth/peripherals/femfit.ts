@@ -16,7 +16,7 @@ export const CHARACTERISTICS = {
   SENSOR: '0d9e0006-c111-49cd-bba3-85c7471cb6fa',
 };
 
-export const FEMFIT_PROFILE: BluetoothProfile = {
+export const PROFILE: BluetoothProfile = {
   notifyChannels: {
     [SERVICES.HOUSEKEEPING_SERVICE]: [],
     [SERVICES.SENSOR_SERVICE]: [

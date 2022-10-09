@@ -1,11 +1,9 @@
 import {AnyAction} from '@reduxjs/toolkit';
 import {has} from 'lodash';
-import {Peripheral} from 'react-native-ble-manager';
 import {put, take, fork, cancel, all, cancelled} from 'redux-saga/effects';
 
 import {ProfileKey} from '~constants/bluetooth';
 
-import {initDevice} from './bluetooth.helpers';
 import {
   createDeviceStreamChannel,
   createNotificationStreamChannel,
@@ -16,8 +14,10 @@ import {
   stopNotification,
 } from './bluetooth.actions';
 import {bluetoothSlice} from './bluetooth.reducer';
+import {ValidPeripheral} from './bluetooth.interface';
 
 const sagaActionConstants = {
+  SET_ERROR: bluetoothSlice.actions.setError.type,
   START_NOTIFICATION_REQUEST: startNotification.pending.type,
   START_NOTIFICATION_FULFILLED: startNotification.fulfilled.type,
   NOTIFICATION_STOP: stopNotification.fulfilled.type,
@@ -43,24 +43,38 @@ function* handleNotificationRequest(
       });
     }
   } catch (err) {
-    console.log(err);
+    let msg = 'An unknown error has occurred';
+    if (err instanceof Error) {
+      msg = err.message;
+    }
+    yield put({
+      type: sagaActionConstants.SET_ERROR,
+      payload: msg,
+    });
   } finally {
     channel.close();
   }
 }
 
-function* handleDeviceScan(): Generator<AnyAction, void, Peripheral> {
+function* handleDeviceScan(): Generator<AnyAction, void, ValidPeripheral> {
   const channel = createDeviceStreamChannel();
   try {
     while (true) {
       const peripheral = yield take(channel);
       yield put({
         type: sagaActionConstants.ADD_AVAILABLE_DEVICE,
-        payload: initDevice(peripheral, 'femfit'),
+        payload: peripheral,
       });
     }
   } catch (err) {
-    console.log(err);
+    let msg = 'An unknown error has occurred';
+    if (err instanceof Error) {
+      msg = err.message;
+    }
+    yield put({
+      type: sagaActionConstants.SET_ERROR,
+      payload: msg,
+    });
   } finally {
     if (yield cancelled()) {
       channel.close();
@@ -71,7 +85,6 @@ function* handleDeviceScan(): Generator<AnyAction, void, Peripheral> {
 export function* watchDeviceScanRequest(): any {
   while (yield take(sagaActionConstants.SCAN_FOR_DEVICE_START)) {
     const task = yield fork(handleDeviceScan);
-
     yield take(sagaActionConstants.SCAN_FOR_DEVICE_STOP);
     yield cancel(task);
   }
@@ -93,8 +106,8 @@ export function* watchNotificationStartRequest(): Generator<
       runningTasks[profileKey] = task;
     }
 
-    const foo = yield take(sagaActionConstants.NOTIFICATION_STOP);
-    yield cancel(runningTasks[foo.meta.arg.profileKey]);
+    const stopCall = yield take(sagaActionConstants.NOTIFICATION_STOP);
+    yield cancel(runningTasks[stopCall.meta.arg.profileKey]);
   }
 }
 

@@ -4,19 +4,19 @@ import {Provider as ReduxProvider} from 'react-redux';
 import {PersistGate} from 'redux-persist/integration/react';
 
 import {store, persistor} from '~state/store';
-import WithBluetooth from '~hoc/WithBluetooth';
+import withBluetooth from '~hoc/withBluetooth';
 
 import Router from './routes';
+
+const Wrapper = withBluetooth(SafeAreaProvider);
 
 export default function App() {
   return (
     <ReduxProvider store={store}>
       <PersistGate loading={null} persistor={persistor}>
-        <WithBluetooth>
-          <SafeAreaProvider>
-            <Router />
-          </SafeAreaProvider>
-        </WithBluetooth>
+        <Wrapper>
+          <Router />
+        </Wrapper>
       </PersistGate>
     </ReduxProvider>
   );

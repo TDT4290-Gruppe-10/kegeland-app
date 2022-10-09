@@ -29,7 +29,7 @@ const schema = yup.object({
 
 const LoginForm: React.FC = () => {
   const navigation = useNavigation<AuthScreenProps<'Login'>['navigation']>();
-  const {error, loading} = useAppSelector(({auth}) => auth);
+  const {loading, error} = useAppSelector((state) => state.auth);
   const dispatch = useAppDispatch();
   const {colors} = useTheme();
   const {control, handleSubmit, formState, reset} = useForm<FormData>({

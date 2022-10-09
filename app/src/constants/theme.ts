@@ -25,5 +25,5 @@ export const lightTheme: Theme = {
 export const darkTheme: Theme = {
   ...defaultDarkTheme,
   roundness: 3,
-  colors: {...defaultDarkTheme.colors, primary: '#D25660'},
+  colors: {...defaultDarkTheme.colors, primary: '#00b0ff'},
 };
