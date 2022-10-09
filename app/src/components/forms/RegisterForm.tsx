@@ -103,7 +103,7 @@ const RegisterForm: React.FC = () => {
           control={control}
           secureTextEntry
           name="password"
-          icon="lock"
+          icon="lock-outline"
           placeholder="Password"
         />
         <FormInput
@@ -111,7 +111,7 @@ const RegisterForm: React.FC = () => {
           control={control}
           name="confirmPassword"
           placeholder="Confirm password"
-          icon="lock-check"
+          icon="lock-check-outline"
           secureTextEntry
         />
       </View>
