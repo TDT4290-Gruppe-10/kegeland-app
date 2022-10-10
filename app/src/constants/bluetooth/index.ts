@@ -4,7 +4,7 @@ import {BluetoothProfile} from './interface';
 
 export const SCAN_TIME = 5;
 export const ALLOW_DUPLICATE_DEVICES = false;
-export const UPDATE_INTERVAL_MS = 500;
+export const UPDATE_INTERVAL_MS = 250;
 
 export const BLE_PROFILES: Record<string, BluetoothProfile> = {
   femfit: femfit.PROFILE,

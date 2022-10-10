@@ -2,6 +2,10 @@ import {readSensorCharacteristic} from '~utils/femfit';
 
 import {BluetoothProfile} from '../interface';
 
+export const PRESSURE_SENSOR_MIN_VAL = 760;
+export const PRESSURE_SENSOR_MAX_VAL = 970;
+export const ACTIVATION_THRESHOLD = 0.05;
+
 export const SERVICES = {
   HOUSEKEEPING_SERVICE: 'b92a0001-4bf9-4870-8aa1-881b3a20ada4',
   SENSOR_SERVICE: '0d9e0001-c111-49cd-bba3-85c7471cb6fa',
