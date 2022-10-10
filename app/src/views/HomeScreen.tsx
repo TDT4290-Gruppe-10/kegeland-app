@@ -1,20 +1,27 @@
-import React, {useEffect, useState} from 'react';
-import {SafeAreaView} from 'react-native';
-import {Text} from 'react-native-paper';
+import {find} from 'lodash';
+import React from 'react';
+import {SafeAreaView, StyleSheet} from 'react-native';
 
+import FemfitDebugger from '~components/FemfitDebugger';
 import useAppSelector from '~hooks/useAppSelector';
 
 const HomeScreen: React.FC = () => {
-  const [data, setData] = useState<any>(null);
-  const {auth} = useAppSelector((state) => state);
-  useEffect(() => {
-    setData(auth);
-  }, [auth]);
+  const device = useAppSelector((state) =>
+    find(
+      state.bluetooth.connectedDevices,
+      (device) => device.type === 'femfit',
+    ),
+  );
+
   return (
-    <SafeAreaView>
-      <Text style={{color: 'black'}}>{JSON.stringify(data, undefined, 2)}</Text>
+    <SafeAreaView style={styles.wrapper}>
+      {device && <FemfitDebugger device={device} />}
     </SafeAreaView>
   );
 };
+
+const styles = StyleSheet.create({
+  wrapper: {flex: 1, position: 'relative'},
+});
 
 export default HomeScreen;
