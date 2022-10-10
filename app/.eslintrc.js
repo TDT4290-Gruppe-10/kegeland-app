@@ -81,6 +81,7 @@ module.exports = {
           ['~containers', './app/src/containers'],
           ['~hoc', './app/src/hoc'],
           ['~hooks', './app/src/hooks'],
+          ['~lib', './app/src/lib'],
           ['~routes', './app/src/routes'],
           ['~state', './app/src/state'],
           ['~utils', './app/src/utils'],
