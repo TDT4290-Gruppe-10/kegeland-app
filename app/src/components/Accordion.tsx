@@ -51,7 +51,7 @@ const Accordion: React.FC<AccordionProps> = (props) => {
       left={renderLeft}
       style={[
         {
-          backgroundColor: colors.elevation.level1,
+          backgroundColor: colors.elevation.elevation1,
         },
         styles.accordion,
         props.style,
