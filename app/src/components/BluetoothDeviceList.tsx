@@ -32,13 +32,7 @@ const BluetoothDeviceList: React.FC<BluetoothDeviceListProps> = ({devices}) => {
     } else {
       return devices.length > 0
         ? devices.map((device) => (
-            <BluetoothDeviceItem
-              key={device.id}
-              device={device}
-              icon={
-                device.state === 'available' ? 'bluetooth' : 'bluetooth-connect'
-              }
-            />
+            <BluetoothDeviceItem key={device.id} device={device} />
           ))
         : Array.from({length: 3}, (_v, i) => <ListItemSkeleton key={i} />);
     }
