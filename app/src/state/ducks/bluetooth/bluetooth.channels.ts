@@ -1,51 +1,15 @@
-import {set, size} from 'lodash';
+import {capitalize} from 'lodash';
 import {Peripheral} from 'react-native-ble-manager';
 import {END, EventChannel, eventChannel} from 'redux-saga';
 
-import {UPDATE_INTERVAL_MS} from '~constants/bluetooth';
 import {bleManagerEmitter} from '~hooks/useBluetooth';
 import {store} from '~state/store';
 import {getPeripheralType} from '~utils/bluetooth';
 
-import {
-  BatchedDeviceCharacteristics,
-  DeviceNotification,
-  ValidPeripheral,
-} from './bluetooth.interface';
+import {BluetoothDevice} from './bluetooth.interface';
 
-export const createNotificationStreamChannel = (
-  deviceId: string,
-): EventChannel<BatchedDeviceCharacteristics> => {
-  return eventChannel<BatchedDeviceCharacteristics>((emitter) => {
-    let data: BatchedDeviceCharacteristics = {};
-    bleManagerEmitter.addListener(
-      'BleManagerDidUpdateValueForCharacteristic',
-      ({peripheral, characteristic, value}: DeviceNotification) => {
-        if (peripheral === deviceId) {
-          set(data, [peripheral, characteristic], value);
-        }
-      },
-    );
-
-    const interval = setInterval(() => {
-      if (size(data) > 0) {
-        emitter(data);
-      }
-
-      data = {};
-    }, UPDATE_INTERVAL_MS);
-    return () => {
-      console.log('Closing notification stream channel');
-      bleManagerEmitter.removeAllListeners(
-        'BleManagerDidUpdateValueForCharacteristic',
-      );
-      clearInterval(interval);
-    };
-  });
-};
-
-export const createDeviceStreamChannel = (): EventChannel<ValidPeripheral> =>
-  eventChannel<ValidPeripheral>((emitter) => {
+export const createDeviceStreamChannel = (): EventChannel<BluetoothDevice> =>
+  eventChannel<BluetoothDevice>((emitter) => {
     bleManagerEmitter.addListener(
       'BleManagerDiscoverPeripheral',
       (peripheral: Peripheral) => {
@@ -55,7 +19,13 @@ export const createDeviceStreamChannel = (): EventChannel<ValidPeripheral> =>
             peripheral.advertising.serviceUUIDs || [],
           );
           if (type && peripheral.advertising.isConnectable) {
-            emitter({...peripheral, type});
+            emitter({
+              id: peripheral.id,
+              name: capitalize(type),
+              battery: undefined,
+              type,
+              state: 'available',
+            });
           }
         } else {
           // Exit channel on state change
@@ -64,7 +34,6 @@ export const createDeviceStreamChannel = (): EventChannel<ValidPeripheral> =>
       },
     );
     return () => {
-      console.log('Closing device stream channel');
       bleManagerEmitter.removeAllListeners('BleManagerDiscoverPeripheral');
     };
   });

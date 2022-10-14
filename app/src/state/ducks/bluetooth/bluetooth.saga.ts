@@ -1,47 +1,48 @@
-import {AnyAction} from '@reduxjs/toolkit';
-import {has} from 'lodash';
-import {put, take, fork, cancel, all, cancelled} from 'redux-saga/effects';
-
-import {ProfileKey} from '~constants/bluetooth';
-
+import {AnyAction, PayloadAction} from '@reduxjs/toolkit';
 import {
-  createDeviceStreamChannel,
-  createNotificationStreamChannel,
-} from './bluetooth.channels';
-import {
-  startDeviceScan,
-  startNotification,
-  stopNotification,
-} from './bluetooth.actions';
+  put,
+  take,
+  fork,
+  cancel,
+  all,
+  cancelled,
+  takeEvery,
+  call,
+} from 'redux-saga/effects';
+
+import {store} from '~state/store';
+import {addServiceListener, getProfile} from '~utils/bluetooth';
+
+import {createDeviceStreamChannel} from './bluetooth.channels';
+import {connectDevice, startDeviceScan} from './bluetooth.actions';
 import {bluetoothSlice} from './bluetooth.reducer';
-import {ValidPeripheral} from './bluetooth.interface';
+import {BluetoothDevice} from './bluetooth.interface';
 
 const sagaActionConstants = {
   SET_ERROR: bluetoothSlice.actions.setError.type,
-  START_NOTIFICATION_REQUEST: startNotification.pending.type,
-  START_NOTIFICATION_FULFILLED: startNotification.fulfilled.type,
-  NOTIFICATION_STOP: stopNotification.fulfilled.type,
-  BLUETOOTH_SERVICES_READY: bluetoothSlice.actions.setReady.type,
-  UPDATE_CHARACTERISTICS: bluetoothSlice.actions.updateCharacteristics.type,
+  ON_DEVICE_CONNECTED: connectDevice.fulfilled.type,
+  ON_DEVICE_DISCONNECTED: bluetoothSlice.actions.deviceDisconnected.type,
   SCAN_FOR_DEVICE_START: startDeviceScan.fulfilled.type,
   SCAN_FOR_DEVICE_STOP: bluetoothSlice.actions.stopDeviceScan.type,
+  ADD_HOUSEKEEPING_SERVICE: bluetoothSlice.actions.addHousekeepingService.type,
   ADD_AVAILABLE_DEVICE: bluetoothSlice.actions.addAvailableDevice.type,
 };
 
-function* handleNotificationRequest(
-  deviceId: string,
-  _profileKey: ProfileKey,
-): any {
-  const channel = createNotificationStreamChannel(deviceId);
+function* handleOnDeviceConnected(
+  action: PayloadAction<void, string, {arg: string}>,
+): Generator<AnyAction, void, void> {
   try {
-    while (true) {
-      const bytes = yield take(channel);
-      // TODO: convert bytes here
-      yield put({
-        type: sagaActionConstants.UPDATE_CHARACTERISTICS,
-        payload: bytes,
-      });
-    }
+    const devices = store.getState().bluetooth.connectedDevices;
+    const device = devices[action.meta.arg];
+    const profile = getProfile(device.type);
+    yield call(addServiceListener, device.id, profile.batteryService.service);
+    yield put({
+      type: sagaActionConstants.ADD_HOUSEKEEPING_SERVICE,
+      payload: {
+        uuid: profile.batteryService.service.uuid,
+        peripheral: device.id,
+      },
+    });
   } catch (err) {
     let msg = 'An unknown error has occurred';
     if (err instanceof Error) {
@@ -51,12 +52,10 @@ function* handleNotificationRequest(
       type: sagaActionConstants.SET_ERROR,
       payload: msg,
     });
-  } finally {
-    channel.close();
   }
 }
 
-function* handleDeviceScan(): Generator<AnyAction, void, ValidPeripheral> {
+function* handleDeviceScan(): Generator<AnyAction, void, BluetoothDevice> {
   const channel = createDeviceStreamChannel();
   try {
     while (true) {
@@ -90,30 +89,16 @@ export function* watchDeviceScanRequest(): any {
   }
 }
 
-export function* watchNotificationStartRequest(): Generator<
-  AnyAction,
-  void,
-  any
-> {
-  const runningTasks: Record<string, any> = {};
-  while (true) {
-    const res: any = yield take(
-      sagaActionConstants.START_NOTIFICATION_FULFILLED,
-    );
-    const {id, profileKey} = res.meta.arg;
-    if (!has(runningTasks, profileKey)) {
-      const task = yield fork(handleNotificationRequest, id, profileKey);
-      runningTasks[profileKey] = task;
-    }
-
-    const stopCall = yield take(sagaActionConstants.NOTIFICATION_STOP);
-    yield cancel(runningTasks[stopCall.meta.arg.profileKey]);
-  }
+function* watchOnDeviceConnectedRequest(): Generator {
+  yield takeEvery(
+    sagaActionConstants.ON_DEVICE_CONNECTED,
+    handleOnDeviceConnected,
+  );
 }
 
 export function* bluetoothSaga(): any {
   yield all([
     fork(watchDeviceScanRequest),
-    fork(watchNotificationStartRequest),
+    fork(watchOnDeviceConnectedRequest),
   ]);
 }
