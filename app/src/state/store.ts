@@ -11,6 +11,7 @@ import {
   PURGE,
   REGISTER,
 } from 'redux-persist';
+import reduxFlipper from 'redux-flipper';
 
 import appReducer from './ducks/app/app.reducer';
 import bluetoothReducer from './ducks/bluetooth/bluetooth.reducer';
@@ -22,7 +23,7 @@ const persistConfig = {
   key: 'root',
   version: 1,
   storage: AsyncStorage,
-  whitelist: ['app', 'auth'],
+  whitelist: ['app', 'auth', 'bluetooth'],
 };
 
 const rootReducer = combineReducers({
@@ -42,6 +43,7 @@ export const store = configureStore({
       },
     })
       .concat(logger)
+      .concat(reduxFlipper())
       .concat(sagaMiddleware);
   },
   devTools: process.env.NODE_ENV !== 'production',
