@@ -2818,7 +2818,7 @@ csstype@^3.0.2:
   resolved "https://registry.yarnpkg.com/csstype/-/csstype-3.1.1.tgz#841b532c45c758ee546a11d5bd7b7b473c8c30b9"
   integrity sha512-DJR/VvkAvSZW9bTouZue2sSxDwdTN92uHjqeKVm+0dAqdfNykRzQ95tay8aXMBAAPpUiq4Qcug2L7neoRh2Egw==
 
-cycle@1.0.x:
+cycle@1.0.x, cycle@^1.0.3:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/cycle/-/cycle-1.0.3.tgz#21e80b2be8580f98b468f379430662b046c34ad2"
   integrity sha512-TVF6svNzeQCOpjCqsy0/CSy8VgObG3wXusJ73xW2GbG5rGx7lC8zxDSURicsXI2UsGdi2L0QNRCi745/wUDvsA==
@@ -2832,7 +2832,7 @@ data-urls@^2.0.0:
     whatwg-mimetype "^2.3.0"
     whatwg-url "^8.0.0"
 
-dayjs@^1.8.15:
+dayjs@^1.8.15, dayjs@^1.8.29:
   version "1.11.5"
   resolved "https://registry.yarnpkg.com/dayjs/-/dayjs-1.11.5.tgz#00e8cc627f231f9499c19b38af49f56dc0ac5e93"
   integrity sha512-CAdX5Q3YW3Gclyo5Vpqkgpj8fSdLQcRuzfX6mC6Phy0nfJ0eGYOeS7m4mt2plDWLAtA4TqTakvbboHvUxfe4iA==
@@ -6654,6 +6654,11 @@ react-native-dotenv@^3.3.1:
   dependencies:
     dotenv "^10.0.0"
 
+react-native-flipper@^0.164.0:
+  version "0.164.0"
+  resolved "https://registry.yarnpkg.com/react-native-flipper/-/react-native-flipper-0.164.0.tgz#64f6269a86a13a72e30f53ba9f5281d2073a7697"
+  integrity sha512-iJhIe3rqx6okuzBp4AJsTa2b8VRAOGzoLRFx/4HGbaGvu8AurZjz8TTQkhJsRma8dsHN2b6KKZPvGGW3wdWzvA==
+
 react-native-game-engine@^1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/react-native-game-engine/-/react-native-game-engine-1.2.0.tgz#a1a049cf9ab9a60607618cafcef8648429f4a817"
@@ -6677,10 +6682,10 @@ react-native-iphone-x-helper@^1.3.1:
   resolved "https://registry.yarnpkg.com/react-native-iphone-x-helper/-/react-native-iphone-x-helper-1.3.1.tgz#20c603e9a0e765fd6f97396638bdeb0e5a60b010"
   integrity sha512-HOf0jzRnq2/aFUcdCJ9w9JGzN3gdEg0zFE4FyYlp4jtidqU03D5X7ZegGKfT1EWteR0gPBGp9ye5T5FvSWi9Yg==
 
-react-native-paper@^5.0.0-rc.6:
-  version "5.0.0-rc.6"
-  resolved "https://registry.yarnpkg.com/react-native-paper/-/react-native-paper-5.0.0-rc.6.tgz#d0f050b04d137daae6e3d457634b26d8332ddaac"
-  integrity sha512-62SRf7vZdwTg/7JXXzcRtEwUyPUVtPu2XZNGVeJ0s96rjAud/V7Ixig7c3Za71fn7Qh/G60PBSq9Gnm0c7joSA==
+react-native-paper@^4.12.5:
+  version "4.12.5"
+  resolved "https://registry.yarnpkg.com/react-native-paper/-/react-native-paper-4.12.5.tgz#5ea4bbe02d416d17802a199de748700358c11d3a"
+  integrity sha512-gdUtJJf0bw/0xoCE1jR6qCQiQCQZ9ivZh0lbPghFFaGxX88WtTQpusnGON8WhLPeH5odEQ4dTBu99lnIQvSFow==
   dependencies:
     "@callstack/react-theme-provider" "^3.0.7"
     color "^3.1.2"
@@ -6861,6 +6866,14 @@ redent@^3.0.0:
   dependencies:
     indent-string "^4.0.0"
     strip-indent "^3.0.0"
+
+redux-flipper@^2.0.2:
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/redux-flipper/-/redux-flipper-2.0.2.tgz#5deca22ef81e71253912fdf8a403f272db9ed27f"
+  integrity sha512-X6OD3+Ok8g0SunzrwS5OtbE735eBDxLz3uuK4fdJSwbAzskqOS3SWc+rKuOpqmLkt8pN+Szp7Nof9Etm75B1Rg==
+  dependencies:
+    cycle "^1.0.3"
+    dayjs "^1.8.29"
 
 redux-logger@^3.0.6:
   version "3.0.6"
