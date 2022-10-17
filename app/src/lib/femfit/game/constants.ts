@@ -1,14 +1,14 @@
 import {Dimensions} from 'react-native';
 
 export default {
+  MAX_WIDTH: Dimensions.get('screen').width,
+  MAX_HEIGHT: Dimensions.get('screen').height,
+  BASELINE: Dimensions.get('screen').height * 0.6,
+  STARS_PER_SEC: 4,
+  HEADER_HEIGHT: 50,
+  BOUNDARY_HEIGHT: 50,
   SPRITE_SIZE: 128,
-  GRAVITY_Y: 1,
-  PLAYER_VELOCITY_Y: 20,
-  MAX_WIDTH: Dimensions.get('window').width,
-  MAX_HEIGHT: Dimensions.get('window').height,
-  FLOOR_HEIGHT: 50,
-  BIRD_WIDTH: 40,
-  BIRD_HEIGHT: 51,
-  COIN_WIDTH: 20,
-  COIN_HEIGHT: 20,
+  PLAYER_SIZE: 50,
+  COIN_SIZE: 25,
+  GRAVITY: 0.4,
 };
