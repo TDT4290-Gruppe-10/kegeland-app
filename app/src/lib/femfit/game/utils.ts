@@ -1,9 +1,44 @@
 import Matter from 'matter-js';
 
-export const getCenteredBodyPosition = (body: Matter.Body) => {
-  const width = body.bounds.max.x - body.bounds.min.x;
-  const height = body.bounds.max.x - body.bounds.min.x;
-  const x = body.position.x - width / 2;
-  const y = body.position.y - height / 2;
-  return {x, y};
+import Coin, {CoinEntity} from './entities/Coin';
+
+import constants from './constants';
+import {ExerciseScheme, GameEntities, Position} from './interface';
+
+const {MAX_WIDTH, BASELINE, COIN_SIZE, PLAYER_SIZE, STARS_PER_SEC} = constants;
+
+export const getMaxExerciseScore = (exercise: ExerciseScheme) => {
+  const {data, repetitions} = exercise;
+  const denominator = 1000 / STARS_PER_SEC;
+  return (
+    (data.reduce((prev, curr) => prev + curr[1], 0) / denominator) * repetitions
+  );
+};
+
+export const isCoinBody = (body: Matter.Body) => {
+  return body.isSensor && body.label.startsWith('coin_');
+};
+
+export const shouldDeleteCoin = (coin: CoinEntity) =>
+  coin.scored || coin.body.position.x < 0;
+
+export const spawnCoins = (
+  engine: Matter.Engine,
+  entities: GameEntities,
+  pointer: number,
+  data: [number, number],
+) => {
+  const [level, ms] = data;
+  const denominator = 1000 / STARS_PER_SEC;
+  const numCoins = Math.trunc(ms / denominator);
+  for (let i = 0; i < numCoins; i++) {
+    pointer++;
+    const label = `coin_${pointer}`;
+    const pos: Position = {
+      x: MAX_WIDTH + COIN_SIZE * 2 * i,
+      y: BASELINE - BASELINE * level - PLAYER_SIZE / 2,
+    };
+    entities[label] = Coin(engine.world, pos, label);
+  }
+  return pointer;
 };
