@@ -16,7 +16,6 @@ httpInstance.interceptors.request.use(
     const token = await retrieveToken(Token.ACCESS_TOKEN);
     if (token) {
       config.headers!.Authorization = 'Bearer ' + token;
-      console.log(config.headers);
     }
     return config;
   },

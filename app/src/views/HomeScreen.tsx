@@ -1,20 +1,17 @@
-import React, {useEffect, useState} from 'react';
-import {SafeAreaView} from 'react-native';
+import React from 'react';
+import {SafeAreaView, StyleSheet} from 'react-native';
 import {Text} from 'react-native-paper';
 
-import useAppSelector from '~hooks/useAppSelector';
-
 const HomeScreen: React.FC = () => {
-  const [data, setData] = useState<any>(null);
-  const {auth} = useAppSelector((state) => state);
-  useEffect(() => {
-    setData(auth);
-  }, [auth]);
   return (
-    <SafeAreaView>
-      <Text style={{color: 'black'}}>{JSON.stringify(data, undefined, 2)}</Text>
+    <SafeAreaView style={styles.wrapper}>
+      <Text>Halla</Text>
     </SafeAreaView>
   );
 };
+
+const styles = StyleSheet.create({
+  wrapper: {flex: 1, position: 'relative'},
+});
 
 export default HomeScreen;

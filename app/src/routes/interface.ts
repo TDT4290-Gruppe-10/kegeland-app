@@ -13,6 +13,11 @@ export type AuthStackParamList = {
   'Forgot password': undefined;
 };
 
+export type ExerciseStackParamList = {
+  Exercises: undefined;
+  Femfit: undefined;
+};
+
 /**
  * Navigation interface for settings routes
  */
@@ -27,6 +32,7 @@ export type SettingsStackParamList = {
 export type RootTabParamList = {
   Home: undefined;
   AuthStack: NavigatorScreenParams<AuthStackParamList> | undefined;
+  ExerciseStack: NavigatorScreenParams<ExerciseStackParamList> | undefined;
   SettingsStack: NavigatorScreenParams<SettingsStackParamList> | undefined;
 };
 
@@ -44,6 +50,13 @@ export type AuthScreenProps<
   RouteName extends keyof AuthStackParamList = keyof AuthStackParamList,
 > = CompositeScreenProps<
   StackScreenProps<AuthStackParamList, RouteName>,
+  BottomTabScreenProps<RootTabParamList>
+>;
+
+export type ExerciseScreenProps<
+  RouteName extends keyof ExerciseStackParamList = keyof ExerciseStackParamList,
+> = CompositeScreenProps<
+  StackScreenProps<ExerciseStackParamList, RouteName>,
   BottomTabScreenProps<RootTabParamList>
 >;
 

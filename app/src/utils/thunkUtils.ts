@@ -9,16 +9,29 @@ type RejectedAction = ReturnType<GenericAsyncThunk['rejected']>;
 
 type FulfilledAction = ReturnType<GenericAsyncThunk['fulfilled']>;
 
-export function isPendingAction(action: AnyAction): action is PendingAction {
-  return action.type.endsWith('/pending');
+export function isPendingAction(
+  action: AnyAction,
+  reducer: string,
+): action is PendingAction {
+  return (
+    reducer === action.type.split('/')[0] && action.type.endsWith('/pending')
+  );
 }
 
-export function isRejectedAction(action: AnyAction): action is RejectedAction {
-  return action.type.endsWith('/rejected');
+export function isRejectedAction(
+  action: AnyAction,
+  reducer: string,
+): action is RejectedAction {
+  return (
+    reducer === action.type.split('/')[0] && action.type.endsWith('/rejected')
+  );
 }
 
 export function isFulfilledAction(
   action: AnyAction,
+  reducer: string,
 ): action is FulfilledAction {
-  return action.type.endsWith('/fulfilled');
+  return (
+    reducer === action.type.split('/')[0] && action.type.endsWith('/fulfilled')
+  );
 }

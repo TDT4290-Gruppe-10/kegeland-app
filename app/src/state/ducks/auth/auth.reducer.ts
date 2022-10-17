@@ -46,18 +46,27 @@ const authSlice = createSlice({
       .addCase(signOutUser.fulfilled, signOutReducer)
       .addCase(signOutUser.rejected, signOutReducer)
       .addCase(signUpUser.fulfilled, signInReducer)
-      .addMatcher(isPendingAction, (state) => {
-        state.loading = true;
-        state.error = undefined;
-      })
-      .addMatcher(isFulfilledAction, (state) => {
-        state.loading = false;
-        state.error = undefined;
-      })
-      .addMatcher(isRejectedAction, (state, {error}) => {
-        state.loading = false;
-        state.error = error.message;
-      });
+      .addMatcher(
+        (action) => isPendingAction(action, 'auth'),
+        (state) => {
+          state.loading = true;
+          state.error = undefined;
+        },
+      )
+      .addMatcher(
+        (action) => isFulfilledAction(action, 'auth'),
+        (state) => {
+          state.loading = false;
+          state.error = undefined;
+        },
+      )
+      .addMatcher(
+        (action) => isRejectedAction(action, 'auth'),
+        (state, {error}) => {
+          state.loading = false;
+          state.error = error.message;
+        },
+      );
   },
 });
 

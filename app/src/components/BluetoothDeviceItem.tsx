@@ -1,7 +1,7 @@
-import React from 'react';
-import {capitalize} from 'lodash';
-import {StyleProp, StyleSheet, Text, TextStyle} from 'react-native';
-import {useTheme} from 'react-native-paper';
+import React, {useState} from 'react';
+import {capitalize, round} from 'lodash';
+import {StyleSheet, TouchableOpacity, View} from 'react-native';
+import {Menu, Title, Text, useTheme} from 'react-native-paper';
 
 import useAppDispatch from '~hooks/useAppDispatch';
 import {
@@ -10,21 +10,38 @@ import {
 } from '~state/ducks/bluetooth/bluetooth.actions';
 import {BluetoothDevice} from '~state/ducks/bluetooth/bluetooth.interface';
 
-import ListItem from './ListItem';
+import Icon from './Icon';
 
 type BluetoothDeviceItemProps = {
   device: BluetoothDevice;
-  icon?: string;
-  iconSize?: number;
-  iconStyle?: StyleProp<TextStyle>;
 };
 
-const BluetoothDeviceItem: React.FC<BluetoothDeviceItemProps> = ({
-  device,
-  ...props
-}) => {
+const getBatteryLevelIcon = (power: number) => {
+  const val = round(power, 1) * 100;
+  if (val === 100) {
+    return 'battery-bluetooth';
+  }
+
+  return `battery-${val}-bluetooth`;
+};
+
+const BluetoothDeviceItem: React.FC<BluetoothDeviceItemProps> = ({device}) => {
   const dispatch = useAppDispatch();
   const {colors} = useTheme();
+
+  const stateColor = () => {
+    switch (device.state) {
+      case 'connected':
+        return colors.status.success;
+      default:
+        return colors.status.alert;
+    }
+  };
+
+  const [visible, setVisible] = useState<boolean>(false);
+  const toggle = () => {
+    setVisible(!visible);
+  };
 
   const handlePress = () => {
     switch (device.state) {
@@ -34,32 +51,103 @@ const BluetoothDeviceItem: React.FC<BluetoothDeviceItemProps> = ({
       default:
         dispatch(connectDevice(device.id));
     }
+    setVisible(false);
   };
   return (
-    <ListItem
-      title={device.name}
-      onLongPress={handlePress}
-      {...props}
-      titleStyle={[styles.title, {color: colors.text}]}
-      render={(renderProps) => (
-        <Text
-          {...renderProps}
-          style={[styles.deviceState, {color: colors.primary}]}>
-          {capitalize(device.state)}
-        </Text>
-      )}
-    />
+    <View style={styles.wrapper}>
+      <View style={styles.leftWrapper}>
+        <Icon icon="bluetooth" size={24} color={colors.primary} />
+      </View>
+      <View style={styles.centerWrapper}>
+        <View style={styles.titleWrapper}>
+          <Title style={styles.title}>{device.name}</Title>
+          <View style={styles.statusWrapper}>
+            <Icon
+              icon="circle"
+              size={8}
+              style={[styles.statusIcon, {color: stateColor()}]}
+            />
+            <Text style={styles.statusText}>{capitalize(device.state)}</Text>
+          </View>
+        </View>
+        {device.battery && (
+          <View style={styles.batteryWrapper}>
+            <Text style={styles.batteryText}>{device.battery * 100}%</Text>
+            <Icon
+              icon={getBatteryLevelIcon(device.battery)}
+              color={colors.status.success}
+            />
+          </View>
+        )}
+      </View>
+      <View style={styles.rightWrapper}>
+        <Menu
+          visible={visible}
+          onDismiss={toggle}
+          contentStyle={styles.popup}
+          anchor={
+            <TouchableOpacity onPress={toggle}>
+              <Icon icon="dots-vertical" size={24} />
+            </TouchableOpacity>
+          }>
+          <Menu.Item
+            theme={{roundness: 15}}
+            onPress={handlePress}
+            title={device.state === 'connected' ? 'Disconnect' : 'Connect'}
+          />
+        </Menu>
+      </View>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
-  title: {
-    fontWeight: '500',
+  wrapper: {
+    padding: 8,
+    flexDirection: 'row',
   },
-  deviceState: {
-    fontSize: 14,
-    fontWeight: '700',
+  leftWrapper: {
     alignSelf: 'center',
+    marginRight: 8,
+  },
+  centerWrapper: {
+    flex: 1,
+    flexDirection: 'row',
+  },
+  titleWrapper: {
+    flex: 1,
+  },
+  title: {
+    fontSize: 16,
+    lineHeight: 16,
+    marginTop: 2,
+    marginVertical: 0,
+  },
+  statusWrapper: {
+    flexDirection: 'row',
+  },
+  statusText: {
+    fontSize: 12,
+    lineHeight: 14,
+  },
+  statusIcon: {
+    marginRight: 4,
+  },
+  rightWrapper: {
+    position: 'relative',
+    alignSelf: 'center',
+  },
+  batteryWrapper: {
+    flexDirection: 'row',
+    alignSelf: 'center',
+  },
+  batteryText: {marginRight: 4},
+  popup: {
+    paddingVertical: 0,
+    position: 'relative',
+    top: '-25%',
+    right: 30,
+    zIndex: 1000,
   },
 });
 

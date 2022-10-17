@@ -1,45 +1,9 @@
 import BleManager from 'react-native-ble-manager';
 import {createAsyncThunk} from '@reduxjs/toolkit';
 
-import {
-  ALLOW_DUPLICATE_DEVICES,
-  BLE_PROFILES,
-  ProfileKey,
-  SCAN_TIME,
-} from '~constants/bluetooth';
+import {ALLOW_DUPLICATE_DEVICES, SCAN_TIME} from '~constants/bluetooth';
 import {getAllServiceIds} from '~utils/bluetooth';
-
-export const startNotification = createAsyncThunk(
-  'bluetooth/startNotification',
-  async ({id, profileKey}: {id: string; profileKey: ProfileKey}) => {
-    try {
-      const profile = BLE_PROFILES[profileKey];
-      for (const [service, chars] of Object.entries(profile.notifyChannels)) {
-        for (const char of chars) {
-          await BleManager.startNotification(id, service, char);
-        }
-      }
-    } catch {
-      throw new Error(`Failed to start notifications for device '${id}'`);
-    }
-  },
-);
-
-export const stopNotification = createAsyncThunk(
-  'bluetooth/stopNotification',
-  async ({id, profileKey}: {id: string; profileKey: ProfileKey}) => {
-    try {
-      const profile = BLE_PROFILES[profileKey];
-      for (const [service, chars] of Object.entries(profile.notifyChannels)) {
-        for (const char of chars) {
-          await BleManager.stopNotification(id, service, char);
-        }
-      }
-    } catch {
-      throw new Error(`Failed to stop notifications for device '${id}'`);
-    }
-  },
-);
+import {sleep} from '~utils/sleep';
 
 export const startDeviceScan = createAsyncThunk(
   'bluetooth/scanForDevices',
@@ -62,10 +26,14 @@ export const forceStopDeviceScan = createAsyncThunk(
 
 export const connectDevice = createAsyncThunk(
   'bluetooth/connectDevice',
-  async (id: string) =>
-    BleManager.connect(id).catch(() => {
+  async (id: string) => {
+    try {
+      await BleManager.connect(id);
+      await sleep(500).then(() => BleManager.retrieveServices(id));
+    } catch {
       throw new Error(`Failed to connect to device '${id}'`);
-    }),
+    }
+  },
 );
 
 export const disconnectDevice = createAsyncThunk(

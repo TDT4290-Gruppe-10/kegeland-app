@@ -1,30 +1,26 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 
+import {readPeripheralDeviceBattery} from '~utils/bluetooth';
 import {isPendingAction, isRejectedAction} from '~utils/thunkUtils';
 
 import {
   connectDevice,
   disconnectDevice,
   startDeviceScan,
-  startNotification,
-  stopNotification,
 } from './bluetooth.actions';
 import {
   addAvailableDeviceReducer,
-  batchUpdateCharacteristics,
   connectDeviceReducer,
-  deviceDisconnectedReducer,
+  disconnectDeviceReducer,
 } from './bluetooth.helpers';
-import {
-  BatchedDeviceCharacteristics,
-  BluetoothState,
-} from './bluetooth.interface';
+import {BluetoothState} from './bluetooth.interface';
 
 const initialState: BluetoothState = {
   isReady: false,
   isScanning: false,
   connectedDevices: {},
   availableDevices: {},
+  housekeepers: {},
   error: undefined,
 };
 
@@ -41,19 +37,26 @@ export const bluetoothSlice = createSlice({
     stopDeviceScan: (state) => {
       state.isScanning = false;
     },
-    deviceDisconnected: deviceDisconnectedReducer,
+    updateBattery: (
+      state,
+      action: PayloadAction<{peripheral: string; value: number[]}>,
+    ) => {
+      const {peripheral, value} = action.payload;
+      const device = state.connectedDevices[peripheral];
+      const val = readPeripheralDeviceBattery(device.type, value);
+      state.connectedDevices[peripheral].battery = val;
+    },
+    addHousekeepingService: (
+      state,
+      action: PayloadAction<{uuid: string; peripheral: string}>,
+    ) => {
+      const {uuid, peripheral} = action.payload;
+      state.housekeepers = {...state.housekeepers, [uuid]: peripheral};
+    },
+    deviceDisconnected: disconnectDeviceReducer,
     addAvailableDevice: addAvailableDeviceReducer,
     clearAvailableDevices: (state) => {
       state.availableDevices = {};
-    },
-    updateCharacteristics: (
-      state,
-      action: PayloadAction<BatchedDeviceCharacteristics>,
-    ) => {
-      state.connectedDevices = batchUpdateCharacteristics(
-        state.connectedDevices,
-        action.payload,
-      );
     },
   },
   extraReducers: (builder) => {
@@ -66,33 +69,47 @@ export const bluetoothSlice = createSlice({
         state.isScanning = true;
       })
       .addCase(connectDevice.pending, (state, action) => {
-        state.availableDevices[action.meta.arg].state = 'connecting';
+        const deviceId = action.meta.arg;
+        if (deviceId in state.availableDevices) {
+          state.availableDevices[deviceId].state = 'connecting';
+        }
+        if (deviceId in state.connectedDevices) {
+          state.connectedDevices[deviceId].state = 'connecting';
+        }
       })
       .addCase(connectDevice.rejected, (state, action) => {
-        state.availableDevices[action.meta.arg].state = 'available';
+        const deviceId = action.meta.arg;
+        if (deviceId in state.availableDevices) {
+          state.availableDevices[deviceId].state = 'available';
+        }
+        if (deviceId in state.connectedDevices) {
+          delete state.connectedDevices[deviceId];
+        }
       })
       .addCase(connectDevice.fulfilled, connectDeviceReducer)
       .addCase(disconnectDevice.pending, (state, action) => {
         state.connectedDevices[action.meta.arg].state = 'disconnecting';
       })
-      .addCase(startNotification.fulfilled, (state, action) => {
-        state.connectedDevices[action.meta.arg.id].active = true;
-      })
-      .addCase(stopNotification.fulfilled, (state, action) => {
-        state.connectedDevices[action.meta.arg.id].active = false;
-      })
-      .addMatcher(isPendingAction, (state) => {
-        state.error = undefined;
-      })
-      .addMatcher(isRejectedAction, (state, {error}) => {
-        state.error = error.message;
-      });
+      .addMatcher(
+        (action) => isPendingAction(action, 'bluetooth'),
+        (state) => {
+          state.error = undefined;
+        },
+      )
+      .addMatcher(
+        (action) => isRejectedAction(action, 'bluetooth'),
+        (state, {error}) => {
+          state.error = error.message;
+        },
+      );
   },
 });
 
 export const {
   setReady,
   setError,
+  updateBattery,
+  addHousekeepingService,
   stopDeviceScan,
   deviceDisconnected,
   addAvailableDevice,

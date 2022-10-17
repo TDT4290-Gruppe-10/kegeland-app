@@ -34,6 +34,7 @@ module.exports = {
           '~containers': './src/containers',
           '~hoc': './src/hoc',
           '~hooks': './src/hooks',
+          '~lib': './src/lib',
           '~routes': './src/routes',
           '~state': './src/state',
           '~utils': './src/utils',

@@ -3,6 +3,7 @@ import {StyleSheet} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {List} from 'react-native-paper';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import {size} from 'lodash';
 
 import Accordion from '~components/Accordion';
 import BluetoothDeviceItem from '~components/BluetoothDeviceItem';
@@ -20,18 +21,18 @@ const SettingsScreen: React.FC<SettingsScreenProps<'Settings'>> = ({
   navigation,
   route,
 }) => {
-  const {isSignedIn, authUser, loading} = useAppSelector((state) => state.auth);
-  const connectedDevices = useAppSelector((state) =>
-    Object.values(state.bluetooth.connectedDevices),
-  );
+  const {auth, bluetooth} = useAppSelector((state) => state);
   const dispatch = useAppDispatch();
   return (
     <SafeAreaView>
       <ScrollView style={styles.wrapper}>
         <Section title="Account">
-          {isSignedIn && !loading ? (
+          {auth.isSignedIn && !auth.loading ? (
             <List.Section>
-              <ListItem icon="account-circle-outline" title={authUser?.email} />
+              <ListItem
+                icon="account-circle-outline"
+                title={auth.authUser?.email}
+              />
               <ListItem icon="lock-outline" title="Change password" isRoute />
               <ListItem
                 icon="logout"
@@ -45,7 +46,7 @@ const SettingsScreen: React.FC<SettingsScreenProps<'Settings'>> = ({
               <ListItem
                 icon="login"
                 title="Sign in"
-                loading={loading}
+                loading={auth.loading}
                 isRoute
                 onPress={() => {
                   dispatch(setAnchorRoute(route));
@@ -75,13 +76,9 @@ const SettingsScreen: React.FC<SettingsScreenProps<'Settings'>> = ({
             />
             <Accordion
               title="Connected devices"
-              icon={<Badge>{connectedDevices.length}</Badge>}>
-              {connectedDevices.map((device) => (
-                <BluetoothDeviceItem
-                  key={device.id}
-                  device={device}
-                  icon="battery-bluetooth"
-                />
+              icon={<Badge>{size(bluetooth.connectedDevices)}</Badge>}>
+              {Object.values(bluetooth.connectedDevices).map((device) => (
+                <BluetoothDeviceItem key={device.id} device={device} />
               ))}
             </Accordion>
           </List.Section>

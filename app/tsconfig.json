@@ -16,6 +16,7 @@
     "target": "esnext",
     "skipLibCheck": true,
     "baseUrl": ".",
+    "typeRoots": ["./types", "./node_modules/@types"],
     "types": [
       "node",
       "jest",
@@ -40,6 +41,9 @@
       "~hooks/*": [
         "./src/hooks/*"
       ],
+      "~lib/*": [
+        "./src/lib/*"
+      ],
       "~routes/*": [
         "./src/routes/*"
       ],
@@ -52,6 +56,10 @@
       "~views/*": [
         "./src/views/*"
       ],
+      "*": [
+        "src/*",
+        "typings/*"
+      ]
     }
   },
   "exclude": [
