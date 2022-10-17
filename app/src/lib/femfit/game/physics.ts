@@ -1,106 +1,114 @@
-import {round} from 'lodash';
 import Matter from 'matter-js';
-import {GameEngineSystem} from 'react-native-game-engine';
 
-// import Coin from './entities/Coin';
+import {CoinEntity} from './entities/Coin';
 
 import constants from './constants';
+import {IGameEngineSystem} from './interface';
+import {isCoinBody, shouldDeleteCoin, spawnCoins} from './utils';
 
-const center = constants.MAX_HEIGHT / 2;
-let tick = 0;
-let coinPose = 0;
-// let coins = 0;
-let prevTime: number | null;
+let coinPointer = 0;
+let canSpawn = true;
+let finished = false;
 
-// const spawnCoins = (
-//   entities: any,
-//   engine: Matter.Engine,
-//   nCoins: number,
-//   yPos: number,
-// ) => {
-//   const x = constants.MAX_WIDTH / 2;
-//   for (let i = 0; i < nCoins; i++) {
-//     coins++;
-//     const xOffset = i * 40;
-//     entities[`Coin${coins}`] = Coin(engine.world, {x: x + xOffset, y: yPos});
-//   }
-// };
+const {MAX_WIDTH, GRAVITY, BASELINE, PLAYER_SIZE} = constants;
 
-const Physics: GameEngineSystem = (entities, {time, events}) => {
+const Physics: IGameEngineSystem = (entities, {time, events, dispatch}) => {
   const engine = entities.physics.engine;
-  const player = entities.Bird;
-
-  if (!prevTime) {
-    prevTime = time.current;
-  }
-
-  events.forEach((event) => {
-    switch (event.type) {
-      case 'move_up':
-        // eslint-disable-next-line no-case-declarations
-        const yCoeff = (center - player.body.position.y) / center;
-        // eslint-disable-next-line no-case-declarations
-        const yForce = round(
-          -constants.PLAYER_VELOCITY_Y * (event.value - yCoeff),
-          0,
-        );
-        console.log(yForce);
-        Matter.Body.setVelocity(player.body, {x: 0, y: yForce});
-
-        break;
-    }
-  });
+  const player = entities.player.body;
+  const exercise = entities.exercise;
 
   Object.keys(entities).forEach((key) => {
-    if (key.indexOf('Coin') === 0) {
-      if (entities[key].scored || entities[key].body.position.x < 0) {
+    if (key.indexOf('coin_') === 0) {
+      if (shouldDeleteCoin(entities[key] as CoinEntity)) {
+        Matter.World.remove(engine.world, entities[key].body);
         delete entities[key];
       } else {
         Matter.Body.translate(entities[key].body, {x: -3, y: 0});
+        if (!canSpawn) {
+          if (
+            key === `coin_${coinPointer}` &&
+            entities[key].body.position.x < MAX_WIDTH / 2
+          ) {
+            if (exercise.currRep === exercise.repetitions) {
+              finished = true;
+            } else {
+              canSpawn = true;
+            }
+          }
+        }
       }
     }
   });
 
   Matter.Engine.update(engine, time.delta);
 
-  // Update sprites
-  tick += 1;
-  if (tick % 5 === 0) {
-    coinPose = (coinPose + 1) % 10;
-  }
+  Matter.Events.on(engine, 'beforeUpdate', () => {
+    events
+      .filter((event) => event.type === 'move_up')
+      .forEach((event) => {
+        const yCoeff = (BASELINE - player.position.y) / BASELINE;
+        const force = -25 * (event.value - yCoeff);
+        Matter.Body.setVelocity(player, {x: 0, y: force});
+      });
+  });
 
-  // if (prevTime && time.current - prevTime >= 10000) {
-  //   prevTime = time.current;
-  //   spawnCoins(
-  //     entities,
-  //     engine,
-  //     5,
-  //     constants.MAX_HEIGHT / 2 - constants.COIN_HEIGHT,
-  //   );
+  Matter.Events.on(engine, 'afterUpdate', () => {
+    // Set gravity
+    switch (true) {
+      // Player is at baseline
+      case player.position.y > BASELINE - 3 && player.position.y < BASELINE + 3:
+        Matter.Body.setVelocity(player, {x: 0, y: 0});
+        engine.gravity.y = 0;
+        break;
+      // Player is above baseline
+      case player.position.y < BASELINE:
+        engine.gravity.y = GRAVITY;
+        break;
+      // Player is below baseline
+      default:
+        Matter.Body.setPosition(player, {
+          x: player.position.x,
+          y: BASELINE - PLAYER_SIZE / 2,
+        });
+    }
 
-  //   console.log(Object.keys(entities));
-  // }
+    // Dispatch 'game over'-event when the number of repetitions is reached
+    if (finished && !(`coin_${coinPointer}` in entities)) {
+      dispatch({type: 'game_over'});
+    }
 
-  const playerY = (player.body.bounds.min.y + player.body.bounds.max.y) / 2;
+    if (canSpawn) {
+      canSpawn = false;
 
-  if (
-    playerY > constants.MAX_HEIGHT / 2 - constants.BIRD_HEIGHT / 2 &&
-    playerY < constants.MAX_HEIGHT / 2 + constants.BIRD_HEIGHT / 2
-  ) {
-    engine.gravity.y = 0;
-    Matter.Body.setVelocity(player.body, {x: 0, y: 0});
-  } else if (playerY < constants.MAX_HEIGHT / 2) {
-    engine.gravity.y = 0.3;
-  } else {
-    engine.gravity.y = -0.3;
-  }
+      coinPointer = spawnCoins(
+        engine,
+        entities,
+        coinPointer,
+        exercise.data[exercise.currStep],
+      );
+
+      // Increment exercise step index
+      exercise.currStep = (exercise.currStep + 1) % exercise.data.length;
+
+      // If next index is the first step, increment repetition counter
+      if (exercise.currStep === 0) {
+        exercise.currRep++;
+      }
+    }
+  });
+
   Matter.Events.on(engine, 'collisionStart', (e) => {
     for (const pair of e.pairs) {
       const {bodyA, bodyB} = pair;
-      if (!bodyA.isSensor && !bodyB.isSensor) continue;
-      console.log(bodyB.label);
-      if (bodyB.label in entities) {
-        entities[bodyB.label].scored = true;
+      if (!bodyA.isSensor && !bodyB.isSensor) {
+        continue;
+      }
+      const coin = isCoinBody(bodyB) ? bodyB : bodyA;
+      if (coin.label in entities) {
+        if (!entities[coin.label].scored) {
+          dispatch({type: 'score'});
+          entities[coin.label].scored = true;
+        }
       }
     }
   });
