@@ -12,6 +12,8 @@ import {
 
 import constants from './constants';
 
+const {SPRITE_SIZE} = constants;
+
 type Animation = {
   name: string;
   row: number;
@@ -65,7 +67,7 @@ export class SpriteSheet extends React.Component<
       time: new Animated.Value(1.0),
       iAnims,
       currAnim: this.props.defaultAnim,
-      size: constants.SPRITE_SIZE,
+      size: SPRITE_SIZE,
       loaded: false,
       playing: false,
     };
@@ -79,7 +81,9 @@ export class SpriteSheet extends React.Component<
       easing: Easing.linear,
       useNativeDriver: true,
     }).start(({finished}) => {
-      if (!finished) return;
+      if (!finished) {
+        return;
+      }
 
       if (!this.state.playing) {
         this.setState((prevState) => ({
@@ -98,7 +102,9 @@ export class SpriteSheet extends React.Component<
   }
 
   generateInterpolationRanges(event: LayoutChangeEvent) {
-    if (this.state.loaded) return;
+    if (this.state.loaded) {
+      return;
+    }
 
     const size = event.nativeEvent.layout.height;
 
