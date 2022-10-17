@@ -49,7 +49,6 @@ const useBluetooth = () => {
     value,
   }: PeripheralNotification) => {
     if (service in housekeepers) {
-      console.log('update');
       dispatch(updateBattery({peripheral, value}));
     }
   };
