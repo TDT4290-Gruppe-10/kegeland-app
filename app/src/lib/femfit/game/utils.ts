@@ -5,14 +5,19 @@ import Coin, {CoinEntity} from './entities/Coin';
 import constants from './constants';
 import {ExerciseScheme, GameEntities, Position} from './interface';
 
-const {MAX_WIDTH, BASELINE, COIN_SIZE, PLAYER_SIZE, STARS_PER_SEC} = constants;
+const {MAX_WIDTH, BASELINE, COIN_SIZE, PLAYER_SIZE, COINS_PER_SEC} = constants;
 
 export const getMaxExerciseScore = (exercise: ExerciseScheme) => {
   const {data, repetitions} = exercise;
-  const denominator = 1000 / STARS_PER_SEC;
+  const denominator = 1000 / COINS_PER_SEC;
   return (
     (data.reduce((prev, curr) => prev + curr[1], 0) / denominator) * repetitions
   );
+};
+
+export const getEstimatedExerciseDuration = (exercise: ExerciseScheme) => {
+  const {data, repetitions} = exercise;
+  return (data.reduce((prev, curr) => prev + curr[1], 0) / 1000) * repetitions;
 };
 
 export const isCoinBody = (body: Matter.Body) => {
@@ -29,7 +34,7 @@ export const spawnCoins = (
   data: [number, number],
 ) => {
   const [level, ms] = data;
-  const denominator = 1000 / STARS_PER_SEC;
+  const denominator = 1000 / COINS_PER_SEC;
   const numCoins = Math.trunc(ms / denominator);
   for (let i = 0; i < numCoins; i++) {
     pointer++;
