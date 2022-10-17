@@ -12,6 +12,7 @@ export type EntityBase = {
 
 export type ExerciseScheme = {
   name: string;
+  description: string;
   repetitions: number;
   data: [number, number][];
 };

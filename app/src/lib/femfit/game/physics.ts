@@ -1,3 +1,4 @@
+/* eslint-disable no-case-declarations */
 import Matter from 'matter-js';
 
 import {CoinEntity} from './entities/Coin';
@@ -17,13 +18,28 @@ const Physics: IGameEngineSystem = (entities, {time, events, dispatch}) => {
   const player = entities.player.body;
   const exercise = entities.exercise;
 
+  events.forEach((event) => {
+    switch (event.type) {
+      case 'reset':
+        coinPointer = 0;
+        canSpawn = true;
+        finished = false;
+        break;
+      case 'move_up':
+        const yCoeff = (BASELINE - player.position.y) / BASELINE;
+        const force = -25 * (event.value - yCoeff);
+        Matter.Body.setVelocity(player, {x: 0, y: force});
+        break;
+    }
+  });
+
   Object.keys(entities).forEach((key) => {
     if (key.indexOf('coin_') === 0) {
       if (shouldDeleteCoin(entities[key] as CoinEntity)) {
         Matter.World.remove(engine.world, entities[key].body);
         delete entities[key];
       } else {
-        Matter.Body.translate(entities[key].body, {x: -3, y: 0});
+        Matter.Body.translate(entities[key].body, {x: -4, y: 0});
         if (!canSpawn) {
           if (
             key === `coin_${coinPointer}` &&
@@ -42,15 +58,9 @@ const Physics: IGameEngineSystem = (entities, {time, events, dispatch}) => {
 
   Matter.Engine.update(engine, time.delta);
 
-  Matter.Events.on(engine, 'beforeUpdate', () => {
-    events
-      .filter((event) => event.type === 'move_up')
-      .forEach((event) => {
-        const yCoeff = (BASELINE - player.position.y) / BASELINE;
-        const force = -25 * (event.value - yCoeff);
-        Matter.Body.setVelocity(player, {x: 0, y: force});
-      });
-  });
+  // Matter.Events.on(engine, 'beforeUpdate', () => {
+
+  // });
 
   Matter.Events.on(engine, 'afterUpdate', () => {
     // Set gravity
