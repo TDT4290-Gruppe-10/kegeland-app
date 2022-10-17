@@ -28,6 +28,7 @@ const {MAX_HEIGHT, MAX_WIDTH} = constants;
 
 type FemfitGameProps = {
   device: BluetoothDevice;
+  exercise: ExerciseScheme;
   navigation: ExerciseScreenProps<'Femfit'>['navigation'];
   goBack: () => void;
 };
@@ -51,7 +52,7 @@ export default class FemfitGame extends PureComponent<
   constructor(props: any) {
     super(props);
     this.gameEngine = null;
-    this.exerciseScheme = require('./exercise_1.json') as ExerciseScheme;
+    this.exerciseScheme = this.props.exercise;
     this.entities = spawnEntities(this.exerciseScheme);
     this.sensorData = reduce(
       SENSOR_SERVICE.characteristics,
@@ -90,6 +91,7 @@ export default class FemfitGame extends PureComponent<
   componentDidMount(): void {
     SystemNavigationBar.navigationHide();
     this.gameEngine.swap(spawnEntities(this.exerciseScheme));
+    this.gameEngine.dispatch({type: 'reset'});
     if (this.props.device && this.props.device.state === 'connected') {
       addServiceListener(this.props.device.id, SENSOR_SERVICE);
       bleManagerEmitter.addListener(
