@@ -1,7 +1,6 @@
 import {find} from 'lodash';
-import React from 'react';
-import {SafeAreaView, StyleSheet, View} from 'react-native';
-import {Button} from 'react-native-paper';
+import React, {useCallback} from 'react';
+import {SafeAreaView, StyleSheet} from 'react-native';
 
 import FemfitGame from '~lib/femfit/game';
 import useAppSelector from '~hooks/useAppSelector';
@@ -11,19 +10,16 @@ const FemfitScreen: React.FC<ExerciseScreenProps<'Femfit'>> = ({
   navigation,
 }) => {
   const device = useAppSelector((state) =>
-    find(
-      state.bluetooth.connectedDevices,
-      (device) => device.type === 'femfit',
-    ),
+    find(state.bluetooth.connectedDevices, (d) => d.type === 'femfit'),
   );
+
+  const goBack = useCallback(() => navigation.goBack(), [navigation]);
 
   return (
     <SafeAreaView style={styles.wrapper}>
-      <View>
-        <Button onPress={() => navigation.goBack()}>Go back</Button>
-      </View>
-      {device && <FemfitGame device={device} />}
-      {/* {device && <FemfitDebugger device={device} />} */}
+      {device && (
+        <FemfitGame device={device} navigation={navigation} goBack={goBack} />
+      )}
     </SafeAreaView>
   );
 };
