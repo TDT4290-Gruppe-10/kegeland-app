@@ -8,3 +8,5 @@ export enum Token {
   ID_TOKEN = '@id_token',
   REFRESH_TOKEN = '@refresh_token',
 }
+
+export const REFRESH_INTERVAL_MS = 50 * 60 * 1000; // every 50th minute
