@@ -11,6 +11,7 @@ import {
   signInUser,
   signOutUser,
   signUpUser,
+  silentRefresh,
 } from './auth.actions';
 import {signOutReducer, signInReducer} from './auth.helpers';
 import {AuthState} from './auth.interface';
@@ -24,7 +25,7 @@ const initialState: AuthState = {
   error: undefined,
 };
 
-const authSlice = createSlice({
+export const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
@@ -45,6 +46,7 @@ const authSlice = createSlice({
       .addCase(signInUser.fulfilled, signInReducer)
       .addCase(signOutUser.fulfilled, signOutReducer)
       .addCase(signOutUser.rejected, signOutReducer)
+      .addCase(silentRefresh.rejected, signOutReducer)
       .addCase(signUpUser.fulfilled, signInReducer)
       .addMatcher(
         (action) => isPendingAction(action, 'auth'),

@@ -1,9 +1,17 @@
 module.exports = {
   env: {
     browser: true,
+    commonjs: true,
+    node: true,
     es2021: true,
+    jest: true,
+  },
+  globals: {
+    Atomics: 'readonly',
+    SharedArrayBuffer: 'readonly',
   },
   extends: [
+    'eslint:recommended',
     '@react-native-community',
     'standard',
     'prettier',
@@ -13,11 +21,11 @@ module.exports = {
   ],
   parser: '@typescript-eslint/parser',
   parserOptions: {
+    ecmaVersion: 'latest',
+    sourceType: 'module',
     ecmaFeatures: {
       jsx: true,
     },
-    ecmaVersion: 'latest',
-    sourceType: 'module',
   },
   plugins: ['react', '@typescript-eslint', 'prettier', 'import'],
   rules: {
@@ -62,6 +70,7 @@ module.exports = {
     'prettier/prettier': 'error',
     'import/default': 0,
     'import/no-unresolved': 0,
+    'no-undef': 0,
     'no-unused-vars': 0,
     '@typescript-eslint/no-unused-vars': 'error',
     'react/no-unstable-nested-components': 0,

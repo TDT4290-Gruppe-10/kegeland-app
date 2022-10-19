@@ -51,7 +51,7 @@
     "@types/jest": "^29.0.3",
     "@types/lodash": "^4.14.185",
     "@types/matter-js": "^0.18.2",
-    "@types/node": "^18.7.18",
+    "@types/node": "^18.11.2",
     "@types/react": "^18.0.21",
     "@types/react-native": "^0.70.1",
     "@types/react-native-vector-icons": "^6.4.12",

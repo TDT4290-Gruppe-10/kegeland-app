@@ -1,12 +1,19 @@
 import {createAsyncThunk} from '@reduxjs/toolkit';
 
+import {Token} from '~constants/auth';
 import {apiCaller} from '~utils/apiCaller';
-import {removeTokens, retrieveTokens, storeTokens} from '~utils/storage';
+import {
+  removeTokens,
+  retrieveToken,
+  retrieveTokens,
+  storeTokens,
+} from '~utils/storage';
 
 import {allTokensExist} from './auth.helpers';
 import {
   LoginDTO,
   LoginResponse,
+  RefreshResponse,
   RegisterDTO,
   RegisterResponse,
   ResetPasswordDTO,
@@ -52,6 +59,19 @@ export const signUpUser = createAsyncThunk(
         return res;
       },
     ),
+);
+
+export const silentRefresh = createAsyncThunk(
+  'auth/silentRefresh',
+  async () => {
+    const token = await retrieveToken(Token.REFRESH_TOKEN);
+    if (!token) {
+      throw new Error('No refresh token found');
+    }
+    await apiCaller<RefreshResponse>('auth/refresh', 'POST', {
+      refreshToken: token,
+    }).then(async (res) => storeTokens(res));
+  },
 );
 
 export const resetPassword = createAsyncThunk(
