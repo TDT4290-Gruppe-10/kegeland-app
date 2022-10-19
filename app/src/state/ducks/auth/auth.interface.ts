@@ -44,3 +44,5 @@ export type RegisterDTO = LoginDTO & UserDetails;
 export type RegisterResponse = LoginResponse;
 
 export type ResetPasswordDTO = Pick<LoginDTO, 'email'>;
+
+export type RefreshResponse = AuthTokens;
