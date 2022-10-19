@@ -6,12 +6,14 @@ export const SCAN_TIME = 5;
 export const ALLOW_DUPLICATE_DEVICES = false;
 export const UPDATE_INTERVAL_MS = 250;
 
-export const BLE_PROFILES: Record<string, BluetoothProfile> = {
+export const _profiles = {
   femfit: FEMFIT_PROFILE,
-};
+} as const;
 
-export const PERIPHERAL_MAP: Record<string, string> = {
+export type DeviceType = keyof typeof _profiles;
+
+export const BLE_PROFILES = _profiles as Record<DeviceType, BluetoothProfile>;
+
+export const PERIPHERAL_MAP: Record<string, DeviceType> = {
   [FEMFIT_PROFILE.batteryService.service.uuid]: 'femfit',
 };
-
-export type ProfileKey = keyof typeof BLE_PROFILES;
