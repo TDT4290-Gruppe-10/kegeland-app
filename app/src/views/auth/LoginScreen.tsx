@@ -11,7 +11,7 @@ import {AuthScreenProps} from '~routes/interface';
 const LoginScreen: React.FC<AuthScreenProps<'Login'>> = ({navigation}) => {
   const {colors} = useTheme();
   return (
-    <PageWrapper title="Sign In">
+    <PageWrapper title="Sign In" contentStyle={styles.wrapper}>
       <AvoidKeyboard style={styles.wrapper}>
         <View style={styles.formWrapper}>
           <LoginForm />

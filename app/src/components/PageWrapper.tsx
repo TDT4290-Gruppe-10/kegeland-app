@@ -1,23 +1,18 @@
 import React from 'react';
-import {StyleProp, StyleSheet, View, ViewStyle} from 'react-native';
+import {StyleSheet} from 'react-native';
 import {Title} from 'react-native-paper';
 import {SafeAreaView} from 'react-native-safe-area-context';
 
 export type PageWrapperProps = {
   title: string;
-  contentStyle?: StyleProp<ViewStyle>;
   children: React.ReactNode;
 };
 
-const PageWrapper: React.FC<PageWrapperProps> = ({
-  title,
-  children,
-  contentStyle,
-}) => {
+const PageWrapper: React.FC<PageWrapperProps> = ({title, children}) => {
   return (
     <SafeAreaView style={styles.wrapper}>
       <Title style={styles.title}>{title}</Title>
-      <View style={contentStyle}>{children}</View>
+      {children}
     </SafeAreaView>
   );
 };
