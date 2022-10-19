@@ -1,7 +1,9 @@
-import {createSlice} from '@reduxjs/toolkit';
+import {createSlice, PayloadAction} from '@reduxjs/toolkit';
+
+import {RootTabParamList} from '~routes/interface';
 
 import {updateSetting} from './app.actions';
-import {AppState} from './app.interface';
+import {AnchorRoute, AppState} from './app.interface';
 
 const initialState: AppState = {
   anchorRoute: undefined,
@@ -14,7 +16,10 @@ export const settingsSlice = createSlice({
   name: 'settings',
   initialState,
   reducers: {
-    setAnchorRoute: (state, action) => {
+    setAnchorRoute: (
+      state,
+      action: PayloadAction<AnchorRoute<keyof RootTabParamList> | undefined>,
+    ) => {
       state.anchorRoute = action.payload;
     },
   },

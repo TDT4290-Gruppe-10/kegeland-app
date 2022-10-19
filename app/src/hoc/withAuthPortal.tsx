@@ -15,7 +15,8 @@ const withAuthPortal =
 
     const goBack = () => {
       if (anchorRoute) {
-        navigation.navigate(anchorRoute);
+        const [stack, params] = anchorRoute as any;
+        navigation.navigate(stack, params || undefined);
         dispatch(setAnchorRoute(undefined));
       } else {
         navigation.goBack();
