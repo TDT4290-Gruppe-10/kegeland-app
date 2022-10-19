@@ -25,11 +25,7 @@ export const storeTokens = async ({
 
 export const retrieveToken = async (token: Token) => {
   let res = null;
-  res = await AsyncStorage.getItem(token, (err) => {
-    if (err) {
-      throw new Error(`Failed to retrieve token, '${token}'`);
-    }
-  });
+  res = await AsyncStorage.getItem(token);
   return res;
 };
 
