@@ -19,7 +19,6 @@ import {signOutUser} from '~state/ducks/auth/auth.actions';
 
 const SettingsScreen: React.FC<SettingsScreenProps<'Settings'>> = ({
   navigation,
-  route,
 }) => {
   const {auth, bluetooth} = useAppSelector((state) => state);
   const dispatch = useAppDispatch();
@@ -49,7 +48,9 @@ const SettingsScreen: React.FC<SettingsScreenProps<'Settings'>> = ({
                 loading={auth.loading}
                 isRoute
                 onPress={() => {
-                  dispatch(setAnchorRoute(route));
+                  dispatch(
+                    setAnchorRoute(['SettingsStack', {screen: 'Settings'}]),
+                  );
                   navigation.navigate('AuthStack', {screen: 'Login'});
                 }}
               />
