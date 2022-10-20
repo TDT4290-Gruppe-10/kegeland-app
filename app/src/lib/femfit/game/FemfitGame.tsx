@@ -3,6 +3,7 @@ import {StatusBar, StyleSheet, View, Image} from 'react-native';
 import SystemNavigationBar from 'react-native-system-navigation-bar';
 import {GameEngine} from 'react-native-game-engine';
 import {max, reduce, round, set} from 'lodash';
+import {connect, ConnectedProps} from 'react-redux';
 
 import BackgroundImage from '~assets/femfit/background.png';
 import {BluetoothDevice} from '~state/ducks/bluetooth/bluetooth.interface';
@@ -11,6 +12,8 @@ import {addServiceListener, removeServiceListener} from '~utils/bluetooth';
 import {bleManagerEmitter} from '~hooks/useBluetooth';
 import {UPDATE_INTERVAL_MS} from '~constants/bluetooth';
 import {DeviceScreenProps} from '~routes/interface';
+import {setSession} from '~state/ducks/session/session.reducer';
+import {clearAnswers} from '~state/ducks/questions/questions.reducer';
 
 import {ACTIVATION_THRESHOLD, SENSOR_SERVICE} from '../bluetooth/constants';
 import {pressurePercent, readSensorBytes} from '../bluetooth/utils';
@@ -26,24 +29,32 @@ import constants from './constants';
 
 const {MAX_HEIGHT, MAX_WIDTH} = constants;
 
+const mapStateToProps = () => ({});
+
+const mapDispatchToProps = {
+  setSession,
+  clearAnswers,
+};
+
+const connector = connect(mapStateToProps, mapDispatchToProps);
+
+type PropsFromRedux = ConnectedProps<typeof connector>;
+
 type FemfitGameProps = {
   device: BluetoothDevice;
   exercise: ExerciseScheme;
   navigation: DeviceScreenProps<'Femfit'>['navigation'];
-  goBack: () => void;
-};
+} & PropsFromRedux;
 
 type FemfitGameState = {
   running: boolean;
   gameOver: boolean;
   score: number;
   gameOverDialogVisible: boolean;
+  sessionData: number[][];
 };
 
-export default class FemfitGame extends PureComponent<
-  FemfitGameProps,
-  FemfitGameState
-> {
+class FemfitGame extends PureComponent<FemfitGameProps, FemfitGameState> {
   gameEngine: any | null;
   exerciseScheme: ExerciseScheme;
   entities: GameEntities;
@@ -68,6 +79,7 @@ export default class FemfitGame extends PureComponent<
       gameOver: false,
       score: 0,
       gameOverDialogVisible: false,
+      sessionData: [],
     };
   }
 
@@ -91,6 +103,7 @@ export default class FemfitGame extends PureComponent<
   componentDidMount(): void {
     SystemNavigationBar.navigationHide();
     this.props.navigation.setOptions({headerShown: false});
+    this.props.setSession();
     this.gameEngine.swap(spawnEntities(this.exerciseScheme));
     this.gameEngine.dispatch({type: 'reset'});
     if (this.props.device && this.props.device.state === 'connected') {
@@ -100,7 +113,16 @@ export default class FemfitGame extends PureComponent<
         (data: PeripheralNotification) => this.handlePeripheralUpdate(data),
       );
       this.interval = setInterval(() => {
-        const {pressures} = readSensorBytes(Object.values(this.sensorData));
+        const {pressures, temperatures} = readSensorBytes(
+          Object.values(this.sensorData),
+        );
+        this.setState({
+          ...this.state,
+          sessionData: [
+            ...this.state.sessionData,
+            [...pressures, ...temperatures],
+          ],
+        });
         const pctMax = round(pressurePercent(max(pressures) as number), 1);
         if (pctMax > ACTIVATION_THRESHOLD) {
           this.gameEngine.dispatch({type: 'move_up', value: pctMax});
@@ -160,6 +182,10 @@ export default class FemfitGame extends PureComponent<
                         gameOver: true,
                       },
                       () => {
+                        this.props.setSession({
+                          device: 'femfit',
+                          data: this.state.sessionData,
+                        });
                         this.toggleGameOverDialog();
                       },
                     );
@@ -173,14 +199,19 @@ export default class FemfitGame extends PureComponent<
         <MenuDialog
           visible={!this.state.running && !this.state.gameOver}
           onDismiss={() => this.toggleMenuDialog()}
-          goBack={() => this.props.goBack()}
+          goBack={() => {
+            this.props.clearAnswers();
+            this.props.navigation.goBack();
+          }}
         />
         <GameOverDialog
           score={this.state.score}
           exercise={this.exerciseScheme}
           visible={this.state.gameOverDialogVisible}
           onDismiss={() => this.toggleGameOverDialog()}
-          goBack={() => this.props.goBack()}
+          goBack={() => {
+            this.props.navigation.goBack();
+          }}
         />
       </View>
     );
@@ -209,3 +240,5 @@ const styles = StyleSheet.create({
     bottom: 0,
   },
 });
+
+export default connector(FemfitGame);
