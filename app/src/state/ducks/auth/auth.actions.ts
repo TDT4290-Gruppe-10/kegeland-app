@@ -30,15 +30,20 @@ export const initializeAuthState = createAsyncThunk<boolean>(
 export const signInUser = createAsyncThunk(
   'auth/signInUser',
   async (data: LoginDTO) =>
-    apiCaller<LoginResponse>('auth/login', 'POST', data).then(async (res) => {
-      await storeTokens(res.tokens);
-      return res;
-    }),
+    apiCaller<LoginResponse>({url: 'auth/login', method: 'POST', data}).then(
+      async (res) => {
+        await storeTokens(res.tokens);
+        return res;
+      },
+    ),
 );
 
 export const signOutUser = createAsyncThunk('auth/signOutUser', async () => {
   try {
-    const res = await apiCaller<void>('auth/logout', 'POST');
+    const res = await apiCaller<void>({
+      url: 'auth/logout',
+      method: 'POST',
+    });
     return res;
   } catch (err) {
     if (err instanceof Error) {
@@ -53,12 +58,14 @@ export const signOutUser = createAsyncThunk('auth/signOutUser', async () => {
 export const signUpUser = createAsyncThunk(
   'auth/signUpUser',
   async (data: RegisterDTO) =>
-    apiCaller<RegisterResponse>('auth/register', 'POST', data).then(
-      async (res) => {
-        await storeTokens(res.tokens);
-        return res;
-      },
-    ),
+    apiCaller<RegisterResponse>({
+      url: 'auth/register',
+      method: 'POST',
+      data,
+    }).then(async (res) => {
+      await storeTokens(res.tokens);
+      return res;
+    }),
 );
 
 export const silentRefresh = createAsyncThunk(
@@ -68,8 +75,12 @@ export const silentRefresh = createAsyncThunk(
     if (!token) {
       throw new Error('No refresh token found');
     }
-    await apiCaller<RefreshResponse>('auth/refresh', 'POST', {
-      refreshToken: token,
+    await apiCaller<RefreshResponse>({
+      url: 'auth/refresh',
+      method: 'POST',
+      data: {
+        refreshToken: token,
+      },
     }).then(async (res) => storeTokens(res));
   },
 );
@@ -77,6 +88,6 @@ export const silentRefresh = createAsyncThunk(
 export const resetPassword = createAsyncThunk(
   'auth/resetPassword',
   async (data: ResetPasswordDTO) => {
-    apiCaller<void>('auth/reset', 'POST', data);
+    apiCaller<void>({url: 'auth/reset', method: 'POST', data});
   },
 );
