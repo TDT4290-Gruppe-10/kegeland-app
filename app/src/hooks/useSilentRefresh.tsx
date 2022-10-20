@@ -13,6 +13,12 @@ const useSilentRefresh = () => {
 
   useEffect(() => {
     if (isSignedIn) {
+      dispatch(silentRefresh());
+    }
+  }, []);
+
+  useEffect(() => {
+    if (isSignedIn) {
       setInterval(() => {
         dispatch(silentRefresh());
       }, REFRESH_INTERVAL_MS);
