@@ -7,17 +7,15 @@ import React from 'react';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import withThemedNavigation from '~hoc/withThemedNavigation';
-import HomeScreen from '~views/HomeScreen';
 
 import AuthRoutes from './AuthRoutes';
-import ExerciseRoutes from './ExerciseRoutes';
+import DeviceRoutes from './DeviceRoutes';
 import {RootTabParamList} from './interface';
 import SettingsRoutes from './SettingsRoutes';
 
 const tabIcons: Record<keyof RootTabParamList, string> = {
-  Home: 'home',
   AuthStack: 'person',
-  ExerciseStack: 'person',
+  DeviceStack: 'home',
   SettingsStack: 'settings',
 };
 
@@ -27,7 +25,7 @@ const Router: React.FC<any> = (props: any) => {
   return (
     <Tab.Navigator
       {...props}
-      initialRouteName="Home"
+      initialRouteName="DeviceStack"
       screenOptions={({route}) => {
         return {
           tabBarIcon: ({color, size}) => {
@@ -40,15 +38,14 @@ const Router: React.FC<any> = (props: any) => {
           headerShown: false,
         };
       }}>
-      <Tab.Screen name="Home" component={HomeScreen} />
       <Tab.Screen name="AuthStack" component={AuthRoutes} />
       <Tab.Screen
-        name="ExerciseStack"
-        component={ExerciseRoutes}
+        name="DeviceStack"
+        component={DeviceRoutes}
         options={({route}) => {
           const options: BottomTabNavigationOptions = {};
           const routeName = getFocusedRouteNameFromRoute(route) ?? null;
-          if (routeName && routeName !== 'Exercises') {
+          if (routeName && routeName !== 'Devices') {
             options.tabBarStyle = {display: 'none'};
           }
           return options;
