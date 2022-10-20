@@ -15,6 +15,8 @@ export const getAllServiceIds = () => {
   return keys(PERIPHERAL_MAP);
 };
 
+export const getDeviceScreen = (key: DeviceType) => getProfile(key).navScreen;
+
 export const getPeripheralType = (serviceUUIDs: string[]) => {
   const key = chain(serviceUUIDs)
     .filter((uuid) => uuid in PERIPHERAL_MAP)
