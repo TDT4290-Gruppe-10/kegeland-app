@@ -3,13 +3,15 @@ import React from 'react';
 import {StyleSheet} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {TouchableOpacity} from 'react-native-gesture-handler';
-import {Appbar, Text} from 'react-native-paper';
+import {Appbar, Text, useTheme} from 'react-native-paper';
 
 type AppHeaderProps = StackHeaderProps;
 
 const AppHeader: React.FC<AppHeaderProps> = ({navigation, back}) => {
+  const {colors} = useTheme();
   return back ? (
-    <Appbar.Header style={styles.wrapper}>
+    <Appbar.Header
+      style={(styles.wrapper, {backgroundColor: colors.background})}>
       <TouchableOpacity style={styles.back} onPress={() => navigation.goBack()}>
         <Icon
           size={30}
