@@ -11,7 +11,7 @@ import {AuthScreenProps} from '~routes/interface';
 const LoginScreen: React.FC<AuthScreenProps<'Login'>> = ({navigation}) => {
   const {colors} = useTheme();
   return (
-    <PageWrapper title="Sign In">
+    <PageWrapper title="Sign In" style={styles.page}>
       <AvoidKeyboard style={styles.wrapper}>
         <View style={styles.formWrapper}>
           <LoginForm />
@@ -35,6 +35,9 @@ const LoginScreen: React.FC<AuthScreenProps<'Login'>> = ({navigation}) => {
 };
 
 const styles = StyleSheet.create({
+  page: {
+    marginTop: 30,
+  },
   wrapper: {
     flex: 1,
     marginVertical: 30,
