@@ -22,6 +22,11 @@ const useSilentRefresh = () => {
       setInterval(() => {
         dispatch(silentRefresh());
       }, REFRESH_INTERVAL_MS);
+    } else {
+      if (timer) {
+        clearInterval(timer);
+        setTimer(null);
+      }
     }
     return () => {
       if (timer) {
