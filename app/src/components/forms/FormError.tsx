@@ -21,8 +21,7 @@ const FormError: React.FC<FormErrorProps> = ({error}) => {
   const hideDialog = () => {
     dispatch(clearError());
   };
-  // #B00020
-  // <Banner visible={visible} children="Sometin wong!" actions={[]} />
+
   return (
     <Portal>
       <Dialog visible={visible} onDismiss={hideDialog}>

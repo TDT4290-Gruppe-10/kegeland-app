@@ -1,7 +1,13 @@
 import {find} from 'lodash';
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {SafeAreaView, ScrollView, StyleSheet} from 'react-native';
-import {Button, Card, Paragraph, Text} from 'react-native-paper';
+import {
+  ActivityIndicator,
+  Button,
+  Card,
+  Paragraph,
+  Text,
+} from 'react-native-paper';
 
 import FemfitGame from '~lib/femfit/game';
 import useAppSelector from '~hooks/useAppSelector';
@@ -12,26 +18,52 @@ import Popup from '~components/Popup';
 import {getEstimatedExerciseDuration} from '~lib/femfit/game/utils';
 import NoDevicePopup from '~components/NoDevicePopup';
 import PageWrapper from '~components/PageWrapper';
+import QuestionnaireModal from '~components/QuestionnaireModal';
+import {fetchQuestionnaire} from '~state/ducks/questions/questions.actions';
+import useAppDispatch from '~hooks/useAppDispatch';
+import {setAnswer} from '~state/ducks/questions/questions.reducer';
 
 const FemfitScreen: React.FC<DeviceScreenProps<'Femfit'>> = ({navigation}) => {
-  const [exercise, setDevice] = useState<ExerciseScheme>();
+  const dispatch = useAppDispatch();
+  const [exercise, setExercise] = useState<ExerciseScheme>();
+  const {authUser} = useAppSelector((state) => state.auth);
+  const {questionnaire, loading, answers} = useAppSelector(
+    (state) => state.questions,
+  );
   const [noDeviceModalVisible, setNoDeviceModalVisible] =
-    useState<boolean>(true);
+    useState<boolean>(false);
   const [modalItem, setModalItem] = useState<ExerciseScheme>();
   const device = useAppSelector((state) =>
     find(state.bluetooth.connectedDevices, (d) => d.type === 'femfit'),
   );
 
   useEffect(() => {
+    if (authUser) {
+      dispatch(fetchQuestionnaire({sensor: 'femfit', userId: authUser.id}));
+    }
+  }, []);
+
+  const shouldRenderGame = () =>
+    device &&
+    exercise &&
+    (questionnaire !== undefined ? answers.length > 0 : true);
+
+  useEffect(() => {
     setNoDeviceModalVisible(device === undefined);
   }, [device]);
+
+  const handleAnswers = (data: number[]) => {
+    if (authUser) {
+      dispatch(setAnswer({userId: authUser.id, answers: data}));
+    }
+  };
 
   const toggleNoDeviceModal = () => {
     setNoDeviceModalVisible(!noDeviceModalVisible);
   };
 
-  const selectDevice = (item: ExerciseScheme) => {
-    setDevice(item);
+  const selectExercise = (item: ExerciseScheme) => {
+    setExercise(item);
   };
 
   const toggleDetails = (item?: ExerciseScheme) => {
@@ -42,18 +74,21 @@ const FemfitScreen: React.FC<DeviceScreenProps<'Femfit'>> = ({navigation}) => {
     }
   };
 
-  const goBack = useCallback(() => navigation.goBack(), [navigation]);
-
   const render = () => {
-    if (device && exercise) {
+    if (shouldRenderGame()) {
       return (
         <SafeAreaView style={styles.wrapper}>
           <FemfitGame
-            device={device}
-            exercise={exercise}
+            device={device!}
+            exercise={exercise!}
             navigation={navigation}
-            goBack={goBack}
           />
+        </SafeAreaView>
+      );
+    } else if (loading) {
+      return (
+        <SafeAreaView style={styles.loader}>
+          <ActivityIndicator animating={true} />
         </SafeAreaView>
       );
     }
@@ -70,13 +105,18 @@ const FemfitScreen: React.FC<DeviceScreenProps<'Femfit'>> = ({navigation}) => {
                 />
                 <Card.Actions style={styles.actions}>
                   <Button onPress={() => toggleDetails(item)}>Details</Button>
-                  <Button onPress={() => selectDevice(item)} mode="contained">
+                  <Button onPress={() => selectExercise(item)} mode="contained">
                     Start exercise
                   </Button>
                 </Card.Actions>
               </Card.Content>
             </Card>
           ))}
+          <QuestionnaireModal
+            onSubmit={handleAnswers}
+            visible={exercise !== undefined && answers.length === 0}
+            questionnaire={questionnaire}
+          />
           <Popup
             title="Details"
             visible={modalItem !== undefined}
@@ -111,6 +151,11 @@ const FemfitScreen: React.FC<DeviceScreenProps<'Femfit'>> = ({navigation}) => {
 
 const styles = StyleSheet.create({
   wrapper: {flex: 1, position: 'relative'},
+  loader: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   exerciseList: {
     marginTop: 16,
   },

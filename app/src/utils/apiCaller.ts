@@ -1,4 +1,4 @@
-import axios, {Method} from 'axios';
+import axios, {AxiosRequestConfig} from 'axios';
 import {API_URL} from '@env';
 
 import {Token} from '~constants/auth';
@@ -20,13 +20,14 @@ httpInstance.interceptors.request.use(
   (err) => Promise.reject(err),
 );
 
-export const apiCaller = <T = unknown>(
-  endpoint: string,
-  method: Method,
-  data?: any,
-) =>
+type ApiCallerProps = Pick<
+  AxiosRequestConfig,
+  'url' | 'method' | 'data' | 'params'
+>;
+
+export const apiCaller = <T = unknown>(config: ApiCallerProps) =>
   httpInstance
-    .request<T>({baseURL: API_URL, url: endpoint, method, data})
+    .request<T>({baseURL: API_URL, ...config})
     .then((res) => res.data)
     .catch((err) => {
       if (err instanceof Error) {

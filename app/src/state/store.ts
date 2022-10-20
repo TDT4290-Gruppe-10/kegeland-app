@@ -16,6 +16,8 @@ import reduxFlipper from 'redux-flipper';
 import appReducer from './ducks/app/app.reducer';
 import bluetoothReducer from './ducks/bluetooth/bluetooth.reducer';
 import authReducer from './ducks/auth/auth.reducer';
+import questionsReducer from './ducks/questions/questions.reducer';
+import sessionReducer from './ducks/session/session.reducer';
 
 import rootSaga, {sagaMiddleware} from './rootSaga';
 
@@ -30,6 +32,8 @@ const rootReducer = combineReducers({
   app: appReducer,
   auth: authReducer,
   bluetooth: bluetoothReducer,
+  questions: questionsReducer,
+  session: sessionReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

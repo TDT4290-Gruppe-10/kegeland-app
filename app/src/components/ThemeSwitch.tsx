@@ -26,6 +26,10 @@ const ThemeSwitch: React.FC<ThemeSwitchProps> = (props) => {
     <Switch
       {...props}
       color={colors.primary}
+      trackColor={{
+        false: colors.placeholder,
+        true: colors.primary,
+      }}
       value={darkMode}
       onValueChange={() => toggle()}
     />

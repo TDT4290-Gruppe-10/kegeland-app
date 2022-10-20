@@ -1,5 +1,5 @@
 import {useForm} from 'react-hook-form';
-import {Dialog, Portal, Text, useTheme} from 'react-native-paper';
+import {Dialog, Portal, Text} from 'react-native-paper';
 import React, {useCallback, useState} from 'react';
 import {StyleSheet, View} from 'react-native';
 import {yupResolver} from '@hookform/resolvers/yup';
@@ -26,7 +26,6 @@ const schema = yup.object({
 });
 
 const ResetPasswordForm: React.FC = () => {
-  const {colors} = useTheme();
   const navigation =
     useNavigation<AuthScreenProps<'Forgot password'>['navigation']>();
   const dispatch = useAppDispatch();
@@ -72,7 +71,6 @@ const ResetPasswordForm: React.FC = () => {
       <FormError error={error} />
       <Portal>
         <Dialog visible={mailSent && !loading}>
-          <Dialog.Icon icon="email-outline" size={32} color={colors.accent} />
           <Dialog.Title style={styles.title}>Check your email!</Dialog.Title>
           <Dialog.Content>
             <Text textBreakStrategy="simple" style={styles.content}>

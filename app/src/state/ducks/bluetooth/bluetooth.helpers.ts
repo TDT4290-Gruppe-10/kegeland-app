@@ -24,6 +24,7 @@ export const connectDeviceReducer = (
   if (deviceId in state.availableDevices) {
     state.availableDevices[deviceId].state = 'connected';
     const device = state.availableDevices[deviceId];
+    device.battery = 1;
     state.connectedDevices[deviceId] = device;
     state.availableDevices = orderDevicesByState(state.availableDevices);
   }
