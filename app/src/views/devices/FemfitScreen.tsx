@@ -5,7 +5,7 @@ import {Button, Card, Paragraph, Text} from 'react-native-paper';
 
 import FemfitGame from '~lib/femfit/game';
 import useAppSelector from '~hooks/useAppSelector';
-import {ExerciseScreenProps} from '~routes/interface';
+import {DeviceScreenProps} from '~routes/interface';
 import {ExerciseScheme} from '~lib/femfit/game/interface';
 import exercises from '~lib/femfit/game/exercises.json';
 import Popup from '~components/Popup';
@@ -13,10 +13,8 @@ import {getEstimatedExerciseDuration} from '~lib/femfit/game/utils';
 import NoDevicePopup from '~components/NoDevicePopup';
 import PageWrapper from '~components/PageWrapper';
 
-const FemfitScreen: React.FC<ExerciseScreenProps<'Femfit'>> = ({
-  navigation,
-}) => {
-  const [exercise, setExercise] = useState<ExerciseScheme>();
+const FemfitScreen: React.FC<DeviceScreenProps<'Femfit'>> = ({navigation}) => {
+  const [exercise, setDevice] = useState<ExerciseScheme>();
   const [noDeviceModalVisible, setNoDeviceModalVisible] =
     useState<boolean>(true);
   const [modalItem, setModalItem] = useState<ExerciseScheme>();
@@ -32,8 +30,8 @@ const FemfitScreen: React.FC<ExerciseScreenProps<'Femfit'>> = ({
     setNoDeviceModalVisible(!noDeviceModalVisible);
   };
 
-  const selectExercise = (item: ExerciseScheme) => {
-    setExercise(item);
+  const selectDevice = (item: ExerciseScheme) => {
+    setDevice(item);
   };
 
   const toggleDetails = (item?: ExerciseScheme) => {
@@ -60,7 +58,7 @@ const FemfitScreen: React.FC<ExerciseScreenProps<'Femfit'>> = ({
       );
     }
     return (
-      <PageWrapper title="Select exercise">
+      <PageWrapper title="Select exercise" contentSize="medium">
         <ScrollView style={styles.exerciseList}>
           {(exercises as ExerciseScheme[]).map((item, idx) => (
             <Card style={styles.item} key={idx}>
@@ -72,7 +70,7 @@ const FemfitScreen: React.FC<ExerciseScreenProps<'Femfit'>> = ({
                 />
                 <Card.Actions style={styles.actions}>
                   <Button onPress={() => toggleDetails(item)}>Details</Button>
-                  <Button onPress={() => selectExercise(item)} mode="contained">
+                  <Button onPress={() => selectDevice(item)} mode="contained">
                     Start exercise
                   </Button>
                 </Card.Actions>
@@ -112,7 +110,7 @@ const FemfitScreen: React.FC<ExerciseScreenProps<'Femfit'>> = ({
 };
 
 const styles = StyleSheet.create({
-  wrapper: {flex: 1, position: 'relative', padding: 8},
+  wrapper: {flex: 1, position: 'relative'},
   exerciseList: {
     marginTop: 16,
   },

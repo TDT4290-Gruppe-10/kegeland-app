@@ -10,7 +10,7 @@ import {PeripheralNotification} from '~constants/bluetooth/interface';
 import {addServiceListener, removeServiceListener} from '~utils/bluetooth';
 import {bleManagerEmitter} from '~hooks/useBluetooth';
 import {UPDATE_INTERVAL_MS} from '~constants/bluetooth';
-import {ExerciseScreenProps} from '~routes/interface';
+import {DeviceScreenProps} from '~routes/interface';
 
 import {ACTIVATION_THRESHOLD, SENSOR_SERVICE} from '../bluetooth/constants';
 import {pressurePercent, readSensorBytes} from '../bluetooth/utils';
@@ -29,7 +29,7 @@ const {MAX_HEIGHT, MAX_WIDTH} = constants;
 type FemfitGameProps = {
   device: BluetoothDevice;
   exercise: ExerciseScheme;
-  navigation: ExerciseScreenProps<'Femfit'>['navigation'];
+  navigation: DeviceScreenProps<'Femfit'>['navigation'];
   goBack: () => void;
 };
 
@@ -90,6 +90,7 @@ export default class FemfitGame extends PureComponent<
 
   componentDidMount(): void {
     SystemNavigationBar.navigationHide();
+    this.props.navigation.setOptions({headerShown: false});
     this.gameEngine.swap(spawnEntities(this.exerciseScheme));
     this.gameEngine.dispatch({type: 'reset'});
     if (this.props.device && this.props.device.state === 'connected') {
@@ -110,6 +111,7 @@ export default class FemfitGame extends PureComponent<
 
   componentWillUnmount(): void {
     SystemNavigationBar.navigationShow();
+    this.props.navigation.setOptions({headerShown: true});
     if (this.interval) {
       clearInterval(this.interval);
       this.interval = null;
