@@ -54,11 +54,17 @@ const darkColorOverride: Partial<Theme['colors']> = merge(
   } as ThemeOverride,
 );
 
-export const lightTheme = merge(merge(NavigationLightTheme, PaperLightTheme), {
-  ...baseOverride,
-  colors: lightColorOverride,
-});
-export const darkTheme = merge(merge(PaperDarkTheme, NavigationDarkTheme), {
-  ...baseOverride,
-  colors: darkColorOverride,
-});
+export const lightTheme: any = merge(
+  merge(NavigationLightTheme, PaperLightTheme),
+  {
+    ...baseOverride,
+    colors: lightColorOverride,
+  },
+);
+export const darkTheme: any = merge(
+  merge(PaperDarkTheme, NavigationDarkTheme),
+  {
+    ...baseOverride,
+    colors: darkColorOverride,
+  },
+);
