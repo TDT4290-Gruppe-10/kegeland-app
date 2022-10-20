@@ -1,3 +1,5 @@
+import {DeviceStackParamList} from '~routes/interface';
+
 export type BluetoothCharacteristic = string;
 export type BluetoothService = {
   uuid: string;
@@ -5,6 +7,7 @@ export type BluetoothService = {
 };
 
 export type BluetoothProfile = {
+  navScreen: keyof DeviceStackParamList;
   services: string[];
   batteryService: {
     service: BluetoothService;

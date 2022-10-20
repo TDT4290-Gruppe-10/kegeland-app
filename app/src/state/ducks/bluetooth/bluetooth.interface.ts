@@ -1,4 +1,4 @@
-import {ProfileKey} from '~constants/bluetooth';
+import {DeviceType} from '~constants/bluetooth';
 
 export type DeviceConnectionState =
   | 'available'
@@ -18,7 +18,7 @@ export type BatchedDeviceCharacteristics = Record<
 export type BluetoothDevice = {
   id: string;
   name: string;
-  type: ProfileKey;
+  type: DeviceType;
   battery?: number;
   state: DeviceConnectionState;
 };

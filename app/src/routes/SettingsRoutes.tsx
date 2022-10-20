@@ -1,6 +1,7 @@
 import {createStackNavigator} from '@react-navigation/stack';
 import React from 'react';
 
+import AppHeader from '~components/AppHeader';
 import ConnectDeviceScreen from '~views/settings/ConnectDeviceScreen';
 import SettingsScreen from '~views/settings/SettingsScreen';
 
@@ -10,7 +11,12 @@ export const SettingsStack = createStackNavigator<SettingsStackParamList>();
 
 const SettingsRoutes: React.FC = () => {
   return (
-    <SettingsStack.Navigator initialRouteName="Settings">
+    <SettingsStack.Navigator
+      initialRouteName="Settings"
+      screenOptions={{
+        header: (props) => <AppHeader {...props} />,
+        headerShown: true,
+      }}>
       <SettingsStack.Screen name="Settings" component={SettingsScreen} />
       <SettingsStack.Screen
         name="Connect device"

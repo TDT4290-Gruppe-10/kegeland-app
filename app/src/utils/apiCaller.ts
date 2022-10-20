@@ -5,9 +5,7 @@ import {Token} from '~constants/auth';
 
 import {isApiError} from './isApiError';
 import {retrieveToken} from './storage';
-
 const httpInstance = axios.create({
-  baseURL: API_URL,
   timeout: 5000,
 });
 
@@ -28,7 +26,7 @@ export const apiCaller = <T = unknown>(
   data?: any,
 ) =>
   httpInstance
-    .request<T>({url: endpoint, method, data})
+    .request<T>({baseURL: API_URL, url: endpoint, method, data})
     .then((res) => res.data)
     .catch((err) => {
       if (err instanceof Error) {

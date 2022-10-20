@@ -1,28 +1,58 @@
 import React from 'react';
-import {StyleSheet} from 'react-native';
+import {StyleProp, StyleSheet, ViewStyle} from 'react-native';
 import {Title} from 'react-native-paper';
 import {SafeAreaView} from 'react-native-safe-area-context';
 
+type ContentSize = 'small' | 'medium' | 'large' | 'full';
+
 export type PageWrapperProps = {
   title: string;
+  contentSize?: ContentSize;
+  style?: StyleProp<ViewStyle>;
   children: React.ReactNode;
 };
 
-const PageWrapper: React.FC<PageWrapperProps> = ({title, children}) => {
+const getPadding = (contentSize?: ContentSize) => {
+  switch (contentSize) {
+    case 'full':
+      return 0;
+    case 'large':
+      return 8;
+    case 'medium':
+      return 16;
+    default:
+      return 32;
+  }
+};
+
+const PageWrapper: React.FC<PageWrapperProps> = ({
+  title,
+  contentSize,
+  style,
+  children,
+}) => {
   return (
-    <SafeAreaView style={styles.wrapper}>
+    <SafeAreaView
+      style={[
+        styles.wrapper,
+        {paddingHorizontal: getPadding(contentSize)},
+        style,
+      ]}>
       <Title style={styles.title}>{title}</Title>
       {children}
     </SafeAreaView>
   );
 };
 
+PageWrapper.defaultProps = {
+  contentSize: 'small',
+};
+
 const styles = StyleSheet.create({
   wrapper: {
     height: '100%',
     width: '100%',
-    paddingHorizontal: 30,
-    marginTop: 30,
+    marginTop: 8,
   },
   title: {
     fontWeight: 'bold',
