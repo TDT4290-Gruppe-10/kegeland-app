@@ -4,6 +4,7 @@ import {HOUSEKEEPING_SERVICE, SENSOR_SERVICE} from './constants';
 import {readBattery} from './utils';
 
 export default {
+  navScreen: 'Femfit',
   services: [HOUSEKEEPING_SERVICE.uuid, SENSOR_SERVICE.uuid],
   batteryService: {
     service: HOUSEKEEPING_SERVICE,
