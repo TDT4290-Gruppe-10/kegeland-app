@@ -9,7 +9,7 @@ const Badge: React.FC<BadgeProps> = (props) => {
     <PaperBadge
       {...props}
       style={[
-        {backgroundColor: colors.primary, color: colors.onPrimary},
+        {backgroundColor: colors.primary, color: colors.text},
         props.style,
       ]}
     />
