@@ -5,7 +5,25 @@ import {apiCaller} from '~utils/apiCaller';
 import {
   FetchQuestionnaireDTO,
   FetchQuestionnaireResponse,
+  UploadAnswersDto,
 } from './questions.interface';
+
+export const uploadAnswers = createAsyncThunk(
+  'questions/uploadAnswers',
+  async (data: UploadAnswersDto) => {
+    const {sessionId, questionnaireId, answers} = data;
+    const promises: Promise<void>[] = [];
+    for (const answer of answers) {
+      const promise = apiCaller<void>({
+        url: `questionnaires/${questionnaireId}/answers`,
+        method: 'POST',
+        data: {sessionId, ...answer},
+      });
+      promises.push(promise);
+    }
+    return await Promise.all(promises);
+  },
+);
 
 export const fetchQuestionnaire = createAsyncThunk(
   'questions/fetchQuestionnaire',

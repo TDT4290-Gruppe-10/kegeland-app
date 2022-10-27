@@ -2,6 +2,8 @@ import {createStackNavigator} from '@react-navigation/stack';
 import React from 'react';
 
 import AppHeader from '~components/AppHeader';
+import withDevice from '~hoc/withDevice';
+import withQuestionnaire from '~hoc/withQuestionnaire';
 import DevicesScreen from '~views/devices/DevicesScreen';
 import FemfitScreen from '~views/devices/FemfitScreen';
 
@@ -18,7 +20,13 @@ const DeviceRoutes: React.FC = () => {
         headerShown: true,
       }}>
       <DeviceStack.Screen name="Devices" component={DevicesScreen} />
-      <DeviceStack.Screen name="Femfit" component={FemfitScreen} />
+      <DeviceStack.Screen
+        name="Femfit"
+        component={withQuestionnaire(
+          'femfit',
+          withDevice('femfit', FemfitScreen),
+        )}
+      />
     </DeviceStack.Navigator>
   );
 };

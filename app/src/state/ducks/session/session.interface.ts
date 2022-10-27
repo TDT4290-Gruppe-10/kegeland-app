@@ -1,12 +1,16 @@
 import {DeviceType} from '~constants/bluetooth';
 
 export type ExerciseSession = {
-  device: DeviceType;
-  data: number[][];
+  id?: string;
+  sensor: DeviceType;
+  data: Record<number, number[]>;
 };
 
 export interface SessionState {
   loading: boolean;
   error?: string;
-  session: ExerciseSession | undefined;
+  currentSession: ExerciseSession | undefined;
 }
+
+export type UploadSessionDto = {userId: string} & ExerciseSession;
+export type UploadSessionResponse = UploadSessionDto & {id: string};

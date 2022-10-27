@@ -72,6 +72,7 @@ const QuestionnaireModal: React.FC<QuestionnaireModalProps> = ({
 const styles = StyleSheet.create({
   popup: {
     width: '90%',
+    zIndex: 10000,
   },
   wrapper: {
     width: '100%',

@@ -51,7 +51,7 @@ type FemfitGameState = {
   gameOver: boolean;
   score: number;
   gameOverDialogVisible: boolean;
-  sessionData: number[][];
+  sessionData: Record<number, number[]>;
 };
 
 class FemfitGame extends PureComponent<FemfitGameProps, FemfitGameState> {
@@ -79,7 +79,7 @@ class FemfitGame extends PureComponent<FemfitGameProps, FemfitGameState> {
       gameOver: false,
       score: 0,
       gameOverDialogVisible: false,
-      sessionData: [],
+      sessionData: {},
     };
   }
 
@@ -116,12 +116,13 @@ class FemfitGame extends PureComponent<FemfitGameProps, FemfitGameState> {
         const {pressures, temperatures} = readSensorBytes(
           Object.values(this.sensorData),
         );
+        const ts = Date.now();
         this.setState({
           ...this.state,
-          sessionData: [
+          sessionData: {
             ...this.state.sessionData,
-            [...pressures, ...temperatures],
-          ],
+            [ts]: [...pressures, ...temperatures],
+          },
         });
         const pctMax = round(pressurePercent(max(pressures) as number), 1);
         if (pctMax > ACTIVATION_THRESHOLD) {
@@ -183,7 +184,7 @@ class FemfitGame extends PureComponent<FemfitGameProps, FemfitGameState> {
                       },
                       () => {
                         this.props.setSession({
-                          device: 'femfit',
+                          sensor: 'femfit',
                           data: this.state.sessionData,
                         });
                         this.toggleGameOverDialog();

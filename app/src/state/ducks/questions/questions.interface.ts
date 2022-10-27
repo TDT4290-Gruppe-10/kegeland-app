@@ -13,6 +13,7 @@ export type Questionnaire = {
 
 export type Answer = {
   userId: string;
+  answeredAt: number;
   answers: number[];
 };
 
@@ -22,6 +23,12 @@ export interface QuestionsState {
   questionnaire: Questionnaire | undefined;
   answers: Answer[];
 }
+
+export type UploadAnswersDto = {
+  sessionId: string;
+  questionnaireId: string;
+  answers: Answer[];
+};
 
 export type FetchQuestionnaireDTO = {
   userId: string;

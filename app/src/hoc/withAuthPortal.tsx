@@ -19,7 +19,7 @@ const withAuthPortal =
         navigation.navigate(stack, params || undefined);
         dispatch(setAnchorRoute(undefined));
       } else {
-        navigation.goBack();
+        navigation.navigate('DeviceStack', {screen: 'Devices'});
       }
     };
 
