@@ -1,5 +1,4 @@
-import {find} from 'lodash';
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {SafeAreaView, ScrollView, StyleSheet} from 'react-native';
 import {
   ActivityIndicator,
@@ -16,54 +15,42 @@ import {ExerciseScheme} from '~lib/femfit/game/interface';
 import exercises from '~lib/femfit/game/exercises.json';
 import Popup from '~components/Popup';
 import {getEstimatedExerciseDuration} from '~lib/femfit/game/utils';
-import NoDevicePopup from '~components/NoDevicePopup';
 import PageWrapper from '~components/PageWrapper';
-import QuestionnaireModal from '~components/QuestionnaireModal';
-import {fetchQuestionnaire} from '~state/ducks/questions/questions.actions';
-import useAppDispatch from '~hooks/useAppDispatch';
-import {setAnswer} from '~state/ducks/questions/questions.reducer';
+import {WithDeviceContext} from '~hoc/withDevice';
+import {WithQuestionnaireContext} from '~hoc/withQuestionnaire';
 
-const FemfitScreen: React.FC<DeviceScreenProps<'Femfit'>> = ({navigation}) => {
-  const dispatch = useAppDispatch();
+type FemfitScreenProps = DeviceScreenProps<'Femfit'> &
+  WithDeviceContext &
+  WithQuestionnaireContext;
+
+const FemfitScreen: React.FC<FemfitScreenProps> = ({
+  navigation,
+  answers,
+  device,
+  questionnaireEnabled,
+  questionnaireLoading,
+  toggleQuestionnaire,
+}) => {
+  const {currentSession} = useAppSelector((state) => state.session);
   const [exercise, setExercise] = useState<ExerciseScheme>();
-  const {authUser} = useAppSelector((state) => state.auth);
-  const {questionnaire, loading, answers} = useAppSelector(
-    (state) => state.questions,
-  );
-  const [noDeviceModalVisible, setNoDeviceModalVisible] =
-    useState<boolean>(false);
   const [modalItem, setModalItem] = useState<ExerciseScheme>();
-  const device = useAppSelector((state) =>
-    find(state.bluetooth.connectedDevices, (d) => d.type === 'femfit'),
-  );
 
-  useEffect(() => {
-    if (authUser) {
-      dispatch(fetchQuestionnaire({sensor: 'femfit', userId: authUser.id}));
+  const shouldRenderGame = () => {
+    if (device && exercise && !questionnaireLoading) {
+      if (questionnaireEnabled) {
+        if (currentSession === undefined && answers.length === 1) {
+          return true;
+        }
+        return false;
+      }
+      return true;
     }
-  }, []);
-
-  const shouldRenderGame = () =>
-    device &&
-    exercise &&
-    (questionnaire !== undefined ? answers.length > 0 : true);
-
-  useEffect(() => {
-    setNoDeviceModalVisible(device === undefined);
-  }, [device]);
-
-  const handleAnswers = (data: number[]) => {
-    if (authUser) {
-      dispatch(setAnswer({userId: authUser.id, answers: data}));
-    }
-  };
-
-  const toggleNoDeviceModal = () => {
-    setNoDeviceModalVisible(!noDeviceModalVisible);
+    return false;
   };
 
   const selectExercise = (item: ExerciseScheme) => {
     setExercise(item);
+    toggleQuestionnaire();
   };
 
   const toggleDetails = (item?: ExerciseScheme) => {
@@ -85,7 +72,7 @@ const FemfitScreen: React.FC<DeviceScreenProps<'Femfit'>> = ({navigation}) => {
           />
         </SafeAreaView>
       );
-    } else if (loading) {
+    } else if (questionnaireLoading) {
       return (
         <SafeAreaView style={styles.loader}>
           <ActivityIndicator animating={true} />
@@ -112,11 +99,6 @@ const FemfitScreen: React.FC<DeviceScreenProps<'Femfit'>> = ({navigation}) => {
               </Card.Content>
             </Card>
           ))}
-          <QuestionnaireModal
-            onSubmit={handleAnswers}
-            visible={exercise !== undefined && answers.length === 0}
-            questionnaire={questionnaire}
-          />
           <Popup
             title="Details"
             visible={modalItem !== undefined}
@@ -136,11 +118,6 @@ const FemfitScreen: React.FC<DeviceScreenProps<'Femfit'>> = ({navigation}) => {
               </Text>
             )}
           </Popup>
-          <NoDevicePopup
-            deviceName="Femfit"
-            visible={noDeviceModalVisible}
-            onDismiss={toggleNoDeviceModal}
-          />
         </ScrollView>
       </PageWrapper>
     );
