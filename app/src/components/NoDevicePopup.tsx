@@ -38,6 +38,7 @@ const NoDevicePopup: React.FC<NoDevicePopupProps> = ({deviceName, visible}) => {
 const styles = StyleSheet.create({
   popup: {
     width: '80%',
+    zIndex: 30000,
   },
   highlight: {
     fontWeight: '700',
