@@ -6,7 +6,7 @@ import {
   isRejectedAction,
 } from '~utils/thunkUtils';
 
-import {fetchQuestionnaire} from './questions.actions';
+import {fetchQuestionnaire, uploadAnswers} from './questions.actions';
 import {fetchQuestionnaireReducer} from './questions.helpers';
 import {Answer, QuestionsState} from './questions.interface';
 
@@ -34,6 +34,9 @@ export const questionsSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(fetchQuestionnaire.fulfilled, fetchQuestionnaireReducer)
+      .addCase(uploadAnswers.fulfilled, (state) => {
+        state.answers = [];
+      })
       .addMatcher(
         (action) => isPendingAction(action, 'questions'),
         (state) => {
