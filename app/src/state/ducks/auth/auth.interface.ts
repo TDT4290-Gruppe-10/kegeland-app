@@ -8,7 +8,7 @@ export type AuthTokens = {
 };
 
 export type UserDetails = {
-  name?: {
+  name: {
     firstName: string;
     lastName: string;
   };

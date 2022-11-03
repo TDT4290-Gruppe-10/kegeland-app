@@ -18,23 +18,16 @@ import FormInput from './FormInput';
 import FormError from './FormError';
 
 type FormData = {
-  firstName?: string;
-  lastName?: string;
+  firstName: string;
+  lastName: string;
   email: string;
   password: string;
   confirmPassword: string;
 };
 
 const schema = yup.object({
-  firstName: yup.string().nullable().notRequired().label('First name'),
-  lastName: yup
-    .string()
-    .when('firstName', {
-      is: (firstName: string) => firstName.length > 0,
-      then: yup.string().nullable().required(),
-      otherwise: yup.string().nullable().notRequired(),
-    })
-    .label('Last name'),
+  firstName: yup.string().nullable().required().label('First name'),
+  lastName: yup.string().nullable().required().label('Last name'),
   email: yup.string().nullable().email().required().label('Email'),
   password: yup.string().nullable().required().min(6).label('Password'),
   confirmPassword: yup
@@ -67,11 +60,10 @@ const RegisterForm: React.FC = () => {
     const payload: RegisterDTO = {
       email,
       password,
+      name: {firstName, lastName},
       roles: [UserRole.PATIENT],
     };
-    if (firstName && lastName) {
-      payload.name = {firstName, lastName};
-    }
+
     dispatch(signUpUser(payload));
   };
 
@@ -82,12 +74,16 @@ const RegisterForm: React.FC = () => {
           state={formState}
           control={control}
           name="firstName"
+          icon="form-textbox"
+          autoCapitalize="words"
           placeholder="First name"
         />
         <FormInput
           state={formState}
           control={control}
           name="lastName"
+          icon="form-textbox"
+          autoCapitalize="words"
           placeholder="Last name"
         />
         <FormInput

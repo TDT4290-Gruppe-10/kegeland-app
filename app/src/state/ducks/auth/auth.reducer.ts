@@ -7,7 +7,6 @@ import {
 } from '~utils/thunkUtils';
 
 import {
-  initializeAuthState,
   signInUser,
   signOutUser,
   signUpUser,
@@ -35,14 +34,6 @@ export const authSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(initializeAuthState.fulfilled, (state, {payload}) => {
-        state.ready = true;
-        if (!payload) {
-          state.isSignedIn = false;
-          state.authUser = undefined;
-          state.userDetails = undefined;
-        }
-      })
       .addCase(signInUser.fulfilled, signInReducer)
       .addCase(signOutUser.fulfilled, signOutReducer)
       .addCase(signOutUser.rejected, signOutReducer)
