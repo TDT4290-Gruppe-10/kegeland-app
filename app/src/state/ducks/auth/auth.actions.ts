@@ -2,14 +2,8 @@ import {createAsyncThunk} from '@reduxjs/toolkit';
 
 import {Token} from '~constants/auth';
 import {apiCaller} from '~utils/apiCaller';
-import {
-  removeTokens,
-  retrieveToken,
-  retrieveTokens,
-  storeTokens,
-} from '~utils/storage';
+import {removeTokens, retrieveToken, storeTokens} from '~utils/storage';
 
-import {allTokensExist} from './auth.helpers';
 import {
   LoginDTO,
   LoginResponse,
@@ -18,14 +12,6 @@ import {
   RegisterResponse,
   ResetPasswordDTO,
 } from './auth.interface';
-
-export const initializeAuthState = createAsyncThunk<boolean>(
-  'auth/initialize',
-  async () => {
-    const tokens = await retrieveTokens();
-    return allTokensExist(tokens);
-  },
-);
 
 export const signInUser = createAsyncThunk(
   'auth/signInUser',

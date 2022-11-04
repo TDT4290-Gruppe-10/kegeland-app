@@ -47,6 +47,29 @@ const withQuestionnaire =
     const {currentSession} = session;
     const {answers, questionnaire} = questions;
 
+    const dispatchSessionWithAnswers = async () => {
+      await dispatch(
+        uploadSession({...currentSession!, userId: authUser!.id}),
+      ).then((res) => {
+        const {id} = res.payload as UploadSessionResponse;
+        if (id) {
+          dispatch(
+            uploadAnswers({
+              answers,
+              questionnaireId: questionnaire!.id,
+              sessionId: id,
+            }),
+          );
+        }
+      });
+      await Promise.all([dispatch(clearAnswers()), dispatch(clearSession())]);
+    };
+
+    const dispatchSession = async () => {
+      await dispatch(uploadSession({...currentSession!, userId: authUser!.id}));
+      dispatch(clearSession());
+    };
+
     useEffect(() => {
       if (authUser) {
         dispatch(fetchQuestionnaire({sensor: deviceType, userId: authUser.id}));
@@ -55,27 +78,24 @@ const withQuestionnaire =
       }
       return () => {
         dispatch(clearAnswers());
+        dispatch(clearSession());
       };
     }, []);
 
     useEffect(() => {
-      if (authUser && questionnaire?.id) {
-        if (answers.length === 2 && currentSession) {
-          dispatch(
-            uploadSession({...currentSession, userId: authUser.id}),
-          ).then((res) => {
-            const {id} = res.payload as UploadSessionResponse;
-            dispatch(
-              uploadAnswers({
-                answers,
-                questionnaireId: questionnaire.id,
-                sessionId: id,
-              }),
-            ).then(() => {
-              dispatch(clearAnswers());
-              dispatch(clearSession());
-            });
-          });
+      if (!questions.loading && !questionnaire) {
+        setQuestionnaireEnabled(false);
+      }
+    }, [questions.loading]);
+
+    useEffect(() => {
+      if (authUser && currentSession) {
+        if (questionnaireEnabled) {
+          if (questionnaire?.id && answers.length === 2) {
+            dispatchSessionWithAnswers();
+          }
+        } else {
+          dispatchSession();
         }
       }
     }, [answers]);
