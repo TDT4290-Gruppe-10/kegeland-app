@@ -1,6 +1,10 @@
 import BleManager from 'react-native-ble-manager';
 
 import * as constants from '~constants/bluetooth';
+import {
+  deviceMock,
+  peripheralMock,
+} from '~state/ducks/__mocks__/bluetooth.mocks';
 import {store} from '~state/store';
 import {getAllServiceIds} from '~utils/bluetooth';
 
@@ -45,21 +49,19 @@ describe('Test bluetooth-actions', () => {
       .mockImplementation(() => Promise.resolve());
     const serviceSpy = jest
       .spyOn(BleManager, 'retrieveServices')
-      .mockImplementation(() =>
-        Promise.resolve({id: deviceId, advertising: {}, rssi: -123}),
-      );
-    const deviceId = 'fs:32:sa:43';
-    await store.dispatch(connectDevice(deviceId));
-    expect(connectSpy).toBeCalledWith(deviceId);
-    expect(serviceSpy).toBeCalledWith(deviceId);
+      .mockImplementation(() => Promise.resolve(peripheralMock));
+    const {id} = deviceMock;
+    await store.dispatch(connectDevice(id));
+    expect(connectSpy).toBeCalledWith(id);
+    expect(serviceSpy).toBeCalledWith(id);
   });
 
   it('connectDevice should fail on error', async () => {
     jest
       .spyOn(BleManager, 'connect')
       .mockImplementation(() => Promise.reject(new Error()));
-    const deviceId = 'fs:32:sa:43';
-    const res = await store.dispatch(connectDevice(deviceId));
+    const {id} = deviceMock;
+    const res = await store.dispatch(connectDevice(id));
     expect(res.type).toBe(connectDevice.rejected.type);
   });
 
@@ -67,17 +69,17 @@ describe('Test bluetooth-actions', () => {
     const disconnectSpy = jest
       .spyOn(BleManager, 'disconnect')
       .mockImplementation(() => Promise.resolve());
-    const deviceId = 'fs:32:sa:43';
-    await store.dispatch(disconnectDevice(deviceId));
-    expect(disconnectSpy).toBeCalledWith(deviceId);
+    const {id} = deviceMock;
+    await store.dispatch(disconnectDevice(id));
+    expect(disconnectSpy).toBeCalledWith(id);
   });
 
   it('disconnectDevice should retry once on initial fail', async () => {
     const disconnectSpy = jest
       .spyOn(BleManager, 'disconnect')
       .mockImplementation(() => Promise.reject(new Error()));
-    const deviceId = 'fs:32:sa:43';
-    await store.dispatch(disconnectDevice(deviceId));
+    const {id} = deviceMock;
+    await store.dispatch(disconnectDevice(id));
     expect(disconnectSpy).toBeCalledTimes(2);
   });
 
@@ -85,8 +87,8 @@ describe('Test bluetooth-actions', () => {
     jest
       .spyOn(BleManager, 'disconnect')
       .mockImplementation(() => Promise.reject(new Error()));
-    const deviceId = 'fs:32:sa:43';
-    const res = await store.dispatch(disconnectDevice(deviceId));
+    const {id} = deviceMock;
+    const res = await store.dispatch(disconnectDevice(id));
     expect(res.type).toBe(disconnectDevice.rejected.type);
   });
 });

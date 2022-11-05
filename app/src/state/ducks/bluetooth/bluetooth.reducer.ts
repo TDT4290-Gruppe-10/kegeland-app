@@ -15,7 +15,7 @@ import {
 } from './bluetooth.helpers';
 import {BluetoothState} from './bluetooth.interface';
 
-const initialState: BluetoothState = {
+export const initialState: BluetoothState = {
   isReady: false,
   isScanning: false,
   connectedDevices: {},
@@ -31,7 +31,7 @@ export const bluetoothSlice = createSlice({
     setReady: (state) => {
       state.isReady = true;
     },
-    setError: (state, action: PayloadAction<string>) => {
+    setError: (state, action: PayloadAction<string | undefined>) => {
       state.error = action.payload;
     },
     stopDeviceScan: (state) => {
@@ -61,9 +61,8 @@ export const bluetoothSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(startDeviceScan.rejected, (state, {error}) => {
+      .addCase(startDeviceScan.rejected, (state) => {
         state.isScanning = false;
-        state.error = error.message;
       })
       .addCase(startDeviceScan.fulfilled, (state) => {
         state.isScanning = true;
