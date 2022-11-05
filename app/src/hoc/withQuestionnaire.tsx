@@ -14,11 +14,11 @@ import {
 } from '~state/ducks/questions/questions.interface';
 import {
   clearAnswers,
-  setAnswer,
+  addAnswer,
 } from '~state/ducks/questions/questions.reducer';
 import {uploadSession} from '~state/ducks/session/session.actions';
 import {UploadSessionResponse} from '~state/ducks/session/session.interface';
-import {clearSession} from '~state/ducks/session/session.reducer';
+import {setSession} from '~state/ducks/session/session.reducer';
 
 export type WithQuestionnaireContext = {
   answers: Answer[];
@@ -62,12 +62,12 @@ const withQuestionnaire =
           );
         }
       });
-      await Promise.all([dispatch(clearAnswers()), dispatch(clearSession())]);
+      await Promise.all([dispatch(clearAnswers()), dispatch(setSession())]);
     };
 
     const dispatchSession = async () => {
       await dispatch(uploadSession({...currentSession!, userId: authUser!.id}));
-      dispatch(clearSession());
+      dispatch(setSession());
     };
 
     useEffect(() => {
@@ -78,7 +78,7 @@ const withQuestionnaire =
       }
       return () => {
         dispatch(clearAnswers());
-        dispatch(clearSession());
+        dispatch(setSession());
       };
     }, []);
 
@@ -109,7 +109,7 @@ const withQuestionnaire =
     const handleAnswers = (data: number[]) => {
       if (authUser && isValidAnswers(questionnaire!, data)) {
         dispatch(
-          setAnswer({
+          addAnswer({
             userId: authUser.id,
             answers: data,
             answeredAt: Date.now(),

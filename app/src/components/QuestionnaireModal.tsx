@@ -19,7 +19,7 @@ const QuestionnaireModal: React.FC<QuestionnaireModalProps> = ({
   onSubmit,
   visible,
 }) => {
-  const [answers, setAnswers] = useState<string[]>(
+  const [answers, addAnswers] = useState<string[]>(
     map(questionnaire ? questionnaire.questions : [], () => '2'),
   );
   if (!questionnaire) return null;
@@ -27,7 +27,7 @@ const QuestionnaireModal: React.FC<QuestionnaireModalProps> = ({
   const handleChange = (value: string, idx: number) => {
     const tmp = clone(answers);
     tmp[idx] = value;
-    setAnswers(tmp);
+    addAnswers(tmp);
   };
 
   const handleSubmit = () =>

@@ -15,7 +15,7 @@ import {
 import {signOutReducer, signInReducer} from './auth.helpers';
 import {AuthState} from './auth.interface';
 
-const initialState: AuthState = {
+export const initialState: AuthState = {
   ready: false,
   loading: false,
   isSignedIn: false,

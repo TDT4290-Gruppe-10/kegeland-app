@@ -27,7 +27,7 @@ type ApiCallerProps = Pick<
 
 export const apiCaller = <T = unknown>(config: ApiCallerProps) =>
   httpInstance
-    .request<T>({baseURL: API_URL, ...config})
+    .request<T>({baseURL: `http://${API_URL}:3000/api/`, ...config})
     .then((res) => res.data)
     .catch((err) => {
       if (err instanceof Error) {

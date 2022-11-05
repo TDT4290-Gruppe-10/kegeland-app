@@ -6,10 +6,9 @@ import {
   isRejectedAction,
 } from '~utils/thunkUtils';
 
-import {uploadSession} from './session.actions';
 import {ExerciseSession, SessionState} from './session.interface';
 
-const initialState: SessionState = {
+export const initialState: SessionState = {
   loading: false,
   error: undefined,
   currentSession: undefined,
@@ -31,9 +30,6 @@ export const sessionSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(uploadSession.fulfilled, (state, action) => {
-        state.currentSession = action.payload;
-      })
       .addMatcher(
         (action) => isPendingAction(action, 'session'),
         (state) => {

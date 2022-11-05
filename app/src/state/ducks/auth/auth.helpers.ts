@@ -1,17 +1,6 @@
 import {PayloadAction} from '@reduxjs/toolkit';
-import {every, values} from 'lodash';
-
-import {Token} from '~constants/auth';
 
 import {AuthState, LoginResponse} from './auth.interface';
-
-export const allTokensExist = (tokens: Record<Token, string>): boolean => {
-  const tokenKeys = values(Token);
-  return every(
-    Object.entries(tokens),
-    ([key, val]) => tokenKeys.includes(key as Token) && val !== null,
-  );
-};
 
 export const signInReducer = (
   state: AuthState,

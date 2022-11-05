@@ -88,7 +88,10 @@ export const bluetoothSlice = createSlice({
       })
       .addCase(connectDevice.fulfilled, connectDeviceReducer)
       .addCase(disconnectDevice.pending, (state, action) => {
-        state.connectedDevices[action.meta.arg].state = 'disconnecting';
+        const deviceId = action.meta.arg;
+        if (deviceId in state.connectedDevices) {
+          state.connectedDevices[action.meta.arg].state = 'disconnecting';
+        }
       })
       .addMatcher(
         (action) => isPendingAction(action, 'bluetooth'),

@@ -5,15 +5,15 @@ const checkAndroidPermission = async (permission: string) => {
     PermissionsAndroid.PERMISSIONS[permission],
   ).then((result) => {
     if (result) {
-      console.log(`Permission ${permission} is OK`);
+      console.warn(`Permission ${permission} is OK`);
     } else {
       PermissionsAndroid.request(
         PermissionsAndroid.PERMISSIONS[permission],
       ).then(() => {
         if (result) {
-          console.log('User accepted');
+          console.warn('User accepted');
         } else {
-          console.log('User refused');
+          console.warn('User refused');
         }
       });
     }
