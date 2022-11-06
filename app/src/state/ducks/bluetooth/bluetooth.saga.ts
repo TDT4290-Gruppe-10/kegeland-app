@@ -18,7 +18,7 @@ import {connectDevice, startDeviceScan} from './bluetooth.actions';
 import {bluetoothSlice} from './bluetooth.reducer';
 import {BluetoothDevice} from './bluetooth.interface';
 
-const sagaActionConstants = {
+export const sagaActionConstants = {
   SET_ERROR: bluetoothSlice.actions.setError.type,
   ON_DEVICE_CONNECTED: connectDevice.fulfilled.type,
   ON_DEVICE_DISCONNECTED: bluetoothSlice.actions.deviceDisconnected.type,
@@ -55,7 +55,11 @@ function* handleOnDeviceConnected(
   }
 }
 
-function* handleDeviceScan(): Generator<AnyAction, void, BluetoothDevice> {
+export function* handleDeviceScan(): Generator<
+  AnyAction,
+  void,
+  BluetoothDevice
+> {
   const channel = createDeviceStreamChannel();
   try {
     while (true) {

@@ -28,7 +28,7 @@ const persistConfig = {
   whitelist: ['app', 'auth', 'bluetooth'],
 };
 
-const rootReducer = combineReducers({
+export const rootReducer = combineReducers({
   app: appReducer,
   auth: authReducer,
   bluetooth: bluetoothReducer,
