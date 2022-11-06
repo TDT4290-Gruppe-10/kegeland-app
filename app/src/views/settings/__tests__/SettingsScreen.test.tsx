@@ -9,6 +9,12 @@ import {render} from '~utils/test-utils';
 import SettingsScreen from '../SettingsScreen';
 
 describe('Test SettingsScreen-component', () => {
+  const errorSpy = jest
+    .spyOn(global.console, 'error')
+    .mockImplementation(() => {});
+  afterAll(() => {
+    errorSpy.mockRestore();
+  });
   it('should render correctly', () => {
     const props: any = {
       navigation: {

@@ -69,6 +69,19 @@ const useBluetooth = () => {
   };
 
   useEffect(() => {
+    bleManagerEmitter.addListener(
+      'BleManagerDidUpdateValueForCharacteristic',
+      (data: PeripheralNotification) => handlePeripheralUpdate(data),
+    );
+
+    return () => {
+      bleManagerEmitter.removeAllListeners(
+        'BleManagerDidUpdateValueForCharacteristic',
+      );
+    };
+  }, [housekeepers]);
+
+  useEffect(() => {
     BleManager.start({showAlert: false}).catch((err) => {
       if (err instanceof Error) {
         dispatch(setError(err.message));
@@ -81,10 +94,6 @@ const useBluetooth = () => {
     bleManagerEmitter.addListener(
       'BleManagerDisconnectPeripheral',
       (data: {peripheral: string}) => handleDisconnectedPeripheral(data),
-    );
-    bleManagerEmitter.addListener(
-      'BleManagerDidUpdateValueForCharacteristic',
-      (data: PeripheralNotification) => handlePeripheralUpdate(data),
     );
 
     // Verify the app's permissions

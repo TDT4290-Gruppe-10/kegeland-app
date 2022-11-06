@@ -47,6 +47,7 @@ export function mockStore(initialState: MockState = initialStore) {
       }).concat(sagaMiddleware),
     preloadedState: initialState,
   });
+
   const self: Partial<Store<MockState, AnyAction>> & {
     getActions: () => ActionHistory;
   } = {
