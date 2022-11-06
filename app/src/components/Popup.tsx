@@ -2,7 +2,7 @@ import React from 'react';
 import {StyleSheet} from 'react-native';
 import {Card, Divider, Modal, Portal, Title} from 'react-native-paper';
 
-type PopupProps = React.ComponentProps<typeof Modal> & {
+export type PopupProps = React.ComponentProps<typeof Modal> & {
   title: string;
   actions?: React.ComponentProps<typeof Card.Actions>['children'];
 };

@@ -6,7 +6,6 @@ import useAppSelector from '~hooks/useAppSelector';
 import {updateSetting} from '~state/ducks/app/app.actions';
 
 export type ThemeSwitchProps = {
-  color: string;
   style?:
     | {
         marginRight: number;
@@ -24,7 +23,6 @@ const ThemeSwitch: React.FC<ThemeSwitchProps> = (props) => {
   };
   return (
     <Switch
-      {...props}
       color={colors.primary}
       trackColor={{
         false: colors.placeholder,
@@ -32,6 +30,7 @@ const ThemeSwitch: React.FC<ThemeSwitchProps> = (props) => {
       }}
       value={darkMode}
       onValueChange={() => toggle()}
+      {...props}
     />
   );
 };

@@ -12,7 +12,7 @@ import {BluetoothDevice} from '~state/ducks/bluetooth/bluetooth.interface';
 
 import Icon from './Icon';
 
-type BluetoothDeviceItemProps = {
+export type BluetoothDeviceItemProps = {
   device: BluetoothDevice;
 };
 

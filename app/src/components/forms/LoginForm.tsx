@@ -17,7 +17,7 @@ import Button from '~components/Button';
 import FormInput from './FormInput';
 import FormError from './FormError';
 
-type FormData = {
+export type LoginFormData = {
   email: string;
   password: string;
 };
@@ -32,7 +32,7 @@ const LoginForm: React.FC = () => {
   const {loading, error} = useAppSelector((state) => state.auth);
   const dispatch = useAppDispatch();
   const {colors} = useTheme();
-  const {control, handleSubmit, formState, reset} = useForm<FormData>({
+  const {control, handleSubmit, formState, reset} = useForm<LoginFormData>({
     mode: 'onSubmit',
     resolver: yupResolver(schema),
   });
@@ -46,7 +46,7 @@ const LoginForm: React.FC = () => {
     }, []),
   );
 
-  const onSubmit = (data: FormData) => {
+  const onSubmit = (data: LoginFormData) => {
     dispatch(signInUser(data));
   };
 

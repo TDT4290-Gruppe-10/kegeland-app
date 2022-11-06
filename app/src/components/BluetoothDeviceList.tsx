@@ -9,7 +9,7 @@ import BluetoothDeviceItem from './BluetoothDeviceItem';
 import Icon from './Icon';
 import ListItemSkeleton from './ListItemSkeleton';
 
-type BluetoothDeviceListProps = {
+export type BluetoothDeviceListProps = {
   devices: BluetoothDevice[];
 };
 

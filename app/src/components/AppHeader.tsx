@@ -5,7 +5,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {Appbar, Text, useTheme} from 'react-native-paper';
 
-type AppHeaderProps = StackHeaderProps;
+export type AppHeaderProps = StackHeaderProps;
 
 const AppHeader: React.FC<AppHeaderProps> = ({navigation, back}) => {
   const {colors} = useTheme();
