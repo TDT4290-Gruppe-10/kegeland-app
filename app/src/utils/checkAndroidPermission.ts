@@ -9,8 +9,8 @@ const checkAndroidPermission = async (permission: string) => {
     } else {
       PermissionsAndroid.request(
         PermissionsAndroid.PERMISSIONS[permission],
-      ).then(() => {
-        if (result) {
+      ).then((status) => {
+        if (status === 'granted') {
           console.warn('User accepted');
         } else {
           console.warn('User refused');

@@ -9,18 +9,15 @@ export const storeTokens = async ({
   idToken,
   refreshToken,
 }: AuthTokens) => {
-  await AsyncStorage.multiSet(
-    [
-      ['@access_token', accessToken],
-      ['@id_token', idToken],
-      ['@refresh_token', refreshToken],
-    ],
-    (err) => {
-      if (err) {
-        throw new Error('Failed to set tokens');
-      }
-    },
-  );
+  await AsyncStorage.multiSet([
+    ['@access_token', accessToken],
+    ['@id_token', idToken],
+    ['@refresh_token', refreshToken],
+  ]).catch((err) => {
+    if (err) {
+      throw new Error('Failed to set tokens');
+    }
+  });
 };
 
 export const retrieveToken = async (token: Token) => {
@@ -31,30 +28,28 @@ export const retrieveToken = async (token: Token) => {
 
 export const retrieveTokens = async () => {
   let values = null;
-  values = await AsyncStorage.multiGet(Object.values(Token), (err) => {
-    if (err) {
+  values = await AsyncStorage.multiGet(Object.values(Token))
+    .then((res) =>
+      reduce(
+        res,
+        (prev, curr) => {
+          const [key, val] = curr;
+          if (val) {
+            prev[key as Token] = val;
+          }
+          return prev;
+        },
+        {} as Record<Token, string>,
+      ),
+    )
+    .catch(() => {
       throw new Error('Failed to retrieve tokens');
-    }
-  }).then((res) =>
-    reduce(
-      res,
-      (prev, curr) => {
-        const [key, val] = curr;
-        if (val) {
-          prev[key as Token] = val;
-        }
-        return prev;
-      },
-      {} as Record<Token, string>,
-    ),
-  );
+    });
   return values;
 };
 
 export const removeTokens = async () => {
-  await AsyncStorage.multiRemove(Object.values(Token), (err) => {
-    if (err) {
-      throw new Error('Failed to remove tokens');
-    }
+  await AsyncStorage.multiRemove(Object.values(Token)).catch(() => {
+    throw new Error('Failed to remove tokens');
   });
 };
