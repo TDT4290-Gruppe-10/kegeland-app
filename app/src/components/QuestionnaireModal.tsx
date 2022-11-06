@@ -36,9 +36,14 @@ const QuestionnaireModal: React.FC<QuestionnaireModalProps> = ({
 
   return (
     <Popup
+      testID="QuestionnaireModal"
       title={questionnaire.name}
       visible={visible && questionnaire !== undefined}
-      actions={<Button onPress={() => handleSubmit()}>Submit answers</Button>}
+      actions={
+        <Button testID="SubmitBtn" onPress={() => handleSubmit()}>
+          Submit answers
+        </Button>
+      }
       contentContainerStyle={styles.popup}>
       <ScrollView contentContainerStyle={styles.wrapper}>
         {questionnaire.questions.map((item, idx) => (
