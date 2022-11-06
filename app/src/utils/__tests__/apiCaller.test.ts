@@ -161,17 +161,4 @@ describe('Test apiCaller', () => {
     const config = {url: 'test', method: 'GET'};
     await expect(apiCaller(config)).rejects.toThrowError();
   });
-
-  //   it('apiCaller should add auth-token if it exists', async () => {
-  //     const token = 'asiofjsaijd';
-  //     jest
-  //       .spyOn(storage, 'retrieveToken')
-  //       .mockImplementation(() => Promise.resolve(token));
-
-  //     const httpMock = jest
-  //       .spyOn(httpInstance, 'request')
-  //       .mockImplementation(() => Promise.resolve({data: httpInstance}));
-  //     const res: AxiosInstance = await apiCaller({url: 'test', method: 'POST'});
-  //     console.log((await res.defaults.headers);
-  //   });
 });
