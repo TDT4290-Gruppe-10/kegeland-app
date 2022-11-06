@@ -10,7 +10,6 @@ const useSilentRefresh = () => {
   const dispatch = useAppDispatch();
   const {isSignedIn} = useAppSelector((state) => state.auth);
   const [timer, setTimer] = useState<NodeJS.Timer | null>(null);
-
   useEffect(() => {
     if (isSignedIn) {
       dispatch(silentRefresh());
@@ -19,9 +18,10 @@ const useSilentRefresh = () => {
 
   useEffect(() => {
     if (isSignedIn) {
-      setInterval(() => {
+      const interval = setInterval(() => {
         dispatch(silentRefresh());
       }, REFRESH_INTERVAL_MS);
+      setTimer(interval);
     } else {
       if (timer) {
         clearInterval(timer);

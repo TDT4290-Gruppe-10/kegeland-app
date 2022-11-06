@@ -82,9 +82,13 @@ const useBluetooth = () => {
   }, [housekeepers]);
 
   useEffect(() => {
-    BleManager.start({showAlert: false}).catch((err) =>
-      dispatch(setError(err)),
-    );
+    BleManager.start({showAlert: false}).catch((err) => {
+      if (err instanceof Error) {
+        dispatch(setError(err.message));
+      } else {
+        dispatch(setError(err));
+      }
+    });
 
     bleManagerEmitter.addListener('BleManagerStopScan', () => handleStopScan());
     bleManagerEmitter.addListener(
@@ -102,6 +106,9 @@ const useBluetooth = () => {
     return () => {
       bleManagerEmitter.removeAllListeners('BleManagerStopScan');
       bleManagerEmitter.removeAllListeners('BleManagerDisconnectPeripheral');
+      bleManagerEmitter.removeAllListeners(
+        'BleManagerDidUpdateValueForCharacteristic',
+      );
     };
   }, []);
 
