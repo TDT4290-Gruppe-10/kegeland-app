@@ -6,8 +6,6 @@ import {getFocusedRouteNameFromRoute} from '@react-navigation/native';
 import React from 'react';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
-import withThemedNavigation from '~hoc/withThemedNavigation';
-
 import AuthRoutes from './AuthRoutes';
 import DeviceRoutes from './DeviceRoutes';
 import {RootTabParamList} from './interface';
@@ -56,6 +54,4 @@ const Router: React.FC<any> = (props: any) => {
   );
 };
 
-const ThemedRouter = withThemedNavigation(Router);
-
-export default ThemedRouter;
+export default Router;
