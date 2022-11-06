@@ -69,27 +69,22 @@ const useBluetooth = () => {
   };
 
   useEffect(() => {
-    bleManagerEmitter.addListener(
-      'BleManagerDidUpdateValueForCharacteristic',
-      (data: PeripheralNotification) => handlePeripheralUpdate(data),
-    );
-
-    return () => {
-      bleManagerEmitter.removeAllListeners(
-        'BleManagerDidUpdateValueForCharacteristic',
-      );
-    };
-  }, [housekeepers]);
-
-  useEffect(() => {
-    BleManager.start({showAlert: false}).catch((err) =>
-      dispatch(setError(err)),
-    );
+    BleManager.start({showAlert: false}).catch((err) => {
+      if (err instanceof Error) {
+        dispatch(setError(err.message));
+      } else {
+        dispatch(setError(err));
+      }
+    });
 
     bleManagerEmitter.addListener('BleManagerStopScan', () => handleStopScan());
     bleManagerEmitter.addListener(
       'BleManagerDisconnectPeripheral',
       (data: {peripheral: string}) => handleDisconnectedPeripheral(data),
+    );
+    bleManagerEmitter.addListener(
+      'BleManagerDidUpdateValueForCharacteristic',
+      (data: PeripheralNotification) => handlePeripheralUpdate(data),
     );
 
     // Verify the app's permissions
@@ -102,6 +97,9 @@ const useBluetooth = () => {
     return () => {
       bleManagerEmitter.removeAllListeners('BleManagerStopScan');
       bleManagerEmitter.removeAllListeners('BleManagerDisconnectPeripheral');
+      bleManagerEmitter.removeAllListeners(
+        'BleManagerDidUpdateValueForCharacteristic',
+      );
     };
   }, []);
 
