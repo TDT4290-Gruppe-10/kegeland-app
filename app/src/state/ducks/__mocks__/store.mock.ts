@@ -67,11 +67,11 @@ export function mockStore(initialState: MockState = initialStore) {
           if (isAsyncThunkAction(res)) {
             const {type, meta, payload} = res;
             actions.push({type, meta, payload});
+            for (let i = 0; i < listeners.length; i++) {
+              listeners[i]();
+            }
           }
 
-          for (let i = 0; i < listeners.length; i++) {
-            listeners[i]();
-          }
           return res;
         });
       }

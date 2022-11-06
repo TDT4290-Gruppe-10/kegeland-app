@@ -48,21 +48,22 @@ const withQuestionnaire =
     const {answers, questionnaire} = questions;
 
     const dispatchSessionWithAnswers = async () => {
-      await dispatch(
-        uploadSession({...currentSession!, userId: authUser!.id}),
-      ).then((res) => {
-        const {id} = res.payload as UploadSessionResponse;
-        if (id) {
-          dispatch(
-            uploadAnswers({
-              answers,
-              questionnaireId: questionnaire!.id,
-              sessionId: id,
-            }),
-          );
-        }
-      });
-      await Promise.all([dispatch(clearAnswers()), dispatch(setSession())]);
+      await dispatch(uploadSession({...currentSession!, userId: authUser!.id}))
+        .then(async (res) => {
+          const {id} = res.payload as UploadSessionResponse;
+          if (id) {
+            await dispatch(
+              uploadAnswers({
+                answers,
+                questionnaireId: questionnaire!.id,
+                sessionId: id,
+              }),
+            );
+          }
+        })
+        .finally(async () => {
+          await Promise.all([dispatch(clearAnswers()), dispatch(setSession())]);
+        });
     };
 
     const dispatchSession = async () => {
@@ -98,7 +99,7 @@ const withQuestionnaire =
           dispatchSession();
         }
       }
-    }, [answers]);
+    }, [answers, questionnaireEnabled]);
 
     useEffect(() => {
       if (currentSession !== undefined && answers.length === 1) {
