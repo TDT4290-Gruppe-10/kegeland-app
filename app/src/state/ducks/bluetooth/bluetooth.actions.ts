@@ -13,7 +13,7 @@ export const startDeviceScan = createAsyncThunk(
       SCAN_TIME,
       ALLOW_DUPLICATE_DEVICES,
     ).catch(() => {
-      throw new Error('Failed to start the scan');
+      throw new Error('Failed to start peripheral scan');
     }),
 );
 

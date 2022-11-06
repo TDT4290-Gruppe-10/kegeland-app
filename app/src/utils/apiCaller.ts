@@ -5,20 +5,22 @@ import {Token} from '~constants/auth';
 
 import {isApiError} from './isApiError';
 import {retrieveToken} from './storage';
-const httpInstance = axios.create({
+
+export const httpInstance = axios.create({
   timeout: 5000,
 });
 
-httpInstance.interceptors.request.use(
-  async (config) => {
-    const token = await retrieveToken(Token.ACCESS_TOKEN);
-    if (token) {
-      config.headers!.Authorization = 'Bearer ' + token;
-    }
-    return config;
-  },
-  (err) => Promise.reject(err),
-);
+export const interceptFulfilled = async (config: AxiosRequestConfig) => {
+  const token = await retrieveToken(Token.ACCESS_TOKEN);
+  if (token) {
+    config.headers!.Authorization = 'Bearer ' + token;
+  }
+  return config;
+};
+
+export const interceptRejected = async (err: any) => Promise.reject(err);
+
+httpInstance.interceptors.request.use(interceptFulfilled, interceptRejected);
 
 type ApiCallerProps = Pick<
   AxiosRequestConfig,

@@ -5,7 +5,7 @@ import {RootTabParamList} from '~routes/interface';
 import {updateSetting} from './app.actions';
 import {AnchorRoute, AppState} from './app.interface';
 
-const initialState: AppState = {
+export const initialState: AppState = {
   anchorRoute: undefined,
   settings: {
     darkMode: false,

@@ -10,7 +10,7 @@ import {fetchQuestionnaire, uploadAnswers} from './questions.actions';
 import {fetchQuestionnaireReducer} from './questions.helpers';
 import {Answer, QuestionsState} from './questions.interface';
 
-const initialState: QuestionsState = {
+export const initialState: QuestionsState = {
   loading: false,
   error: undefined,
   questionnaire: undefined,
@@ -24,7 +24,7 @@ export const questionsSlice = createSlice({
     clearQuestionnaire: (state) => {
       state.questionnaire = undefined;
     },
-    setAnswer: (state: QuestionsState, action: PayloadAction<Answer>) => {
+    addAnswer: (state: QuestionsState, action: PayloadAction<Answer>) => {
       state.answers = [...state.answers, action.payload];
     },
     clearAnswers: (state: QuestionsState) => {
@@ -61,7 +61,7 @@ export const questionsSlice = createSlice({
   },
 });
 
-export const {clearQuestionnaire, clearAnswers, setAnswer} =
+export const {clearQuestionnaire, clearAnswers, addAnswer} =
   questionsSlice.actions;
 
 export default questionsSlice.reducer;
