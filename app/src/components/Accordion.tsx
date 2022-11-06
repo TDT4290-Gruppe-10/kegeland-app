@@ -4,7 +4,7 @@ import {Divider, List, useTheme} from 'react-native-paper';
 
 import Icon from './Icon';
 
-type AccordionProps = Omit<
+export type AccordionProps = Omit<
   React.ComponentProps<typeof List.Accordion>,
   'expanded' | 'onPress' | 'left'
 > & {

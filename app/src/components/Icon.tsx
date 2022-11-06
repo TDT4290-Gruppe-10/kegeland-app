@@ -3,7 +3,7 @@ import {StyleProp, StyleSheet, TextStyle} from 'react-native';
 import {useTheme} from 'react-native-paper';
 import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-type IconProps = {
+export type IconProps = {
   color?: string;
   icon: string;
   size?: number;

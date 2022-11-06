@@ -8,7 +8,7 @@ import {Questionnaire} from '~state/ducks/questions/questions.interface';
 
 import Popup from './Popup';
 
-type QuestionnaireModalProps = {
+export type QuestionnaireModalProps = {
   questionnaire: Questionnaire | undefined;
   visible: boolean;
   onSubmit: (data: number[]) => void;

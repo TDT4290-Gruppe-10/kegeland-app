@@ -17,7 +17,7 @@ import Button from '~components/Button';
 import FormInput from './FormInput';
 import FormError from './FormError';
 
-type FormData = {
+type ResetPasswordFormData = {
   email: string;
 };
 
@@ -31,10 +31,11 @@ const ResetPasswordForm: React.FC = () => {
   const dispatch = useAppDispatch();
   const [mailSent, setMailSent] = useState<boolean>(false);
   const {loading, error} = useAppSelector(({auth}) => auth);
-  const {control, handleSubmit, formState, reset} = useForm<FormData>({
-    mode: 'onSubmit',
-    resolver: yupResolver(schema),
-  });
+  const {control, handleSubmit, formState, reset} =
+    useForm<ResetPasswordFormData>({
+      mode: 'onSubmit',
+      resolver: yupResolver(schema),
+    });
 
   useFocusEffect(
     useCallback(() => {
@@ -46,7 +47,7 @@ const ResetPasswordForm: React.FC = () => {
     }, []),
   );
 
-  const onSubmit = (data: FormData) => {
+  const onSubmit = (data: ResetPasswordFormData) => {
     setMailSent(true);
     dispatch(resetPassword(data));
   };

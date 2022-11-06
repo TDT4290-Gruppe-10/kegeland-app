@@ -19,7 +19,7 @@ import PageWrapper from '~components/PageWrapper';
 import {WithDeviceContext} from '~hoc/withDevice';
 import {WithQuestionnaireContext} from '~hoc/withQuestionnaire';
 
-type FemfitScreenProps = DeviceScreenProps<'Femfit'> &
+export type FemfitScreenProps = DeviceScreenProps<'Femfit'> &
   WithDeviceContext &
   WithQuestionnaireContext;
 

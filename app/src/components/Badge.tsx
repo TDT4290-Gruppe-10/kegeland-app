@@ -1,7 +1,7 @@
 import React from 'react';
 import {Badge as PaperBadge, useTheme} from 'react-native-paper';
 
-type BadgeProps = React.ComponentProps<typeof PaperBadge>;
+export type BadgeProps = React.ComponentProps<typeof PaperBadge>;
 
 const Badge: React.FC<BadgeProps> = (props) => {
   const {colors} = useTheme();

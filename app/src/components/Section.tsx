@@ -2,7 +2,7 @@ import React from 'react';
 import {StyleSheet, ViewStyle} from 'react-native';
 import {Divider, Surface, Title} from 'react-native-paper';
 
-type SectionProps = {
+export type SectionProps = {
   title: string;
   style?: ViewStyle;
   children?: React.ReactNode;

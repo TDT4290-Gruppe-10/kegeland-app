@@ -7,7 +7,7 @@ import {RootTabParamList} from '~routes/interface';
 
 import Popup from './Popup';
 
-type NoDevicePopupProps = {
+export type NoDevicePopupProps = {
   visible: boolean;
   onDismiss: () => void;
   deviceName: string;

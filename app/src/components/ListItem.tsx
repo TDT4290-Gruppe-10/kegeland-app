@@ -5,7 +5,7 @@ import {List, useTheme} from 'react-native-paper';
 import Icon from './Icon';
 import ListItemSkeleton from './ListItemSkeleton';
 
-type ListItemProps = Omit<
+export type ListItemProps = Omit<
   React.ComponentProps<typeof List.Item>,
   'onLongPress'
 > & {

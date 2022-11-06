@@ -17,7 +17,7 @@ import Button from '~components/Button';
 import FormInput from './FormInput';
 import FormError from './FormError';
 
-type FormData = {
+export type RegisterFormData = {
   firstName: string;
   lastName: string;
   email: string;
@@ -41,7 +41,7 @@ const schema = yup.object({
 const RegisterForm: React.FC = () => {
   const {error, loading} = useAppSelector(({auth}) => auth);
   const dispatch = useAppDispatch();
-  const {control, handleSubmit, formState, reset} = useForm<FormData>({
+  const {control, handleSubmit, formState, reset} = useForm<RegisterFormData>({
     mode: 'onSubmit',
     resolver: yupResolver(schema),
   });
@@ -55,7 +55,7 @@ const RegisterForm: React.FC = () => {
     }, []),
   );
 
-  const onSubmit = (data: FormData) => {
+  const onSubmit = (data: RegisterFormData) => {
     const {firstName, lastName, email, password} = data;
     const payload: RegisterDTO = {
       email,
