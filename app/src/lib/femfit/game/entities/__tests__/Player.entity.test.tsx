@@ -3,14 +3,14 @@ import Matter from 'matter-js';
 
 import {render} from '~utils/test-utils';
 
-import {PlayerRenderer, PlayerProps} from '../Player.entity';
+import Player, {PlayerRenderer, PlayerProps} from '../Player.entity';
 import constants from '../../constants';
 import {Position} from '../../interface';
 
 const {PLAYER_SIZE} = constants;
 describe('Test Player-entity', () => {
+  const pos: Position = {x: 100, y: 100};
   it('should render correctly', () => {
-    const pos: Position = {x: 100, y: 100};
     const props: PlayerProps = {
       body: Matter.Bodies.rectangle(pos.x, pos.y, PLAYER_SIZE, PLAYER_SIZE, {
         label: 'Player',
@@ -22,5 +22,13 @@ describe('Test Player-entity', () => {
     const component = <PlayerRenderer {...props} />;
     const tree = render(component);
     expect(tree.toJSON()).toMatchSnapshot();
+  });
+
+  it('should spawn the entity correctly', () => {
+    const world = Matter.World.create({});
+    const entity = Player(world, pos);
+    expect(Object.keys(entity).sort()).toStrictEqual(
+      ['body', 'renderer'].sort(),
+    );
   });
 });

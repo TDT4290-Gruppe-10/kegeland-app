@@ -5,7 +5,7 @@ import PlayerSpriteSheet from '~assets/femfit/bird.png';
 
 import {EntityBase, Position} from '../interface';
 import constants from '../constants';
-import {SpriteSheet} from '../SpriteSheet';
+import SpriteSheet from '../SpriteSheet';
 
 import styles from './styles';
 

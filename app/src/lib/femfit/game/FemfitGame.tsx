@@ -40,7 +40,7 @@ const connector = connect(mapStateToProps, mapDispatchToProps);
 
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
-type FemfitGameProps = {
+export type FemfitGameProps = {
   device: BluetoothDevice;
   exercise: ExerciseScheme;
   navigation: DeviceScreenProps<'Femfit'>['navigation'];

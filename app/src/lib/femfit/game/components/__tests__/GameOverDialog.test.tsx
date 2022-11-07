@@ -2,8 +2,7 @@ import React from 'react';
 
 import {render} from '~utils/test-utils';
 
-import exercises from '../../exercises.json';
-import {ExerciseScheme} from '../../interface';
+import exerciseMock from '../../__mocks__/exercise.mock';
 import GameOverDialog, {GameOverDialogProps} from '../GameOverDialog';
 
 describe('Test GameOverDialog-component', () => {
@@ -12,7 +11,7 @@ describe('Test GameOverDialog-component', () => {
       visible: true,
       goBack: jest.fn(),
       onDismiss: jest.fn(),
-      exercise: exercises[0] as ExerciseScheme,
+      exercise: exerciseMock,
       score: 10,
     };
     const component = <GameOverDialog {...props} />;
