@@ -21,8 +21,8 @@ import {pressurePercent, readSensorBytes} from '../bluetooth/utils';
 import GameOverDialog from './components/GameOverDialog';
 import MenuDialog from './components/MenuDialog';
 import Header from './components/Header';
+import spawnEntities from './entities/spawnEntities';
 
-import spawnEntities from './entities';
 import {ExerciseScheme, GameEntities} from './interface';
 import Physics from './physics';
 import constants from './constants';

@@ -1,7 +1,7 @@
 /* eslint-disable no-case-declarations */
 import Matter from 'matter-js';
 
-import {CoinEntity} from './entities/Coin';
+import {CoinEntity} from './entities/Coin.entity';
 
 import constants from './constants';
 import {IGameEngineSystem} from './interface';

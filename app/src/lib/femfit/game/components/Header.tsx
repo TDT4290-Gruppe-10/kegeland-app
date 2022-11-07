@@ -9,7 +9,7 @@ import Icon from '~components/Icon';
 import constants from '../constants';
 const {HEADER_HEIGHT, COIN_SIZE} = constants;
 
-type HeaderProps = {
+export type HeaderProps = {
   score: number;
   toggle: () => void;
 };

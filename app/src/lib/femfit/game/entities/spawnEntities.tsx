@@ -3,8 +3,8 @@ import Matter from 'matter-js';
 import constants from '../constants';
 import {ExerciseScheme} from '../interface';
 
-import Boundary from './Boundary';
-import Player from './Player';
+import Boundary from './Boundary.entity';
+import Player from './Player.entity';
 
 const {BASELINE, PLAYER_SIZE, MAX_WIDTH, BOUNDARY_HEIGHT} = constants;
 

@@ -4,7 +4,7 @@ import {Button} from 'react-native-paper';
 
 import Popup from '~components/Popup';
 
-type MenuDialogProps = {
+export type MenuDialogProps = {
   visible: boolean;
   onDismiss: () => void;
   goBack: () => void;
