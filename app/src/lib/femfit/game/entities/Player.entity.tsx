@@ -5,14 +5,14 @@ import PlayerSpriteSheet from '~assets/femfit/bird.png';
 
 import {EntityBase, Position} from '../interface';
 import constants from '../constants';
-import {SpriteSheet} from '../SpriteSheet';
+import SpriteSheet from '../SpriteSheet';
 
 import styles from './styles';
 
 const {PLAYER_SIZE} = constants;
-type PlayerProps = EntityBase;
+export type PlayerProps = EntityBase;
 
-class Player extends React.Component<PlayerProps> {
+export class PlayerRenderer extends React.Component<PlayerProps> {
   render(): React.ReactNode {
     const width = this.props.body.bounds.max.x - this.props.body.bounds.min.x;
     const height = this.props.body.bounds.max.y - this.props.body.bounds.min.y;
@@ -39,5 +39,5 @@ export default (world: Matter.World, pos: Position) => {
     frictionAir: 0.015,
   });
   Matter.World.add(world, body);
-  return {body, renderer: Player};
+  return {body, renderer: PlayerRenderer};
 };

@@ -7,7 +7,7 @@ import Popup from '~components/Popup';
 import {ExerciseScheme} from '../interface';
 import {getMaxExerciseScore} from '../utils';
 
-type GameOverDialogProps = {
+export type GameOverDialogProps = {
   score: number;
   exercise: ExerciseScheme;
   visible: boolean;

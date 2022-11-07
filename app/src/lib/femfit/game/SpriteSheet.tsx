@@ -29,7 +29,7 @@ type InternalAnim = {
 
 type InternalAnims = {[key: string]: InternalAnim};
 
-type SpriteSheetProps = {
+export type SpriteSheetProps = {
   src: any;
   rows: number;
   cols: number;
@@ -48,7 +48,7 @@ type SpriteSheetState = {
   playing: boolean;
 };
 
-export class SpriteSheet extends React.Component<
+export default class SpriteSheet extends React.Component<
   SpriteSheetProps,
   SpriteSheetState
 > {

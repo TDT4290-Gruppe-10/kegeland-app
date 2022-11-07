@@ -1,7 +1,7 @@
 /* eslint-disable no-case-declarations */
 import Matter from 'matter-js';
 
-import {CoinEntity} from './entities/Coin';
+import {CoinProps} from './entities/Coin.entity';
 
 import constants from './constants';
 import {IGameEngineSystem} from './interface';
@@ -35,7 +35,7 @@ const Physics: IGameEngineSystem = (entities, {time, events, dispatch}) => {
 
   Object.keys(entities).forEach((key) => {
     if (key.indexOf('coin_') === 0) {
-      if (shouldDeleteCoin(entities[key] as CoinEntity)) {
+      if (shouldDeleteCoin(entities[key] as CoinProps)) {
         Matter.World.remove(engine.world, entities[key].body);
         delete entities[key];
       } else {

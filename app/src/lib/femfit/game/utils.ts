@@ -1,6 +1,6 @@
 import Matter from 'matter-js';
 
-import Coin, {CoinEntity} from './entities/Coin';
+import Coin, {CoinProps} from './entities/Coin.entity';
 
 import constants from './constants';
 import {ExerciseScheme, GameEntities, Position} from './interface';
@@ -24,7 +24,7 @@ export const isCoinBody = (body: Matter.Body) => {
   return body.isSensor && body.label.startsWith('coin_');
 };
 
-export const shouldDeleteCoin = (coin: CoinEntity) =>
+export const shouldDeleteCoin = (coin: CoinProps) =>
   coin.scored || coin.body.position.x < 0;
 
 export const spawnCoins = (

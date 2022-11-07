@@ -1,25 +1,28 @@
 import React from 'react';
 import Matter from 'matter-js';
-import {View} from 'react-native';
+import {Image} from 'react-native';
 
-import constants from '../constants';
+import CoinSprite from '~assets/femfit/gold.png';
+
 import {EntityBase, Position} from '../interface';
+import constants from '../constants';
 
 import styles from './styles';
 
-const {MAX_WIDTH, BOUNDARY_HEIGHT} = constants;
+const {COIN_SIZE} = constants;
 
-type BoundaryProps = EntityBase;
+export type CoinProps = EntityBase & {
+  scored: boolean;
+};
 
-class Boundary extends React.Component<BoundaryProps> {
+export class CoinRenderer extends React.Component<CoinProps> {
   render(): React.ReactNode {
     const width = this.props.body.bounds.max.x - this.props.body.bounds.min.x;
     const height = this.props.body.bounds.max.y - this.props.body.bounds.min.y;
     const x = this.props.body.position.x - width / 2;
     const y = this.props.body.position.y - height / 2;
-
     return (
-      <View
+      <Image
         style={[
           styles.entity,
           {
@@ -29,23 +32,19 @@ class Boundary extends React.Component<BoundaryProps> {
             height,
           },
         ]}
+        resizeMode="stretch"
+        source={CoinSprite}
       />
     );
   }
 }
 
 export default (world: Matter.World, pos: Position, label: string) => {
-  const body = Matter.Bodies.rectangle(
-    pos.x,
-    pos.y,
-    MAX_WIDTH,
-    BOUNDARY_HEIGHT,
-    {
-      label,
-      isStatic: true,
-      density: 1,
-    },
-  );
+  const body = Matter.Bodies.rectangle(pos.x, pos.y, COIN_SIZE, COIN_SIZE, {
+    label,
+    isSensor: true,
+    isStatic: true,
+  });
   Matter.World.add(world, body);
-  return {body, renderer: Boundary};
+  return {body, scored: false, renderer: CoinRenderer};
 };
