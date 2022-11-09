@@ -53,6 +53,7 @@ jobs:
   test-e2e:
     name: E2E tests
     runs-on: macOS-latest
+    timeout-minutes: 15
 
     defaults:
       run:
@@ -61,6 +62,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 1
 
       - name: Install Node
         uses: actions/setup-node@v3
@@ -84,17 +87,33 @@ jobs:
         env:
           ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
 
+      - name: Download Android Emulator Image
+        run: |
+          echo "y" | $ANDROID_HOME/tools/bin/sdkmanager --install "system-images;android-30;google_apis;x86"
+          echo "no" | $ANDROID_HOME/tools/bin/avdmanager create avd --force --name emu --device "Pixel_4_API_30" -k 'system-images;android-30;google_apis;x86'
+          $ANDROID_HOME/emulator/emulator -list-avds
+
       - name: Run Detox Build
         run: yarn build:android-debug
 
-      - name: Run Detox Test(s)
-        uses: reactivecircus/android-emulator-runner@v2
+      - name: Android Emulator
+        timeout-minutes: 10
+        continue-on-error: true
+        run: |
+          echo "Starting emulator"
+          nohup $ANDROID_HOME/emulator/emulator -avd emu -no-audio -no-snapshot -no-window &
+          $ANDROID_HOME/platform-tools/adb wait-for-device shell 'while [[ -z $(getprop sys.boot_completed | tr -d '\r') ]]; do sleep 1; done; input keyevent 82'
+          $ANDROID_HOME/platform-tools/adb devices
+          echo "Emulator started"
+
+      - name: Android Detox
+        run: yarn start & yarn test:android-debug
+
+      - name: Store Detox artifacts on test failure
+        uses: actions/upload-artifact@v3
+        if: failure()
         with:
-          api-level: 30
-          target: default
-          arch: x86_64
-          profile: pixel
-          avd-name: Pixel_4_API_30
-          script: bash ${{ github.workspace }}/app/scripts/run_e2e_android.sh
+          name: detox-artifacts
+          path: artifacts # Default path for Detox artifacts
       
 

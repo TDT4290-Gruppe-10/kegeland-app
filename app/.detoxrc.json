@@ -32,6 +32,10 @@
       "device": "emulator",
       "app": "android.debug"
     },
+    "android.emu.local": {
+      "device": "emulator",
+      "app": "android.local"
+    },
     "android.emu.release": {
       "device": "emulator",
       "app": "android.release"
