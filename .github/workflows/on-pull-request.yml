@@ -23,10 +23,10 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
       
-      - name: Setup Node.js ${{ matrix.node-version }}
+      - name: Setup Node.js v16.13.2
         uses: actions/setup-node@v3
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: 16.13.2
       
       - name: Cache dependencies
         uses: actions/cache@v3
@@ -49,6 +49,14 @@ jobs:
         working-directory: ./app
 
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      
+      - name: Setup Node.js v16.13.2
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16.13.2
+
       - name: Run unit tests
         run: yarn test:unit --coverage
         
