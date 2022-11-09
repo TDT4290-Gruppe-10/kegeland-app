@@ -88,10 +88,9 @@ jobs:
 
       - name: Download Android Emulator Image
         run: |
-          echo "y" | $ANDROID_HOME/tools/bin/sdkmanager --install "system-images;android-29;google_apis;x86"
-          echo "no" | $ANDROID_HOME/tools/bin/avdmanager create avd --force --name emu --device "Nexus 5X" -k 'system-images;android-29;google_apis;x86'
+          echo "y" | $ANDROID_HOME/tools/bin/sdkmanager --install "system-images;android-30;google_apis;x86"
+          echo "no" | $ANDROID_HOME/tools/bin/avdmanager create avd --force --name emu --device "Nexus 5X" -k 'system-images;android-30;google_apis;x86'
           $ANDROID_HOME/emulator/emulator -list-avds
-
       - name: Run Detox Build
         run: yarn e2e:build-android-debug
 
@@ -104,7 +103,6 @@ jobs:
           $ANDROID_HOME/platform-tools/adb wait-for-device shell 'while [[ -z $(getprop sys.boot_completed | tr -d '\r') ]]; do sleep 1; done; input keyevent 82'
           $ANDROID_HOME/platform-tools/adb devices
           echo "Emulator started"
-
       - name: Android Detox
         env:
           RN_SRC_EXT: 'e2e.ts,e2e.js'
@@ -117,4 +115,3 @@ jobs:
           name: detox-artifacts
           path: artifacts # Default path for Detox artifacts
       
-
