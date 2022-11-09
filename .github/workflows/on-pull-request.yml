@@ -13,7 +13,7 @@ on:
 jobs:
   # Lint and run unit tests
   test-unit:
-    name: Unit test
+    name: Unit tests
     runs-on: ubuntu-latest
         
     defaults:
@@ -49,8 +49,9 @@ jobs:
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           verbose: true
+  # Run E2E tests
   test-e2e:
-    name: E2E test
+    name: E2E tests
     runs-on: macOS-latest
 
     defaults:

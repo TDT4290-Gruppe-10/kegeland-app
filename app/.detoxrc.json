@@ -3,10 +3,15 @@
   "runnerConfig": "e2e/detox.config.js",
   "skipLegacyWorkersInjection": true,
   "apps": {
-    "android.debug": {
+    "android.local": {
       "type": "android.apk",
       "binaryPath": "android/app/build/outputs/apk/debug/app-debug.apk",
       "build": "cd android && gradlew assembleDebug assembleAndroidTest -DtestBuildType=debug && cd .."
+    },
+    "android.debug": {
+      "type": "android.apk",
+      "binaryPath": "android/app/build/outputs/apk/debug/app-debug.apk",
+      "build": "cd android && ./gradlew assembleDebug assembleAndroidTest -DtestBuildType=debug && cd .."
     },
     "android.release": {
       "type": "android.apk",
