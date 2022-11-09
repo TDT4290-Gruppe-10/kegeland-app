@@ -51,11 +51,12 @@ const LoginForm: React.FC = () => {
   };
 
   return (
-    <ScrollView>
+    <ScrollView testID="LoginForm">
       <View style={styles.form}>
         <FormInput
           state={formState}
           control={control}
+          testID="LoginEmailInput"
           name="email"
           placeholder="Email"
           icon="at"
@@ -64,6 +65,7 @@ const LoginForm: React.FC = () => {
         <FormInput
           state={formState}
           control={control}
+          testID="LoginPasswordInput"
           name="password"
           placeholder="Password"
           secureTextEntry
@@ -83,6 +85,7 @@ const LoginForm: React.FC = () => {
       <Button
         mode="contained"
         loading={loading}
+        testID="LoginSubmit"
         onPress={handleSubmit(onSubmit)}>
         Sign in
       </Button>

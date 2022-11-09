@@ -23,7 +23,7 @@ const SettingsScreen: React.FC<SettingsScreenProps<'Settings'>> = ({
   const {auth, bluetooth} = useAppSelector((state) => state);
   const dispatch = useAppDispatch();
   return (
-    <SafeAreaView>
+    <SafeAreaView testID="SettingsScreen">
       <ScrollView style={styles.wrapper}>
         <Section title="Account">
           {auth.isSignedIn && !auth.loading ? (

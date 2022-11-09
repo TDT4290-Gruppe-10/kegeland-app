@@ -68,11 +68,12 @@ const RegisterForm: React.FC = () => {
   };
 
   return (
-    <ScrollView>
+    <ScrollView testID="RegisterForm">
       <View style={styles.form}>
         <FormInput
           state={formState}
           control={control}
+          testID="RegisterFirstNameInput"
           name="firstName"
           icon="form-textbox"
           autoCapitalize="words"
@@ -81,6 +82,7 @@ const RegisterForm: React.FC = () => {
         <FormInput
           state={formState}
           control={control}
+          testID="RegisterLastNameInput"
           name="lastName"
           icon="form-textbox"
           autoCapitalize="words"
@@ -89,6 +91,7 @@ const RegisterForm: React.FC = () => {
         <FormInput
           state={formState}
           control={control}
+          testID="RegisterEmailInput"
           name="email"
           placeholder="Email"
           icon="at"
@@ -98,6 +101,7 @@ const RegisterForm: React.FC = () => {
           state={formState}
           control={control}
           secureTextEntry
+          testID="RegisterPasswordInput"
           name="password"
           icon="lock-outline"
           placeholder="Password"
@@ -105,6 +109,7 @@ const RegisterForm: React.FC = () => {
         <FormInput
           state={formState}
           control={control}
+          testID="RegisterConfirmPasswordInput"
           name="confirmPassword"
           placeholder="Confirm password"
           icon="lock-check-outline"
@@ -114,6 +119,7 @@ const RegisterForm: React.FC = () => {
       <Button
         mode="contained"
         loading={loading}
+        testID="RegisterSubmit"
         onPress={handleSubmit(onSubmit)}>
         Register
       </Button>

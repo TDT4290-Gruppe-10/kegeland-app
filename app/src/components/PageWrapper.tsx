@@ -9,6 +9,7 @@ export type PageWrapperProps = {
   title: string;
   contentSize?: ContentSize;
   style?: StyleProp<ViewStyle>;
+  testID?: string;
   children: React.ReactNode;
 };
 
@@ -29,10 +30,12 @@ const PageWrapper: React.FC<PageWrapperProps> = ({
   title,
   contentSize,
   style,
+  testID,
   children,
 }) => {
   return (
     <SafeAreaView
+      testID={testID}
       style={[
         styles.wrapper,
         {paddingHorizontal: getPadding(contentSize)},

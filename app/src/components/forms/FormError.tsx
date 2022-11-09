@@ -26,7 +26,7 @@ const FormError: React.FC<FormErrorProps> = ({error}) => {
     <Portal>
       <Dialog visible={visible} onDismiss={hideDialog}>
         <Dialog.Title style={styles.title}>Error</Dialog.Title>
-        <Dialog.Content>
+        <Dialog.Content testID="FormErrorModal">
           <Text style={styles.error}>{error}</Text>
         </Dialog.Content>
         <Dialog.Actions style={styles.actions}>

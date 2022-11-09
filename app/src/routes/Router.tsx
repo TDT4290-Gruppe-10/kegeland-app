@@ -26,6 +26,7 @@ const Router: React.FC<any> = (props: any) => {
       initialRouteName="DeviceStack"
       screenOptions={({route}) => {
         return {
+          tabBarTestID: route.name,
           tabBarIcon: ({color, size}) => {
             return (
               <Icon name={tabIcons[route.name]} size={size} color={color} />

@@ -42,7 +42,10 @@ const DevicesScreen: React.FC<DeviceScreenProps<'Devices'>> = ({
   }, [connectedDevices]);
 
   return (
-    <PageWrapper title="Select device" contentSize="medium">
+    <PageWrapper
+      title="Select device"
+      contentSize="medium"
+      testID="DevicesScreen">
       <ScrollView style={styles.deviceList}>
         {Object.entries(devices).map(([type, connected]) => (
           <List.Item

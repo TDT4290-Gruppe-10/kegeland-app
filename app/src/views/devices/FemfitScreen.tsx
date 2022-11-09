@@ -80,7 +80,10 @@ const FemfitScreen: React.FC<FemfitScreenProps> = ({
       );
     }
     return (
-      <PageWrapper title="Select exercise" contentSize="medium">
+      <PageWrapper
+        title="Select exercise"
+        contentSize="medium"
+        testID="FemfitScreen">
         <ScrollView style={styles.exerciseList}>
           {(exercises as ExerciseScheme[]).map((item, idx) => (
             <Card style={styles.item} key={idx}>

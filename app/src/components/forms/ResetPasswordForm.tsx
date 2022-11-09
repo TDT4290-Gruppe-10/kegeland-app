@@ -58,6 +58,7 @@ const ResetPasswordForm: React.FC = () => {
         <FormInput
           state={formState}
           control={control}
+          testID="ResetEmailInput"
           name="email"
           placeholder="Email"
           keyboardType="email-address"
@@ -81,6 +82,7 @@ const ResetPasswordForm: React.FC = () => {
           </Dialog.Content>
           <Dialog.Actions style={styles.actions}>
             <Button
+              testID="ResetSubmit"
               onPress={() => navigation.navigate('Login')}
               labelStyle={styles.button}
               children="Login"
