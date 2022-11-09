@@ -107,7 +107,7 @@ jobs:
           echo "Emulator started"
 
       - name: Android Detox
-        run: yarn start & yarn e2e:test-android-debug --headless
+        run: yarn start:e2e & yarn e2e:test-android-debug --headless
 
       - name: Store Detox artifacts on test failure
         uses: actions/upload-artifact@v3
