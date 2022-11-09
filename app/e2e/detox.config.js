@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 module.exports = {
   maxWorkers: 1,
   testEnvironment: './environment',
