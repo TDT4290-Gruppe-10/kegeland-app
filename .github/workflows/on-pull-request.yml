@@ -95,6 +95,6 @@ jobs:
           arch: x86_64
           profile: pixel
           avd-name: Pixel_4_API_30
-          script: bash scripts/run-e2e-android-release.sh
+          script: bash ${{ github.workspace }}/app/scripts/run_e2e_android.sh
       
 
