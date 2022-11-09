@@ -1,6 +1,6 @@
 #!/bin/bash
 
-yarn start &
+yarn start:e2e &
 
 METRO_BUNDLER_PID=$!
 
