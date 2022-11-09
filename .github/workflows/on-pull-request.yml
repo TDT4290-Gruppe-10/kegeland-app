@@ -13,6 +13,7 @@ on:
 jobs:
   # Lint and run unit tests
   test-unit:
+    name: Unit test
     runs-on: ubuntu-latest
         
     defaults:
@@ -23,10 +24,10 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
       
-      - name: Setup Node.js v16.13.2
+      - name: Install Node
         uses: actions/setup-node@v3
         with:
-          node-version: 16.13.2
+          node-version: '16'
       
       - name: Cache dependencies
         uses: actions/cache@v3
@@ -48,5 +49,51 @@ jobs:
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           verbose: true
+  test-e2e:
+    name: E2E test
+    runs-on: macOS-latest
+
+    defaults:
+      run:
+        working-directory: ./app
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Install Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+
+      - name: Cache dependencies
+        uses: actions/cache@v3
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
+
+      - name: Install dependencies
+        run: yarn install
+
+      - name: Install Java JDK
+        uses: joschi/setup-jdk@v1
+        with:
+          java-version: 'openjdk8'
+          architecture: 'x64'
+        env:
+          ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
+
+      - name: Run Detox Build
+        run: yarn build:android-debug
+
+      - name: Run Detox Test(s)
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 30
+          target: default
+          arch: x86_64
+          profile: pixel
+          avd-name: Pixel_4_API_30
+          script: bash ${{ github.workspace }}/app/scripts/run-e2e-android-release.sh
       
 
