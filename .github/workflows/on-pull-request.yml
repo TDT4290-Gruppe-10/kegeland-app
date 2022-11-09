@@ -107,7 +107,9 @@ jobs:
           echo "Emulator started"
 
       - name: Android Detox
-        run: yarn start:e2e & yarn e2e:test-android-debug
+        env:
+          RN_SRC_EXT: 'e2e.ts,e2e.js'
+        run: yarn start & yarn e2e:test-android-debug
 
       - name: Store Detox artifacts on test failure
         uses: actions/upload-artifact@v3
