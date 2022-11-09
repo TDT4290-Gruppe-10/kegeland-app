@@ -1,18 +1,11 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import * as storage from '~utils/storage';
-import {AuthTokens} from '~state/ducks/auth/auth.interface';
 import {Token} from '~constants/auth';
+import {mockTokens} from '~state/ducks/__mocks__/auth.mocks';
 
 describe('Test async storage', () => {
-  const tokens: AuthTokens = {
-    accessToken: 'adfsad',
-    idToken: 'adfsad',
-    refreshToken: 'adfsloijsapAKODSo',
-    expiresIn: 1232131,
-  };
-
-  const {accessToken, idToken, refreshToken} = tokens;
+  const {accessToken, idToken, refreshToken} = mockTokens;
   const keyValuePairs: Record<string, string> = {
     '@access_token': accessToken,
     '@id_token': idToken,
@@ -29,7 +22,7 @@ describe('Test async storage', () => {
       .spyOn(AsyncStorage, 'multiSet')
       .mockImplementation(() => Promise.resolve());
 
-    await storage.storeTokens(tokens);
+    await storage.storeTokens(mockTokens);
     const expectedCall = [
       ['@access_token', accessToken],
       ['@id_token', idToken],
@@ -44,7 +37,7 @@ describe('Test async storage', () => {
     jest
       .spyOn(AsyncStorage, 'multiSet')
       .mockImplementation(() => Promise.reject(new Error()));
-    await expect(storage.storeTokens(tokens)).rejects.toThrowError();
+    await expect(storage.storeTokens(mockTokens)).rejects.toThrowError();
   });
 
   it('retrieveToken should return token if found', async () => {

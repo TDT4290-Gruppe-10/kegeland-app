@@ -1,6 +1,11 @@
 import {UserRole} from '~constants/auth';
 
-import {LoginDTO, LoginResponse, RegisterDTO} from '../auth/auth.interface';
+import {
+  AuthTokens,
+  LoginDTO,
+  LoginResponse,
+  RegisterDTO,
+} from '../auth/auth.interface';
 import {initialState} from '../auth/auth.reducer';
 
 const loginResponse: LoginResponse = {
@@ -38,6 +43,13 @@ export const signedInState = {
   isSignedIn: true,
   authUser: {id: loginResponse.id, email: loginResponse.email},
   userDetails: loginResponse.details,
+};
+
+export const mockTokens: AuthTokens = {
+  accessToken: 'adfsad',
+  idToken: 'adfsad',
+  refreshToken: 'adfsloijsapAKODSo',
+  expiresIn: 1232131,
 };
 
 export default loginResponse;
