@@ -2,43 +2,32 @@
   "testRunner": "jest",
   "runnerConfig": "e2e/detox.config.js",
   "skipLegacyWorkersInjection": true,
-  "apps": {
-    "android.local": {
-      "type": "android.apk",
-      "binaryPath": "android/app/build/outputs/apk/debug/app-debug.apk",
-      "build": "cd android && gradlew assembleDebug assembleAndroidTest -DtestBuildType=debug && cd .."
-    },
-    "android.debug": {
-      "type": "android.apk",
-      "binaryPath": "android/app/build/outputs/apk/debug/app-debug.apk",
-      "build": "cd android && ./gradlew assembleDebug assembleAndroidTest -DtestBuildType=debug && cd .."
-    },
-    "android.release": {
-      "type": "android.apk",
-      "binaryPath": "android/app/build/outputs/apk/releaseE2E/app-releaseE2E.apk",
-      "build": "cd android && gradlew assembleReleaseE2E assembleAndroidTest -DtestBuildType=release && cd .."
-    }
-  },
-  "devices": {
-    "emulator": {
-      "type": "android.emulator",
-      "device": {
-        "avdName": "Pixel_4_API_30"
-      }
-    }
-  },
   "configurations": {
     "android.emu.debug": {
-      "device": "emulator",
-      "app": "android.debug"
+      "binaryPath": "android/app/build/outputs/apk/debug/app-debug.apk",
+      "build": "cd android && gradlew assembleDebug assembleAndroidTest -DtestBuildType=debug && cd ..",
+      "type": "android.emulator",
+      "name": "emu"
     },
     "android.emu.local": {
-      "device": "emulator",
-      "app": "android.local"
-    },
-    "android.emu.release": {
-      "device": "emulator",
-      "app": "android.release"
+      "binaryPath": "android/app/build/outputs/apk/debug/app-debug.apk",
+      "build": "cd android && gradlew assembleDebug assembleAndroidTest -DtestBuildType=debug && cd ..",
+      "type": "android.emulator",
+      "name": "Pixel_4_API_30"
+    }
+  },
+  "artifacts": {
+    "plugins": {
+      "log": { "enabled": true },
+      "uiHierarchy": "enabled",
+      "screenshot": {
+        "shouldTakeAutomaticSnapshots": true,
+        "keepOnlyFailedTestsArtifacts": true,
+        "takeWhen": {
+          "testStart": false,
+          "testDone": true
+        }
+      }
     }
   }
 }

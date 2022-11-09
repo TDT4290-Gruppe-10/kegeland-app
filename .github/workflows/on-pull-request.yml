@@ -89,12 +89,12 @@ jobs:
 
       - name: Download Android Emulator Image
         run: |
-          echo "y" | $ANDROID_HOME/tools/bin/sdkmanager --install "system-images;android-30;google_apis;x86"
-          echo "no" | $ANDROID_HOME/tools/bin/avdmanager create avd --force --name emu --device "Pixel_4_API_30" -k 'system-images;android-30;google_apis;x86'
+          echo "y" | $ANDROID_HOME/tools/bin/sdkmanager --install "system-images;android-29;google_apis;x86"
+          echo "no" | $ANDROID_HOME/tools/bin/avdmanager create avd --force --name emu --device "Nexus 5X" -k 'system-images;android-29;google_apis;x86'
           $ANDROID_HOME/emulator/emulator -list-avds
 
       - name: Run Detox Build
-        run: yarn build:android-debug
+        run: yarn e2e:build-android-debug
 
       - name: Android Emulator
         timeout-minutes: 10
@@ -107,7 +107,7 @@ jobs:
           echo "Emulator started"
 
       - name: Android Detox
-        run: yarn start & yarn test:android-debug
+        run: yarn start & yarn e2e:test-android-debug
 
       - name: Store Detox artifacts on test failure
         uses: actions/upload-artifact@v3
