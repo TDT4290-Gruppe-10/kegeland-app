@@ -65,3 +65,6 @@ coverage/
 
 # Environment
 .env
+
+# Logs
+*.log
