@@ -11,8 +11,8 @@ on:
   workflow_dispatch:
 
 jobs:
-  # Lint and build the code
-  build:
+  # Lint and run unit tests
+  test-unit:
     runs-on: ubuntu-latest
         
     defaults:
@@ -39,23 +39,6 @@ jobs:
 
       - name: Lint files
         run: yarn lint
-  
-  # Run unit tests
-  test-unit:
-    needs: build
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./app
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-      
-      - name: Setup Node.js v16.13.2
-        uses: actions/setup-node@v3
-        with:
-          node-version: 16.13.2
 
       - name: Run unit tests
         run: yarn test:unit --coverage
@@ -65,4 +48,5 @@ jobs:
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           verbose: true
+      
 
