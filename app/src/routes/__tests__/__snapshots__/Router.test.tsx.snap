@@ -284,6 +284,7 @@ exports[`Test Router-component should render correctly 1`] = `
                                         undefined,
                                       ]
                                     }
+                                    testID="DevicesScreen"
                                   >
                                     <Text
                                       style={
@@ -707,6 +708,7 @@ exports[`Test Router-component should render correctly 1`] = `
               undefined,
             ]
           }
+          testID="AuthStack"
         >
           <View
             style={
@@ -841,6 +843,7 @@ exports[`Test Router-component should render correctly 1`] = `
               undefined,
             ]
           }
+          testID="DeviceStack"
         >
           <View
             style={
@@ -971,6 +974,7 @@ exports[`Test Router-component should render correctly 1`] = `
               undefined,
             ]
           }
+          testID="SettingsStack"
         >
           <View
             style={

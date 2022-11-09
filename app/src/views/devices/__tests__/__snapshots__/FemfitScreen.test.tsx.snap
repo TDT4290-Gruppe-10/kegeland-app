@@ -32,6 +32,7 @@ exports[`Test FemfitScreen-component should render correctly 1`] = `
         undefined,
       ]
     }
+    testID="FemfitScreen"
   >
     <Text
       style={
