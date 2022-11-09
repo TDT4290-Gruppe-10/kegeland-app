@@ -1,5 +1,5 @@
 #!/bin/bash
-
+cd app
 yarn start:e2e &
 
 METRO_BUNDLER_PID=$!
