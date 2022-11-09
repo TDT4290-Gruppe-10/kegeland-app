@@ -44,6 +44,9 @@ jobs:
   test-unit:
     needs: build
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./app
 
     steps:
       - name: Run unit tests
