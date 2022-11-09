@@ -68,6 +68,6 @@ describe('Test Sign in flow', () => {
     // Return home
     const errModal = element(by.id(ERROR_MODAL));
     await detox.waitFor(errModal).toBeVisible().withTimeout(5000);
-    await detox.expect(errModal).toBeVisible();
+    await detox.expect(errModal).not.toBeVisible();
   });
 });
