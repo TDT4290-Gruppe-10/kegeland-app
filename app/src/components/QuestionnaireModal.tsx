@@ -56,8 +56,10 @@ const QuestionnaireModal: React.FC<QuestionnaireModalProps> = ({
               value={answers[idx]}>
               <View style={styles.radioGroup}>
                 {Array.from(Array(5).keys()).map((val) => (
-                  <View style={styles.radioButton} key={val}>
-                    <RadioButton value={val.toString()} />
+                  <View
+                    style={styles.radioButton}
+                    key={`${item.question}_${val}`}>
+                    <RadioButton.Android value={val.toString()} />
                   </View>
                 ))}
               </View>

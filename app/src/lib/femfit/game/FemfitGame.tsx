@@ -103,7 +103,6 @@ class FemfitGame extends PureComponent<FemfitGameProps, FemfitGameState> {
   componentDidMount(): void {
     SystemNavigationBar.navigationHide();
     this.props.navigation.setOptions({headerShown: false});
-    // this.props.setSession();
     this.gameEngine.swap(spawnEntities(this.exerciseScheme));
     this.gameEngine.dispatch({type: 'reset'});
     if (this.props.device && this.props.device.state === 'connected') {
