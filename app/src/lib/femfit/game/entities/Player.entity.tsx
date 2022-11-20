@@ -37,6 +37,7 @@ export default (world: Matter.World, pos: Position) => {
     restitution: 0,
     density: 0.0025,
     frictionAir: 0.015,
+    isSleeping: false,
   });
   Matter.World.add(world, body);
   return {body, renderer: PlayerRenderer};
