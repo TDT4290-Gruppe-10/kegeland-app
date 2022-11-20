@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {SafeAreaView, ScrollView, StyleSheet} from 'react-native';
 import {
   ActivityIndicator,
@@ -9,7 +9,6 @@ import {
 } from 'react-native-paper';
 
 import FemfitGame from '~lib/femfit/game';
-import useAppSelector from '~hooks/useAppSelector';
 import {DeviceScreenProps} from '~routes/interface';
 import {ExerciseScheme} from '~lib/femfit/game/interface';
 import exercises from '~lib/femfit/game/exercises.json';
@@ -18,6 +17,7 @@ import {getEstimatedExerciseDuration} from '~lib/femfit/game/utils';
 import PageWrapper from '~components/PageWrapper';
 import {WithDeviceContext} from '~hoc/withDevice';
 import {WithQuestionnaireContext} from '~hoc/withQuestionnaire';
+import useAppSelector from '~hooks/useAppSelector';
 
 export type FemfitScreenProps = DeviceScreenProps<'Femfit'> &
   WithDeviceContext &
@@ -25,33 +25,27 @@ export type FemfitScreenProps = DeviceScreenProps<'Femfit'> &
 
 const FemfitScreen: React.FC<FemfitScreenProps> = ({
   navigation,
+  session,
   answers,
   device,
-  questionnaireEnabled,
-  questionnaireLoading,
-  toggleQuestionnaire,
+  hasQuestionnaire,
+  loading,
+  openQuestionnaire,
 }) => {
-  const {currentSession} = useAppSelector((state) => state.session);
   const [exercise, setExercise] = useState<ExerciseScheme>();
   const [modalItem, setModalItem] = useState<ExerciseScheme>();
+  const {currentSession} = useAppSelector((state) => state.session);
 
-  const shouldRenderGame = () => {
-    if (device && exercise && !questionnaireLoading) {
-      if (questionnaireEnabled) {
-        if (currentSession === undefined && answers.length === 1) {
-          return true;
-        }
-        return false;
-      }
-      return true;
+  const clear = () => {
+    setExercise(undefined);
+    setModalItem(undefined);
+  };
+
+  useEffect(() => {
+    if (!currentSession) {
+      clear();
     }
-    return false;
-  };
-
-  const selectExercise = (item: ExerciseScheme) => {
-    setExercise(item);
-    toggleQuestionnaire();
-  };
+  }, [currentSession]);
 
   const toggleDetails = (item?: ExerciseScheme) => {
     if (!item) {
@@ -59,6 +53,23 @@ const FemfitScreen: React.FC<FemfitScreenProps> = ({
     } else {
       setModalItem(item);
     }
+  };
+
+  const selectExercise = (item: ExerciseScheme) => {
+    setExercise(item);
+    if (hasQuestionnaire) {
+      openQuestionnaire();
+    }
+  };
+
+  const shouldRenderGame = () => {
+    if (device && exercise && !loading) {
+      if (hasQuestionnaire) {
+        return session === undefined && answers.length === 1;
+      }
+      return true;
+    }
+    return false;
   };
 
   const render = () => {
@@ -72,7 +83,7 @@ const FemfitScreen: React.FC<FemfitScreenProps> = ({
           />
         </SafeAreaView>
       );
-    } else if (questionnaireLoading) {
+    } else if (loading) {
       return (
         <SafeAreaView style={styles.loader}>
           <ActivityIndicator animating={true} />
