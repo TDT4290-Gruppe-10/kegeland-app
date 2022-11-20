@@ -12,13 +12,9 @@ import {
   Answer,
   Questionnaire,
 } from '~state/ducks/questions/questions.interface';
-import {
-  clearAnswers,
-  addAnswer,
-} from '~state/ducks/questions/questions.reducer';
+import {addAnswer} from '~state/ducks/questions/questions.reducer';
 import {uploadSession} from '~state/ducks/session/session.actions';
 import {UploadSessionResponse} from '~state/ducks/session/session.interface';
-import {setSession} from '~state/ducks/session/session.reducer';
 
 export type WithQuestionnaireContext = {
   answers: Answer[];
@@ -48,27 +44,28 @@ const withQuestionnaire =
     const {answers, questionnaire} = questions;
 
     const dispatchSessionWithAnswers = async () => {
-      await dispatch(uploadSession({...currentSession!, userId: authUser!.id}))
-        .then(async (res) => {
-          const {id} = res.payload as UploadSessionResponse;
-          if (id) {
-            await dispatch(
-              uploadAnswers({
-                answers,
-                questionnaireId: questionnaire!.id,
-                sessionId: id,
-              }),
-            );
-          }
-        })
-        .finally(async () => {
-          await Promise.all([dispatch(clearAnswers()), dispatch(setSession())]);
-        });
+      await dispatch(
+        uploadSession({...currentSession!, userId: authUser!.id}),
+      ).then(async (res) => {
+        const {id} = res.payload as UploadSessionResponse;
+        if (id) {
+          await dispatch(
+            uploadAnswers({
+              answers,
+              questionnaireId: questionnaire!.id,
+              sessionId: id,
+            }),
+          );
+        }
+      });
+      // .finally(async () => {
+      //   await Promise.all([dispatch(clearAnswers()), dispatch(setSession())]);
+      // });
     };
 
     const dispatchSession = async () => {
       await dispatch(uploadSession({...currentSession!, userId: authUser!.id}));
-      dispatch(setSession());
+      // dispatch(setSession());
     };
 
     useEffect(() => {
@@ -77,10 +74,6 @@ const withQuestionnaire =
       } else {
         setQuestionnaireEnabled(false);
       }
-      return () => {
-        dispatch(clearAnswers());
-        dispatch(setSession());
-      };
     }, []);
 
     useEffect(() => {
