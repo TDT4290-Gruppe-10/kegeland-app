@@ -19,11 +19,12 @@ const SENSOR_1_UUID = transformId('0d9e0002-c111-49cd-bba3-85c7471cb6fa');
 const SENSOR_2_UUID = transformId('0d9e0003-c111-49cd-bba3-85c7471cb6fa');
 const SENSOR_3_UUID = transformId('0d9e0004-c111-49cd-bba3-85c7471cb6fa');
 const SENSOR_4_UUID = transformId('0d9e0005-c111-49cd-bba3-85c7471cb6fa');
+
 /**
  * The femfit services
  */
 export const SERVICES = {
-  HOUSEKEEPING_CHARACTERISTIC: HOUSEKEEPING_CHARACTERISTIC_UUID,
+  HOUSEKEEPING_SERVICE: HOUSEKEEPING_SERVICE_UUID,
   SENSOR_SERVICE: SENSOR_SERVICE_UUID,
 };
 

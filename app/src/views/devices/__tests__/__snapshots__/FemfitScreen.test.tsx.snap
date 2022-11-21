@@ -210,7 +210,7 @@ exports[`Test FemfitScreen-component should render correctly 1`] = `
                       ]
                     }
                   >
-                    No pain, no gain 8)
+                    Exercise 1
                   </Text>
                   <Text
                     numberOfLines={2}
@@ -617,7 +617,7 @@ exports[`Test FemfitScreen-component should render correctly 1`] = `
                       ]
                     }
                   >
-                    Håkon spesial
+                    Exercise 2
                   </Text>
                   <Text
                     numberOfLines={2}
@@ -661,7 +661,7 @@ exports[`Test FemfitScreen-component should render correctly 1`] = `
                       ]
                     }
                   >
-                    Denne saftige øvelsen røsker godt i strikken.
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin dictum vitae nibh id posuere. Integer varius ac dolor non bibendum. Pellentesque vestibulum aliquam tincidunt. Suspendisse congue lobortis risus, ac luctus sem suscipit sed. Ut et tincidunt lacus. Suspendisse placerat ornare velit vel lobortis. Cras sagittis arcu pulvinar, venenatis ex in, dictum sapien. Curabitur tempus felis eget arcu facilisis interdum
                   </Text>
                 </View>
                 <View />
