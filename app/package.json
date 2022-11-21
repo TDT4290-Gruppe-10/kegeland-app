@@ -6,14 +6,12 @@
     "android": "react-native run-android",
     "ios": "react-native run-ios",
     "start": "react-native start",
-    "start:e2e": "cross-env RN_SRC_EXT=e2e.ts,e2e.js NODE_ENV=test react-native start",
     "lint": "eslint src/**/*.{ts,tsx,js,jsx} --fix",
     "prepare": "cd .. && husky install ./app/.husky",
     "test:unit": "jest",
+    "start:e2e": "cross-env RN_SRC_EXT=e2e.ts,e2e.js NODE_ENV=test react-native start",
     "e2e:build-android-local": "detox build -c android.emu.local",
-    "e2e:build-android-debug": "detox build -c android.emu.debug",
-    "e2e:test-android-local": "detox test -c android.emu.local",
-    "e2e:test-android-debug": "detox test -c android.emu.debug"
+    "e2e:test-android-local": "detox test -c android.emu.local"
   },
   "dependencies": {
     "@hookform/resolvers": "^2.9.8",
