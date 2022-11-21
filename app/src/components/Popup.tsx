@@ -7,6 +7,11 @@ export type PopupProps = React.ComponentProps<typeof Modal> & {
   actions?: React.ComponentProps<typeof Card.Actions>['children'];
 };
 
+/**
+ * Generic component for rendering a modal popup.
+ * @param props the props
+ * @see {@link PopupProps}
+ */
 const Popup: React.FC<PopupProps> = ({contentContainerStyle, ...props}) => {
   return (
     <Portal>

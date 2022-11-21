@@ -10,6 +10,11 @@ export type FormErrorProps = {
   error?: string;
 };
 
+/**
+ * Component for rendering a form error popup
+ * @param props the props
+ * @see {@link FormErrorProps}
+ */
 const FormError: React.FC<FormErrorProps> = ({error}) => {
   const dispatch = useAppDispatch();
   const [visible, setVisible] = React.useState(error !== undefined);
@@ -18,6 +23,9 @@ const FormError: React.FC<FormErrorProps> = ({error}) => {
     setVisible(error !== undefined);
   }, [error]);
 
+  /**
+   * Hide the error popup
+   */
   const hideDialog = () => {
     dispatch(clearError());
   };

@@ -54,6 +54,9 @@ type FemfitGameState = {
   sessionData: Record<number, number[]>;
 };
 
+/**
+ * Component for rendering the gamified exercise for femfit devices
+ */
 class FemfitGame extends PureComponent<FemfitGameProps, FemfitGameState> {
   gameEngine: any | null;
   exerciseScheme: ExerciseScheme;
@@ -64,7 +67,9 @@ class FemfitGame extends PureComponent<FemfitGameProps, FemfitGameState> {
     super(props);
     this.gameEngine = null;
     this.exerciseScheme = this.props.exercise;
+    // Initialize the game entities
     this.entities = spawnEntities(this.exerciseScheme);
+    // Initialize empty sensor data
     this.sensorData = reduce(
       SENSOR_SERVICE.characteristics,
       (prev, curr) => {
@@ -74,6 +79,7 @@ class FemfitGame extends PureComponent<FemfitGameProps, FemfitGameState> {
       {} as Record<string, number[]>,
     );
     this.interval = null;
+    // Initialize the state
     this.state = {
       running: true,
       gameOver: false,
@@ -83,10 +89,16 @@ class FemfitGame extends PureComponent<FemfitGameProps, FemfitGameState> {
     };
   }
 
+  /**
+   * Function for opening/closing the menu
+   */
   toggleMenuDialog() {
     this.setState({...this.state, running: !this.state.running});
   }
 
+  /**
+   * Function for opening/closing the game over dialog
+   */
   toggleGameOverDialog() {
     this.setState({
       ...this.state,
@@ -94,28 +106,41 @@ class FemfitGame extends PureComponent<FemfitGameProps, FemfitGameState> {
     });
   }
 
+  /**
+   * Handles notification updates from the femfit sensor
+   * @param param0 the update data
+   * @see {@link PeripheralNotification}
+   */
   handlePeripheralUpdate({characteristic, value}: PeripheralNotification) {
     if (characteristic in this.sensorData) {
       set(this.sensorData, characteristic, value);
     }
   }
 
+  /**
+   * Logic executed when component is mounted
+   */
   componentDidMount(): void {
+    // Hide the navigation bar
     SystemNavigationBar.navigationHide();
     this.props.navigation.setOptions({headerShown: false});
+    // Reset the entities
     this.gameEngine.swap(spawnEntities(this.exerciseScheme));
     this.gameEngine.dispatch({type: 'reset'});
+    // Initialize listeners for the sensor
     if (this.props.device && this.props.device.state === 'connected') {
       addServiceListener(this.props.device.id, SENSOR_SERVICE);
       bleManagerEmitter.addListener(
         'BleManagerDidUpdateValueForCharacteristic',
         (data: PeripheralNotification) => this.handlePeripheralUpdate(data),
       );
+      // Start interval for reading the sensor data
       this.interval = setInterval(() => {
         const {pressures, temperatures} = readSensorBytes(
           Object.values(this.sensorData),
         );
         const ts = Date.now();
+        // Update the state with new session data
         this.setState({
           ...this.state,
           sessionData: {
@@ -124,6 +149,7 @@ class FemfitGame extends PureComponent<FemfitGameProps, FemfitGameState> {
           },
         });
         const pctMax = round(pressurePercent(max(pressures) as number), 1);
+        // Move the character if the pressure is above threshold
         if (pctMax > ACTIVATION_THRESHOLD) {
           this.gameEngine.dispatch({type: 'move_up', value: pctMax});
         }
@@ -131,13 +157,19 @@ class FemfitGame extends PureComponent<FemfitGameProps, FemfitGameState> {
     }
   }
 
+  /**
+   * Logic executed when the component dismounts
+   */
   componentWillUnmount(): void {
+    // Show the navigation bar
     SystemNavigationBar.navigationShow();
     this.props.navigation.setOptions({headerShown: true});
+    // Clear the update interval
     if (this.interval) {
       clearInterval(this.interval);
       this.interval = null;
     }
+    // Unsubscribe the bluetooth listeners
     removeServiceListener(this.props.device.id, SENSOR_SERVICE);
     bleManagerEmitter.removeAllListeners(
       'BleManagerDidUpdateValueForCharacteristic',

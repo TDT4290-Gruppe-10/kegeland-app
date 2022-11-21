@@ -10,6 +10,10 @@ import styles from './styles';
 const {MAX_WIDTH, BOUNDARY_HEIGHT} = constants;
 export type BoundaryProps = EntityBase;
 
+/**
+ * Boundary entity. Representing in-game boundaries like walls, floors and ceils
+ * @see {@link BoundaryProps}
+ */
 export class BoundaryRenderer extends React.Component<BoundaryProps> {
   render(): React.ReactNode {
     const width = this.props.body.bounds.max.x - this.props.body.bounds.min.x;
@@ -33,6 +37,12 @@ export class BoundaryRenderer extends React.Component<BoundaryProps> {
   }
 }
 
+/**
+ * Renders the boundary entity
+ * @param world the world
+ * @param pos the position
+ * @param label the label
+ */
 export default (world: Matter.World, pos: Position, label: string) => {
   const body = Matter.Bodies.rectangle(
     pos.x,

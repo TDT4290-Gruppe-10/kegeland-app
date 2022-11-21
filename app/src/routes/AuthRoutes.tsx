@@ -11,6 +11,9 @@ import {AuthStackParamList} from './interface';
 
 const AuthStack = createStackNavigator<AuthStackParamList>();
 
+/**
+ * AuthRoutes. Configure the routes within the auth stack
+ */
 const AuthRoutes: React.FC = () => {
   return (
     <AuthStack.Navigator

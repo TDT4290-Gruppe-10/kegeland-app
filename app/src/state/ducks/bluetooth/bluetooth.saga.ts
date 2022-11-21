@@ -28,13 +28,18 @@ export const sagaActionConstants = {
   ADD_AVAILABLE_DEVICE: bluetoothSlice.actions.addAvailableDevice.type,
 };
 
+/**
+ * Observer function for setting up newly connected devices
+ */
 function* handleOnDeviceConnected(
   action: PayloadAction<void, string, {arg: string}>,
 ): Generator<AnyAction, void, void> {
   try {
     const devices = store.getState().bluetooth.connectedDevices;
     const device = devices[action.meta.arg];
+    // Retrieve the profile of the device
     const profile = getProfile(device.type);
+    // Initialize listeners for battery updates
     yield call(addServiceListener, device.id, profile.batteryService.service);
     yield put({
       type: sagaActionConstants.ADD_HOUSEKEEPING_SERVICE,
@@ -55,6 +60,10 @@ function* handleOnDeviceConnected(
   }
 }
 
+/**
+ * Observer function for adding discovered devices
+ * to the state
+ */
 export function* handleDeviceScan(): Generator<
   AnyAction,
   void,
@@ -63,7 +72,9 @@ export function* handleDeviceScan(): Generator<
   const channel = createDeviceStreamChannel();
   try {
     while (true) {
+      // Receive discovered devices
       const peripheral = yield take(channel);
+      // Dispatch discovered device to the reducer
       yield put({
         type: sagaActionConstants.ADD_AVAILABLE_DEVICE,
         payload: peripheral,

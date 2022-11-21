@@ -5,6 +5,12 @@ import {
   Platform,
 } from 'react-native';
 
+/**
+ * Component for avoiding the mobile keyboard from overlaying the onscreen content.
+ * @param props the props
+ * @see {@link KeyboardAvoidingViewProps}
+ * @see {@link KeyboardAvoidingView}
+ */
 const AvoidKeyboard: React.FC<KeyboardAvoidingViewProps> = ({
   children,
   ...props

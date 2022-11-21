@@ -9,6 +9,9 @@ import {SettingsStackParamList} from './interface';
 
 export const SettingsStack = createStackNavigator<SettingsStackParamList>();
 
+/**
+ * SettingsRoutes. Configure the routes within the settings stack
+ */
 const SettingsRoutes: React.FC = () => {
   return (
     <SettingsStack.Navigator

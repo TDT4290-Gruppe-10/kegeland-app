@@ -11,6 +11,9 @@ import {DeviceStackParamList} from './interface';
 
 const DeviceStack = createStackNavigator<DeviceStackParamList>();
 
+/**
+ * DeviceRoutes. Configure the routes within the device stack
+ */
 const DeviceRoutes: React.FC = () => {
   return (
     <DeviceStack.Navigator

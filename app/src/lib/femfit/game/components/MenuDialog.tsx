@@ -10,6 +10,11 @@ export type MenuDialogProps = {
   goBack: () => void;
 };
 
+/**
+ * Component for rendering the menu dialog
+ * @param param0 the props
+ * @see {@link MenuDialogProps}
+ */
 const MenuDialog: React.FC<MenuDialogProps> = ({
   visible,
   onDismiss,

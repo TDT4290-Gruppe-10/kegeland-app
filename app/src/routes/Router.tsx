@@ -19,6 +19,10 @@ const tabIcons: Record<keyof RootTabParamList, string> = {
 
 const Tab = createBottomTabNavigator<RootTabParamList>();
 
+/**
+ * Base router for mounting all routes within the app
+ * @param props props passed from higher-order component, like React Navigation
+ */
 const Router: React.FC<any> = (props: any) => {
   return (
     <Tab.Navigator

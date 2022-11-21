@@ -10,6 +10,12 @@ export type IconProps = {
   style?: StyleProp<TextStyle>;
 };
 
+/**
+ * Component for rendering a icon.
+ * @param props the props
+ * @see {@link IconProps}
+ * @see {@link MaterialIcon}
+ */
 const Icon: React.FC<IconProps> = (props) => {
   const {colors} = useTheme();
   return (

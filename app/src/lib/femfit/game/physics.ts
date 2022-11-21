@@ -17,11 +17,20 @@ const {MAX_WIDTH, GRAVITY, BASELINE, PLAYER_SIZE} = constants;
 
 const speedMultiplier = isAndroid() ? 1 : 0.5;
 
+/**
+ * Function for handling the game logic
+ * @param entities the game entities
+ * @param param1 the update information
+ * @see {@link IGameEngineSystem}
+ */
 const Physics: IGameEngineSystem = (entities, {time, events, dispatch}) => {
   const engine = entities.physics.engine;
   const player = entities.player.body;
   const exercise = entities.exercise;
 
+  /**
+   * Handle in-game events
+   */
   events.forEach((event) => {
     switch (event.type) {
       case 'reset':
@@ -37,16 +46,22 @@ const Physics: IGameEngineSystem = (entities, {time, events, dispatch}) => {
     }
   });
 
+  /**
+   * Handle the in-game coin entities
+   */
   Object.keys(entities).forEach((key) => {
     if (key.indexOf('coin_') === 0) {
+      // Remove coin if it should be deleted
       if (shouldDeleteCoin(entities[key] as CoinProps)) {
         Matter.World.remove(engine.world, entities[key].body);
         delete entities[key];
       } else {
+        // Move the coin to the left
         Matter.Body.translate(entities[key].body, {
           x: -4 * speedMultiplier,
           y: 0,
         });
+        // Check if the game can spawn new coins
         if (!canSpawn) {
           if (
             key === `coin_${coinPointer}` &&
@@ -64,10 +79,6 @@ const Physics: IGameEngineSystem = (entities, {time, events, dispatch}) => {
   });
 
   Matter.Engine.update(engine, time.delta);
-
-  // Matter.Events.on(engine, 'beforeUpdate', () => {
-
-  // });
 
   Matter.Events.on(engine, 'afterUpdate', () => {
     // Set gravity
@@ -114,6 +125,9 @@ const Physics: IGameEngineSystem = (entities, {time, events, dispatch}) => {
     }
   });
 
+  /**
+   * Check for collisions between the player and coins
+   */
   Matter.Events.on(engine, 'collisionStart', (e) => {
     for (const pair of e.pairs) {
       const {bodyA, bodyB} = pair;

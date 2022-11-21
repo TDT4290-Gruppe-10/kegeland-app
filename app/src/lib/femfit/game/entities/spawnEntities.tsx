@@ -8,6 +8,11 @@ import Player from './Player.entity';
 
 const {BASELINE, PLAYER_SIZE, MAX_WIDTH, BOUNDARY_HEIGHT} = constants;
 
+/**
+ * Spawns the in-game entities
+ * @param exerciseScheme the exercise to use
+ * @returns the game entities
+ */
 const spawnEntities = (exerciseScheme: ExerciseScheme): any => {
   const engine = Matter.Engine.create({enableSleeping: false});
   const world = engine.world;

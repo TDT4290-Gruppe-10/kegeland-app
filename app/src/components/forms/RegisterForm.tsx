@@ -38,6 +38,9 @@ const schema = yup.object({
     .label('Confirm password'),
 });
 
+/**
+ * Component for rendering the register form.
+ */
 const RegisterForm: React.FC = () => {
   const {error, loading} = useAppSelector(({auth}) => auth);
   const dispatch = useAppDispatch();

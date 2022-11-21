@@ -8,6 +8,10 @@ import LoginForm from '~components/forms/LoginForm';
 import PageWrapper from '~components/PageWrapper';
 import {AuthScreenProps} from '~routes/interface';
 
+/**
+ * LoginScreen. Screen where users can sign in
+ * @see {@link AuthScreenProps}
+ */
 const LoginScreen: React.FC<AuthScreenProps<'Login'>> = ({navigation}) => {
   const {colors} = useTheme();
   return (

@@ -3,6 +3,10 @@ import {StyleSheet, View} from 'react-native';
 
 import Skeleton from './Skeleton';
 
+/**
+ * Skeleton component for ListItem.
+ * @see {@link Skeleton}
+ */
 const ListItemSkeleton: React.FC = () => {
   return (
     <View style={styles.skeleton}>
