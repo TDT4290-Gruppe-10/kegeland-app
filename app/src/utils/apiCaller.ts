@@ -26,10 +26,9 @@ type ApiCallerProps = Pick<
   AxiosRequestConfig,
   'url' | 'method' | 'data' | 'params'
 >;
-
 export const apiCaller = <T = unknown>(config: ApiCallerProps) =>
   httpInstance
-    .request<T>({baseURL: API_URL, ...config})
+    .request<T>({baseURL: `${API_URL}/api/`, ...config})
     .then((res) => res.data)
     .catch((err) => {
       if (err instanceof Error) {

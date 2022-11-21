@@ -1,6 +1,8 @@
 /* eslint-disable no-case-declarations */
 import Matter from 'matter-js';
 
+import {isAndroid} from '~utils/platform.utils';
+
 import {CoinProps} from './entities/Coin.entity';
 
 import constants from './constants';
@@ -12,6 +14,8 @@ let canSpawn = true;
 let finished = false;
 
 const {MAX_WIDTH, GRAVITY, BASELINE, PLAYER_SIZE} = constants;
+
+const speedMultiplier = isAndroid() ? 1 : 0.5;
 
 const Physics: IGameEngineSystem = (entities, {time, events, dispatch}) => {
   const engine = entities.physics.engine;
@@ -39,7 +43,10 @@ const Physics: IGameEngineSystem = (entities, {time, events, dispatch}) => {
         Matter.World.remove(engine.world, entities[key].body);
         delete entities[key];
       } else {
-        Matter.Body.translate(entities[key].body, {x: -4, y: 0});
+        Matter.Body.translate(entities[key].body, {
+          x: -4 * speedMultiplier,
+          y: 0,
+        });
         if (!canSpawn) {
           if (
             key === `coin_${coinPointer}` &&
