@@ -1,43 +1,33 @@
-# This is a basic workflow to help you get started with Actions
+# Workflow configuration for continuous integration
 
-name: CI/CD
+name: CI
 
-# Controls when the workflow will run
 on:
-  # Triggers the workflow on push or pull request events but only for the "main" branch
   push:
     branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
 
-  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
-  build:
-    # The type of runner that the job will run on
+  # Lint and run unit tests
+  test-unit:
+    name: Unit tests
     runs-on: ubuntu-latest
-    
-    strategy:
-      matrix:
-        node-version: [16.x]
         
     defaults:
       run:
         working-directory: ./app
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - name: Checkout repository
         uses: actions/checkout@v3
       
-      - name: Setup Node.js ${{ matrix.node-version }}
+      - name: Install Node
         uses: actions/setup-node@v3
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: '14'
       
       - name: Cache dependencies
         uses: actions/cache@v3
@@ -50,9 +40,9 @@ jobs:
 
       - name: Lint files
         run: yarn lint
-      
-      - name: Run tests
-        run: yarn test --coverage
+
+      - name: Run unit tests
+        run: yarn test:unit --coverage
         
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v3.1.1

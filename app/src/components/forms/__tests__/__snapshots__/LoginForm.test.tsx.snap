@@ -16,6 +16,7 @@ exports[`Test LoginForm-component should render correctly 1`] = `
     handlerType="NativeViewGestureHandler"
     onGestureHandlerEvent={[Function]}
     onGestureHandlerStateChange={[Function]}
+    testID="LoginForm"
     waitFor={
       Array [
         Object {
@@ -124,7 +125,7 @@ exports[`Test LoginForm-component should render correctly 1`] = `
                       },
                     ]
                   }
-                  testID="text-input-outlined"
+                  testID="LoginEmailInput"
                   underlineColorAndroid="transparent"
                   value={null}
                 />
@@ -350,7 +351,7 @@ exports[`Test LoginForm-component should render correctly 1`] = `
                       },
                     ]
                   }
-                  testID="text-input-outlined"
+                  testID="LoginPasswordInput"
                   underlineColorAndroid="transparent"
                   value={null}
                 />
@@ -701,6 +702,7 @@ exports[`Test LoginForm-component should render correctly 1`] = `
               },
             ]
           }
+          testID="LoginSubmit"
         >
           <View
             style={

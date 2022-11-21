@@ -203,6 +203,7 @@ exports[`Test SettingsRoutes-component should render correctly 1`] = `
                               "top",
                             ]
                           }
+                          testID="SettingsScreen"
                         >
                           <RCTScrollView
                             collapsable={false}

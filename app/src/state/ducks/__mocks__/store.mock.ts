@@ -4,7 +4,6 @@ import {
   isAsyncThunkAction,
   Store,
 } from '@reduxjs/toolkit';
-import {FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER} from 'redux-persist';
 import {isFunction} from 'lodash';
 import {isFSA} from '@reduxjs/toolkit/src/createAction';
 
@@ -41,9 +40,6 @@ export function mockStore(initialState: MockState = initialStore) {
       getDefaultMiddleware({
         immutableCheck: true,
         thunk: true,
-        serializableCheck: {
-          ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
-        },
       }).concat(sagaMiddleware),
     preloadedState: initialState,
   });

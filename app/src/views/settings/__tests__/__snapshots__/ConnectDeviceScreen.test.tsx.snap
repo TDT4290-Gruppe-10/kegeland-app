@@ -12,6 +12,7 @@ exports[`Test ConnectDeviceScreen-component should render correctly 1`] = `
 >
   <RCTSafeAreaView
     emulateUnlessSupported={true}
+    testID="ConnectDeviceScreen"
   >
     <RCTScrollView
       collapsable={false}
