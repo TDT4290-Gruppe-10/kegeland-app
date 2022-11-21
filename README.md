@@ -32,6 +32,10 @@ The important elements of this structure is that `App.tsx` renders the routes de
 
 Many pages will also use the custom hooks developed to retrieve data relevant for its usage. This implementation can be found in the `hooks` directory, which in turn uses the programs implementation of [Redux](https://react-redux.js.org/). These will also use some functions from the `utils` directory, where standard and reusable functions are defined.
 
+## Development view - Example use case
+
+<img src="resources\ProcessviewApp.jpg">
+
 ## Getting started
 
 ### Cloning and configuring the project
