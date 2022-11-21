@@ -10,6 +10,7 @@ import {mockStore} from '~state/ducks/__mocks__/store.mock';
 
 import Router from './routes/Router';
 
+// Initialize higher-order components
 const Wrapper = withAppWrapper(SafeAreaProvider);
 const ThemedRouter = withThemedNavigation(Router);
 
@@ -17,6 +18,9 @@ const isTest = process.env.NODE_ENV === 'test';
 
 const store = isTest ? mockStore() : persistedStore;
 
+/**
+ * The application's main component. The app and all its' content is rendered from this entrypoint
+ */
 export default function App() {
   const content = () => (
     <Wrapper>

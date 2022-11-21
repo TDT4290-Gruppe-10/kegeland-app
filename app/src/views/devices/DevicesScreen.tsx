@@ -25,6 +25,11 @@ const initialDeviceMap = reduce(
   {} as Record<DeviceType, boolean>,
 );
 
+/**
+ * DevicesScreen. Screen for showing available devices, which
+ * allows you to initiate a session for one of the devices.
+ * @see {@link DeviceScreenProps}
+ */
 const DevicesScreen: React.FC<DeviceScreenProps<'Devices'>> = ({
   navigation,
 }) => {
@@ -33,6 +38,9 @@ const DevicesScreen: React.FC<DeviceScreenProps<'Devices'>> = ({
     useState<Record<DeviceType, boolean>>(initialDeviceMap);
   const {connectedDevices} = useAppSelector((state) => state.bluetooth);
 
+  /**
+   * Create a dictionary of connected devices on mount
+   */
   useEffect(() => {
     const tmp = clone(initialDeviceMap);
     forEach(connectedDevices, (device) => {

@@ -10,6 +10,14 @@ export type WithDeviceContext = {
   device: BluetoothDevice | undefined;
 };
 
+/**
+ * Higher-order component withDevice.
+ * Wraps the component with a device selector used to select a connected
+ * device from the redux state. The selected device will be passed to the sub-component
+ * as a prop
+ * @param deviceType the type of device to select
+ * @param Component the component to wrap
+ */
 const withDevice =
   <P extends WithDeviceContext>(
     deviceType: DeviceType,
@@ -26,6 +34,7 @@ const withDevice =
       setDeviceConnected(!deviceConnected);
     };
 
+    // Set props for passing to the sub-component
     const mapStateToProps: any = {
       device,
     };

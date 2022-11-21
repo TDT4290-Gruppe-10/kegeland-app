@@ -1,143 +1,75 @@
-import React, {useEffect, useState, ComponentType} from 'react';
+import React, {ComponentType, useEffect} from 'react';
 
 import QuestionnaireModal from '~components/QuestionnaireModal';
 import {DeviceType} from '~constants/bluetooth';
-import useAppDispatch from '~hooks/useAppDispatch';
-import useAppSelector from '~hooks/useAppSelector';
-import {
-  fetchQuestionnaire,
-  uploadAnswers,
-} from '~state/ducks/questions/questions.actions';
-import {
-  Answer,
-  Questionnaire,
-} from '~state/ducks/questions/questions.interface';
-import {
-  clearAnswers,
-  addAnswer,
-} from '~state/ducks/questions/questions.reducer';
-import {uploadSession} from '~state/ducks/session/session.actions';
-import {UploadSessionResponse} from '~state/ducks/session/session.interface';
-import {setSession} from '~state/ducks/session/session.reducer';
+import useCurrentSession from '~hooks/useCurrentSession';
+import useQuestionnaire from '~hooks/useQuestionnaire';
+import {Answer} from '~state/ducks/questions/questions.interface';
+import {ExerciseSession} from '~state/ducks/session/session.interface';
 
 export type WithQuestionnaireContext = {
+  session: ExerciseSession;
   answers: Answer[];
-  questionnaireEnabled: boolean;
-  questionnaireLoading: boolean;
-  toggleQuestionnaire: () => void;
+  hasQuestionnaire: boolean;
+  loading: boolean;
+  openQuestionnaire: () => void;
 };
 
-const isValidAnswers = (questionnaire: Questionnaire, answers: number[]) => {
-  return questionnaire.questions.length === answers.length;
-};
-
+/**
+ * Higher-order component withQuestionnaire.
+ * Wraps the component with questionnaire-functionality.
+ * Will fetch the questionnaire based on the device type if the signed in user
+ * has a questionnaire assigned for the specific device.
+ * @param deviceType the type of device to select
+ * @param Component the component to wrap
+ */
 const withQuestionnaire =
   <P extends WithQuestionnaireContext>(
     deviceType: DeviceType,
     Component: ComponentType<P>,
   ): ComponentType<Omit<P, keyof WithQuestionnaireContext>> =>
   (props) => {
-    const dispatch = useAppDispatch();
-    const [questionnaireEnabled, setQuestionnaireEnabled] =
-      useState<boolean>(true);
-    const [questionnaireVisible, setQuestionnaireVisible] =
-      useState<boolean>(false);
-    const {auth, questions, session} = useAppSelector((state) => state);
-    const {authUser} = auth;
-    const {currentSession} = session;
-    const {answers, questionnaire} = questions;
+    const questionnaire = useQuestionnaire(deviceType);
+    const session = useCurrentSession(questionnaire.hasQuestionnaire);
 
-    const dispatchSessionWithAnswers = async () => {
-      await dispatch(uploadSession({...currentSession!, userId: authUser!.id}))
-        .then(async (res) => {
-          const {id} = res.payload as UploadSessionResponse;
-          if (id) {
-            await dispatch(
-              uploadAnswers({
-                answers,
-                questionnaireId: questionnaire!.id,
-                sessionId: id,
-              }),
-            );
-          }
-        })
-        .finally(async () => {
-          await Promise.all([dispatch(clearAnswers()), dispatch(setSession())]);
-        });
-    };
-
-    const dispatchSession = async () => {
-      await dispatch(uploadSession({...currentSession!, userId: authUser!.id}));
-      dispatch(setSession());
-    };
-
-    useEffect(() => {
-      if (authUser) {
-        dispatch(fetchQuestionnaire({sensor: deviceType, userId: authUser.id}));
-      } else {
-        setQuestionnaireEnabled(false);
-      }
-      return () => {
-        dispatch(clearAnswers());
-        dispatch(setSession());
-      };
-    }, []);
-
-    useEffect(() => {
-      if (!questions.loading && !questionnaire) {
-        setQuestionnaireEnabled(false);
-      }
-    }, [questions.loading]);
-
-    useEffect(() => {
-      if (authUser && currentSession) {
-        if (questionnaireEnabled) {
-          if (questionnaire?.id && answers.length === 2) {
-            dispatchSessionWithAnswers();
-          }
-        } else {
-          dispatchSession();
-        }
-      }
-    }, [answers, questionnaireEnabled]);
-
-    useEffect(() => {
-      if (currentSession !== undefined && answers.length === 1) {
-        toggleQuestionnaire();
-      }
-    }, [currentSession]);
-
-    const handleAnswers = (data: number[]) => {
-      if (authUser && isValidAnswers(questionnaire!, data)) {
-        dispatch(
-          addAnswer({
-            userId: authUser.id,
-            answers: data,
-            answeredAt: Date.now(),
-          }),
-        );
-      }
-      toggleQuestionnaire();
-    };
-
-    const toggleQuestionnaire = () => {
-      setQuestionnaireVisible(!questionnaireVisible);
-    };
-
+    // Set props for passing to the sub-component
     const mapStateToProps: any = {
-      answers,
-      questionnaireEnabled,
-      questionnaireLoading: questions.loading || session.loading,
-      toggleQuestionnaire,
+      session: session.session,
+      answers: questionnaire.answers,
+      hasQuestionnaire: questionnaire.hasQuestionnaire,
+      loading: questionnaire.loading || session.loading,
+      openQuestionnaire: questionnaire.open,
     };
+
+    useEffect(() => {
+      // Open questionnaire if a questionnaire is assigned and 1 out of 2 answers has been answered.
+      if (
+        session.session &&
+        questionnaire.hasQuestionnaire &&
+        questionnaire.answers.length === 1
+      ) {
+        questionnaire.open();
+      }
+    }, [session.session]);
+
+    /**
+     * Upload the session if state allows for it.
+     * Requires 2 answers and a session if questionnaire is enabled. Will
+     * only require a session if not.
+     */
+    useEffect(() => {
+      if (session.session && !questionnaire.visible && !session.isUploading) {
+        session.upload();
+      }
+    }, [session.session, questionnaire.submit]);
 
     return (
       <>
         <Component {...props} {...mapStateToProps} />
         <QuestionnaireModal
-          onSubmit={handleAnswers}
-          visible={questionnaireVisible}
-          questionnaire={questions.questionnaire}
+          onSubmit={questionnaire.submit}
+          visible={questionnaire.visible}
+          questionnaire={questionnaire.questionnaire}
         />
       </>
     );

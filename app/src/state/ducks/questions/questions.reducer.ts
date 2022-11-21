@@ -10,6 +10,9 @@ import {fetchQuestionnaire, uploadAnswers} from './questions.actions';
 import {fetchQuestionnaireReducer} from './questions.helpers';
 import {Answer, QuestionsState} from './questions.interface';
 
+/**
+ * The initial questions state
+ */
 export const initialState: QuestionsState = {
   loading: false,
   error: undefined,
@@ -17,6 +20,9 @@ export const initialState: QuestionsState = {
   answers: [],
 };
 
+/**
+ * The reducer for questions state
+ */
 export const questionsSlice = createSlice({
   name: 'questions',
   initialState,

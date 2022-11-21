@@ -14,6 +14,11 @@ export type HeaderProps = {
   toggle: () => void;
 };
 
+/**
+ * Component for rendering the game header panel
+ * @param param0 the props
+ * @see {@link HeaderProps}
+ */
 const Header: React.FC<HeaderProps> = ({score, toggle}) => {
   const {colors} = useTheme();
   return (

@@ -19,7 +19,7 @@ describe('Test apiCaller', () => {
     await apiCaller(config);
     const reqConfig = httpMock.mock.calls[0][0];
     expect(reqConfig).toStrictEqual({
-      baseURL: API_URL,
+      baseURL: `${API_URL}/api/`,
       url: 'test',
       method: 'POST',
     });
@@ -33,7 +33,7 @@ describe('Test apiCaller', () => {
     await apiCaller(config);
     const reqConfig = httpMock.mock.calls[0][0];
     expect(reqConfig).toStrictEqual({
-      baseURL: API_URL,
+      baseURL: `${API_URL}/api/`,
       ...config,
     });
   });
@@ -46,7 +46,7 @@ describe('Test apiCaller', () => {
     await apiCaller(config);
     const reqConfig = httpMock.mock.calls[0][0];
     expect(reqConfig).toStrictEqual({
-      baseURL: API_URL,
+      baseURL: `${API_URL}/api/`,
       ...config,
     });
   });

@@ -27,6 +27,10 @@ const schema = yup.object({
   password: yup.string().nullable().required().label('Password'),
 });
 
+/**
+ * Component for rendering the login form.
+ * @see {@link LoginFormData}
+ */
 const LoginForm: React.FC = () => {
   const navigation = useNavigation<AuthScreenProps<'Login'>['navigation']>();
   const {loading, error} = useAppSelector((state) => state.auth);

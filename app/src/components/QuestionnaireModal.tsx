@@ -2,7 +2,7 @@ import {clone, map} from 'lodash';
 import React, {useState} from 'react';
 import {StyleSheet, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
-import {Button, Divider, RadioButton, Text} from 'react-native-paper';
+import {Button, Divider, RadioButton, Text, useTheme} from 'react-native-paper';
 
 import {Questionnaire} from '~state/ducks/questions/questions.interface';
 
@@ -14,22 +14,37 @@ export type QuestionnaireModalProps = {
   onSubmit: (data: number[]) => void;
 };
 
+/**
+ * Component for rendering a questionnaire modal.
+ * @param props the props
+ * @see {@link QuestionnaireModalProps}
+ * @see {@link Popup}
+ */
 const QuestionnaireModal: React.FC<QuestionnaireModalProps> = ({
   questionnaire,
   onSubmit,
   visible,
 }) => {
+  const {colors} = useTheme();
   const [answers, addAnswers] = useState<string[]>(
     map(questionnaire ? questionnaire.questions : [], () => '2'),
   );
   if (!questionnaire) return null;
 
+  /**
+   * Updates answer for a question
+   * @param value answer
+   * @param idx the question
+   */
   const handleChange = (value: string, idx: number) => {
     const tmp = clone(answers);
     tmp[idx] = value;
     addAnswers(tmp);
   };
 
+  /**
+   * Submits the answers for the questionnaire
+   */
   const handleSubmit = () =>
     // eslint-disable-next-line radix
     onSubmit(map(answers, (answer) => parseInt(answer)));
@@ -48,7 +63,7 @@ const QuestionnaireModal: React.FC<QuestionnaireModalProps> = ({
       <ScrollView contentContainerStyle={styles.wrapper}>
         {questionnaire.questions.map((item, idx) => (
           <View
-            key={item.question}
+            key={`${item.question}_${idx}`}
             style={idx > 0 ? styles.question : undefined}>
             <Text style={styles.questionTitle}>{item.question}</Text>
             <RadioButton.Group
@@ -56,8 +71,13 @@ const QuestionnaireModal: React.FC<QuestionnaireModalProps> = ({
               value={answers[idx]}>
               <View style={styles.radioGroup}>
                 {Array.from(Array(5).keys()).map((val) => (
-                  <View style={styles.radioButton} key={val}>
-                    <RadioButton value={val.toString()} />
+                  <View
+                    style={styles.radioButton}
+                    key={`${item.question}_${idx}_${val}`}>
+                    <RadioButton.Android
+                      color={colors.primary}
+                      value={val.toString()}
+                    />
                   </View>
                 ))}
               </View>

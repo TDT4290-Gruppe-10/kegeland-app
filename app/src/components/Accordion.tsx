@@ -13,12 +13,22 @@ export type AccordionProps = Omit<
   iconStyle?: StyleProp<TextStyle>;
 };
 
+/**
+ * Component for rendering an accordion menu.
+ * This component has inbuilt functionality for hiding/displaying it's sub-components.
+ * @param props the props
+ * @see {@link AccordionProps}
+ * @see {@link List.Accordion}
+ */
 const Accordion: React.FC<AccordionProps> = (props) => {
   const {colors} = useTheme();
   const [expanded, setExpanded] = React.useState(true);
 
   const handlePress = () => setExpanded(!expanded);
 
+  /**
+   * Render the an icon to the left if enabled
+   */
   const renderLeft = () => {
     if (props.icon) {
       if (React.isValidElement(props.icon)) {

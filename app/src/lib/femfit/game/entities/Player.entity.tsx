@@ -12,6 +12,10 @@ import styles from './styles';
 const {PLAYER_SIZE} = constants;
 export type PlayerProps = EntityBase;
 
+/**
+ * Player entity
+ * @see {@link PlayerProps}
+ */
 export class PlayerRenderer extends React.Component<PlayerProps> {
   render(): React.ReactNode {
     const width = this.props.body.bounds.max.x - this.props.body.bounds.min.x;
@@ -31,12 +35,18 @@ export class PlayerRenderer extends React.Component<PlayerProps> {
   }
 }
 
+/**
+ * Renders the player entity
+ * @param world the world
+ * @param pos the position
+ */
 export default (world: Matter.World, pos: Position) => {
   const body = Matter.Bodies.rectangle(pos.x, pos.y, PLAYER_SIZE, PLAYER_SIZE, {
     label: 'Player',
     restitution: 0,
     density: 0.0025,
     frictionAir: 0.015,
+    isSleeping: false,
   });
   Matter.World.add(world, body);
   return {body, renderer: PlayerRenderer};

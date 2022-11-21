@@ -8,6 +8,10 @@ import PageWrapper from '~components/PageWrapper';
 import RegisterForm from '~components/forms/RegisterForm';
 import {AuthScreenProps} from '~routes/interface';
 
+/**
+ * ForgotPasswordScreen. Screen where users can register
+ * @see {@link AuthScreenProps}
+ */
 const RegisterScreen: React.FC<AuthScreenProps<'Register'>> = ({
   navigation,
 }) => {

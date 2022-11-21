@@ -8,6 +8,11 @@ export type SectionProps = {
   children?: React.ReactNode;
 };
 
+/**
+ * Component for rendering a section.
+ * @param props the props
+ * @see {@link SectionProps}
+ */
 const Section: React.FC<SectionProps> = ({title, children, ...props}) => {
   return (
     <Surface style={[styles.surface, props.style]}>

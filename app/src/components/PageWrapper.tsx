@@ -13,6 +13,12 @@ export type PageWrapperProps = {
   children: React.ReactNode;
 };
 
+/**
+ * Retrieves the page's padding based on it's defined content size
+ * @param contentSize the content size
+ * @see {@link ContentSize}
+ * @returns the padding
+ */
 const getPadding = (contentSize?: ContentSize) => {
   switch (contentSize) {
     case 'full':
@@ -26,6 +32,11 @@ const getPadding = (contentSize?: ContentSize) => {
   }
 };
 
+/**
+ * Component for rendering page layout.
+ * @param props the props
+ * @see {@link PageWrapperProps}
+ */
 const PageWrapper: React.FC<PageWrapperProps> = ({
   title,
   contentSize,

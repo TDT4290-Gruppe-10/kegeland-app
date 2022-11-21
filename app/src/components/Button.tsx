@@ -4,6 +4,12 @@ import {Button as PaperButton} from 'react-native-paper';
 
 export type ButtonProps = React.ComponentProps<typeof PaperButton>;
 
+/**
+ * Component for rendering a button.
+ * @param props the props
+ * @see {@link ButtonProps}
+ * @see {@link Button}
+ */
 const Button: React.FC<ButtonProps> = (props) => {
   return (
     <PaperButton

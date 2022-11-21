@@ -15,6 +15,10 @@ export type CoinProps = EntityBase & {
   scored: boolean;
 };
 
+/**
+ * Coin entity
+ * @see {@link CoinProps}
+ */
 export class CoinRenderer extends React.Component<CoinProps> {
   render(): React.ReactNode {
     const width = this.props.body.bounds.max.x - this.props.body.bounds.min.x;
@@ -39,6 +43,12 @@ export class CoinRenderer extends React.Component<CoinProps> {
   }
 }
 
+/**
+ * Renders the coin entity
+ * @param world the world
+ * @param pos the position
+ * @param label the label
+ */
 export default (world: Matter.World, pos: Position, label: string) => {
   const body = Matter.Bodies.rectangle(pos.x, pos.y, COIN_SIZE, COIN_SIZE, {
     label,
