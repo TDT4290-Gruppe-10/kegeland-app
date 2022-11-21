@@ -25,7 +25,7 @@ export const interceptRejected = async (err: any) => Promise.reject(err);
 
 httpInstance.interceptors.request.use(interceptFulfilled, interceptRejected);
 
-type ApiCallerProps = Pick<
+export type ApiCallerProps = Pick<
   AxiosRequestConfig,
   'url' | 'method' | 'data' | 'params'
 >;

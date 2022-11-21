@@ -17,7 +17,7 @@ const RegisterScreen: React.FC<AuthScreenProps<'Register'>> = ({
 }) => {
   const {colors} = useTheme();
   return (
-    <PageWrapper title="Sign Up">
+    <PageWrapper title="Sign Up" testID="RegisterScreen">
       <AvoidKeyboard style={styles.wrapper}>
         <View style={styles.formWrapper}>
           <RegisterForm />

@@ -33,7 +33,7 @@ const ConnectDeviceScreen: React.FC<
   }, []);
 
   return (
-    <SafeAreaView>
+    <SafeAreaView testID="ConnectDeviceScreen">
       <ScrollView style={styles.wrapper}>
         <Section title="Available devices">
           <BluetoothDeviceList devices={Object.values(availableDevices)} />

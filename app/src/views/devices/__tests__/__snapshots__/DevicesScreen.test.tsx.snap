@@ -32,6 +32,7 @@ exports[`Test ConnectDeviceScreen-component should render correctly 1`] = `
         undefined,
       ]
     }
+    testID="DevicesScreen"
   >
     <Text
       style={

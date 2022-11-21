@@ -216,6 +216,7 @@ exports[`Test DeviceRoutes-component should render correctly 1`] = `
                               undefined,
                             ]
                           }
+                          testID="DevicesScreen"
                         >
                           <Text
                             style={

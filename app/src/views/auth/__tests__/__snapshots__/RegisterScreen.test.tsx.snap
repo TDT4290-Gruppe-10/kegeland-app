@@ -32,6 +32,7 @@ exports[`Test RegisterScreen-component should render correctly 1`] = `
         undefined,
       ]
     }
+    testID="RegisterScreen"
   >
     <Text
       style={
@@ -99,6 +100,7 @@ exports[`Test RegisterScreen-component should render correctly 1`] = `
           handlerType="NativeViewGestureHandler"
           onGestureHandlerEvent={[Function]}
           onGestureHandlerStateChange={[Function]}
+          testID="RegisterForm"
           waitFor={
             Array [
               Object {
@@ -207,7 +209,7 @@ exports[`Test RegisterScreen-component should render correctly 1`] = `
                             },
                           ]
                         }
-                        testID="text-input-outlined"
+                        testID="RegisterFirstNameInput"
                         underlineColorAndroid="transparent"
                         value={null}
                       />
@@ -431,7 +433,7 @@ exports[`Test RegisterScreen-component should render correctly 1`] = `
                             },
                           ]
                         }
-                        testID="text-input-outlined"
+                        testID="RegisterLastNameInput"
                         underlineColorAndroid="transparent"
                         value={null}
                       />
@@ -655,7 +657,7 @@ exports[`Test RegisterScreen-component should render correctly 1`] = `
                             },
                           ]
                         }
-                        testID="text-input-outlined"
+                        testID="RegisterEmailInput"
                         underlineColorAndroid="transparent"
                         value={null}
                       />
@@ -881,7 +883,7 @@ exports[`Test RegisterScreen-component should render correctly 1`] = `
                             },
                           ]
                         }
-                        testID="text-input-outlined"
+                        testID="RegisterPasswordInput"
                         underlineColorAndroid="transparent"
                         value={null}
                       />
@@ -1213,7 +1215,7 @@ exports[`Test RegisterScreen-component should render correctly 1`] = `
                             },
                           ]
                         }
-                        testID="text-input-outlined"
+                        testID="RegisterConfirmPasswordInput"
                         underlineColorAndroid="transparent"
                         value={null}
                       />
@@ -1500,6 +1502,7 @@ exports[`Test RegisterScreen-component should render correctly 1`] = `
                     },
                   ]
                 }
+                testID="RegisterSubmit"
               >
                 <View
                   style={

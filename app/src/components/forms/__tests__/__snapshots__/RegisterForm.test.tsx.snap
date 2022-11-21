@@ -16,6 +16,7 @@ exports[`Test RegisterForm-component should render correctly 1`] = `
     handlerType="NativeViewGestureHandler"
     onGestureHandlerEvent={[Function]}
     onGestureHandlerStateChange={[Function]}
+    testID="RegisterForm"
     waitFor={
       Array [
         Object {
@@ -124,7 +125,7 @@ exports[`Test RegisterForm-component should render correctly 1`] = `
                       },
                     ]
                   }
-                  testID="text-input-outlined"
+                  testID="RegisterFirstNameInput"
                   underlineColorAndroid="transparent"
                   value={null}
                 />
@@ -348,7 +349,7 @@ exports[`Test RegisterForm-component should render correctly 1`] = `
                       },
                     ]
                   }
-                  testID="text-input-outlined"
+                  testID="RegisterLastNameInput"
                   underlineColorAndroid="transparent"
                   value={null}
                 />
@@ -572,7 +573,7 @@ exports[`Test RegisterForm-component should render correctly 1`] = `
                       },
                     ]
                   }
-                  testID="text-input-outlined"
+                  testID="RegisterEmailInput"
                   underlineColorAndroid="transparent"
                   value={null}
                 />
@@ -798,7 +799,7 @@ exports[`Test RegisterForm-component should render correctly 1`] = `
                       },
                     ]
                   }
-                  testID="text-input-outlined"
+                  testID="RegisterPasswordInput"
                   underlineColorAndroid="transparent"
                   value={null}
                 />
@@ -1130,7 +1131,7 @@ exports[`Test RegisterForm-component should render correctly 1`] = `
                       },
                     ]
                   }
-                  testID="text-input-outlined"
+                  testID="RegisterConfirmPasswordInput"
                   underlineColorAndroid="transparent"
                   value={null}
                 />
@@ -1417,6 +1418,7 @@ exports[`Test RegisterForm-component should render correctly 1`] = `
               },
             ]
           }
+          testID="RegisterSubmit"
         >
           <View
             style={

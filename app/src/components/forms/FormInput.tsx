@@ -12,6 +12,7 @@ export type FormInputProps = {
   autoCapitalize?: 'none' | 'sentences' | 'words' | 'characters';
   secureTextEntry?: boolean;
   keyboardType?: KeyboardTypeOptions;
+  testID?: string;
 };
 
 /**
@@ -34,6 +35,7 @@ const FormInput: React.FC<FormInputProps> = (props) => {
       render={({field: {onChange, onBlur, value}}) => (
         <View style={styles.inputWrapper}>
           <TextInput
+            testID={props.testID}
             mode="outlined"
             theme={{roundness: 15}}
             left={props.icon ? <TextInput.Icon icon={props.icon} /> : undefined}

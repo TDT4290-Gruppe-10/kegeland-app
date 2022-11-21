@@ -14,7 +14,7 @@ const ForgotPasswordScreen: React.FC<
   AuthScreenProps<'Forgot password'>
 > = () => {
   return (
-    <PageWrapper title="Reset Password">
+    <PageWrapper title="Reset Password" testID="ForgotPasswordScreen">
       <AvoidKeyboard style={styles.wrapper}>
         <View style={styles.formWrapper}>
           <ResetPasswordForm />
