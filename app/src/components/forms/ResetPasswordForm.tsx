@@ -25,6 +25,9 @@ const schema = yup.object({
   email: yup.string().nullable().email().required().label('Email'),
 });
 
+/**
+ * Component for rendering the reset password form.
+ */
 const ResetPasswordForm: React.FC = () => {
   const navigation =
     useNavigation<AuthScreenProps<'Forgot password'>['navigation']>();

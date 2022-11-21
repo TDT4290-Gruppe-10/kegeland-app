@@ -5,6 +5,7 @@ import {bluetoothSaga} from './ducks/bluetooth/bluetooth.saga';
 
 export const sagaMiddleware = createSagaMiddleware();
 
+// Initiate the root saga
 const rootSaga = function* rootSaga() {
   yield all([fork(bluetoothSaga)]);
 };

@@ -16,6 +16,11 @@ export type BluetoothDeviceItemProps = {
   device: BluetoothDevice;
 };
 
+/**
+ * Returns an icon based on the device's battery level
+ * @param power the device power
+ * @returns icon based on device power
+ */
 const getBatteryLevelIcon = (power: number) => {
   const val = round(power, 1) * 100;
   if (val === 100) {
@@ -25,10 +30,18 @@ const getBatteryLevelIcon = (power: number) => {
   return `battery-${val}-bluetooth`;
 };
 
+/**
+ * Component for rendering a bluetooth device item.
+ * @param props the props
+ * @see {@link BluetoothDeviceItemProps}
+ */
 const BluetoothDeviceItem: React.FC<BluetoothDeviceItemProps> = ({device}) => {
   const dispatch = useAppDispatch();
   const {colors} = useTheme();
 
+  /**
+   * Color indicator based on the device's state
+   */
   const stateColor = () => {
     switch (device.state) {
       case 'connected':
@@ -43,6 +56,10 @@ const BluetoothDeviceItem: React.FC<BluetoothDeviceItemProps> = ({device}) => {
     setVisible(!visible);
   };
 
+  /**
+   * Handle touch interaction.
+   * Will disconnect if the device is connected, else connect
+   */
   const handlePress = () => {
     switch (device.state) {
       case 'connected':

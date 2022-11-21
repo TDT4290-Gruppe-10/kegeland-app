@@ -23,6 +23,12 @@ export type FemfitScreenProps = DeviceScreenProps<'Femfit'> &
   WithDeviceContext &
   WithQuestionnaireContext;
 
+/**
+ * FemfitScreen. Screen for exercising with the femfit-sensor.
+ * The screen will display a selection of exercises, and initiate a game once
+ * an exercise is selected.
+ * @see {@link FemfitScreenProps}
+ */
 const FemfitScreen: React.FC<FemfitScreenProps> = ({
   navigation,
   session,
@@ -36,17 +42,27 @@ const FemfitScreen: React.FC<FemfitScreenProps> = ({
   const [modalItem, setModalItem] = useState<ExerciseScheme>();
   const {currentSession} = useAppSelector((state) => state.session);
 
+  /**
+   * Clear the state
+   */
   const clear = () => {
     setExercise(undefined);
     setModalItem(undefined);
   };
 
+  /**
+   * Clear the state once the current session is undefined
+   */
   useEffect(() => {
     if (!currentSession) {
       clear();
     }
   }, [currentSession]);
 
+  /**
+   * Toggle a details modal for selected exercise
+   * @param item the exericse
+   */
   const toggleDetails = (item?: ExerciseScheme) => {
     if (!item) {
       setModalItem(undefined);
@@ -55,6 +71,11 @@ const FemfitScreen: React.FC<FemfitScreenProps> = ({
     }
   };
 
+  /**
+   * Select an exercise
+   * Will trigger a questionnaire if enabled, and initiate the game
+   * @param item the exercise
+   */
   const selectExercise = (item: ExerciseScheme) => {
     setExercise(item);
     if (hasQuestionnaire) {
@@ -62,6 +83,11 @@ const FemfitScreen: React.FC<FemfitScreenProps> = ({
     }
   };
 
+  /**
+   * Boolean function to decide whether or not the state allows for the game
+   * to be rendered.
+   * @returns true if game should be rendered
+   */
   const shouldRenderGame = () => {
     if (device && exercise && !loading) {
       if (hasQuestionnaire) {

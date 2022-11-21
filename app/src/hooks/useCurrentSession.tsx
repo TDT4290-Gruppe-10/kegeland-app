@@ -9,6 +9,11 @@ import {clearSession} from '~state/ducks/session/session.reducer';
 import useAppDispatch from './useAppDispatch';
 import useAppSelector from './useAppSelector';
 
+/**
+ * Hook for handling exercise sessions.
+ * Will upload the session to the database if requirements are met.
+ * @param hasQuestionnaire whether or not the session uses a questionnaire
+ */
 const useCurrentSession = (hasQuestionnaire: boolean) => {
   const dispatch = useAppDispatch();
   const [isUploading, setIsUploading] = useState<boolean>(false);

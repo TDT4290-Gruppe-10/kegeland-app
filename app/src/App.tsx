@@ -9,9 +9,13 @@ import withThemedNavigation from '~hoc/withThemedNavigation';
 
 import Router from './routes/Router';
 
+// Initialize higher-order components
 const Wrapper = withAppWrapper(SafeAreaProvider);
 const ThemedRouter = withThemedNavigation(Router);
 
+/**
+ * The application's main component. The app and all its' content is rendered from this entrypoint
+ */
 export default function App() {
   return (
     <ReduxProvider store={store}>

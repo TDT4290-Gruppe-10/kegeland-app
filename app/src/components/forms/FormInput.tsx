@@ -14,6 +14,12 @@ export type FormInputProps = {
   keyboardType?: KeyboardTypeOptions;
 };
 
+/**
+ * Generic component for rendering a form inputs
+ * @param props the props
+ * @see {@link FormInputProps}
+ * @see {@link TextInput}
+ */
 const FormInput: React.FC<FormInputProps> = (props) => {
   const [secured, setSecured] = useState<boolean>(
     props.secureTextEntry || false,

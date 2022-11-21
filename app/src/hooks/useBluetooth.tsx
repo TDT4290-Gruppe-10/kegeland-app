@@ -37,12 +37,20 @@ const useBluetooth = () => {
     dispatch(stopDeviceScan());
   };
 
+  /**
+   * Reconnects devices stored as 'connected' within the redux state
+   */
   const reconnectDevices = () => {
     forEach(connectedDevices, (_, peripheral) => {
       dispatch(connectDevice(peripheral));
     });
   };
 
+  /**
+   * Handles battery updates for a device
+   * @param param0 the peripheral update information
+   * @see {@link PeripheralNotification}
+   */
   const handlePeripheralUpdate = ({
     peripheral,
     service,
@@ -53,6 +61,10 @@ const useBluetooth = () => {
     }
   };
 
+  /**
+   * Handles disconnected peripherals
+   * @param param0 the peripheral id
+   */
   const handleDisconnectedPeripheral = ({peripheral}: {peripheral: string}) => {
     dispatch(deviceDisconnected(peripheral));
   };

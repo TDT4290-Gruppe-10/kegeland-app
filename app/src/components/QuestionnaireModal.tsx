@@ -14,6 +14,12 @@ export type QuestionnaireModalProps = {
   onSubmit: (data: number[]) => void;
 };
 
+/**
+ * Component for rendering a questionnaire modal.
+ * @param props the props
+ * @see {@link QuestionnaireModalProps}
+ * @see {@link Popup}
+ */
 const QuestionnaireModal: React.FC<QuestionnaireModalProps> = ({
   questionnaire,
   onSubmit,
@@ -25,12 +31,20 @@ const QuestionnaireModal: React.FC<QuestionnaireModalProps> = ({
   );
   if (!questionnaire) return null;
 
+  /**
+   * Updates answer for a question
+   * @param value answer
+   * @param idx the question
+   */
   const handleChange = (value: string, idx: number) => {
     const tmp = clone(answers);
     tmp[idx] = value;
     addAnswers(tmp);
   };
 
+  /**
+   * Submits the answers for the questionnaire
+   */
   const handleSubmit = () =>
     // eslint-disable-next-line radix
     onSubmit(map(answers, (answer) => parseInt(answer)));

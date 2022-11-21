@@ -10,6 +10,11 @@ export type SkeletonProps = {
   children?: React.ReactNode;
 };
 
+/**
+ * Component for rendering a component skeleton while a component is rendering.
+ * @param props the props
+ * @see {@link SkeletonProps}
+ */
 const Skeleton: React.FC<SkeletonProps> = (props) => {
   const {colors} = useTheme();
   const opacity = useRef(new Animated.Value(0.3));
@@ -20,6 +25,9 @@ const Skeleton: React.FC<SkeletonProps> = (props) => {
     borderRadius: props.mode === 'rounded' && props.width ? props.width / 2 : 0,
   };
 
+  /**
+   * Initiate animation
+   */
   useEffect(() => {
     Animated.loop(
       Animated.sequence([

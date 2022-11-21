@@ -13,6 +13,10 @@ import {
 } from '~state/ducks/bluetooth/bluetooth.actions';
 import {clearAvailableDevices} from '~state/ducks/bluetooth/bluetooth.reducer';
 
+/**
+ * ConnectDeviceScreen. Screen for connecting to available bluetooth-devices
+ * @see {@link SettingsScreenProps}
+ */
 const ConnectDeviceScreen: React.FC<
   SettingsScreenProps<'Connect device'>
 > = () => {

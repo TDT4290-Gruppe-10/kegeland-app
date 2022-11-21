@@ -48,6 +48,11 @@ type SpriteSheetState = {
   playing: boolean;
 };
 
+/**
+ * Component for rendering an animated sprite sheet
+ * @see {@link SpriteSheetProps}
+ * @see {@link SpriteSheetState}
+ */
 export default class SpriteSheet extends React.Component<
   SpriteSheetProps,
   SpriteSheetState

@@ -14,6 +14,13 @@ export type ThemeSwitchProps = {
     | undefined;
 };
 
+/**
+ * Component for switching the app's color theme
+ * @param props the props
+ * @see {@link ThemeSwitchProps}
+ * @see {@link Switch}
+ * @see {@link useTheme}
+ */
 const ThemeSwitch: React.FC<ThemeSwitchProps> = (props) => {
   const {colors} = useTheme();
   const dispatch = useAppDispatch();

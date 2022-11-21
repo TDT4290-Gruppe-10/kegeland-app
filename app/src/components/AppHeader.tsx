@@ -7,6 +7,12 @@ import {Appbar, Text, useTheme} from 'react-native-paper';
 
 export type AppHeaderProps = StackHeaderProps;
 
+/**
+ * Component for rendering the applications main header
+ * @param props the props
+ * @see {@link AppHeaderProps}
+ * @see {@link Appbar.Header}
+ */
 const AppHeader: React.FC<AppHeaderProps> = ({navigation, back}) => {
   const {colors} = useTheme();
   return back ? (

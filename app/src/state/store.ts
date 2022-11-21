@@ -21,6 +21,11 @@ import sessionReducer from './ducks/session/session.reducer';
 
 import rootSaga, {sagaMiddleware} from './rootSaga';
 
+/**
+ * Configuration for redux-persist.
+ * Redux-persist is responsible for maintaining the state
+ * between sessions.
+ */
 const persistConfig = {
   key: 'root',
   version: 1,
@@ -28,6 +33,7 @@ const persistConfig = {
   whitelist: ['app', 'auth', 'bluetooth'],
 };
 
+// Initiate the root reducer
 export const rootReducer = combineReducers({
   app: appReducer,
   auth: authReducer,
@@ -37,6 +43,8 @@ export const rootReducer = combineReducers({
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
+
+// Check if development-environment is enabled
 const isDev = !['production', 'test'].includes(process.env.NODE_ENV || '');
 
 export const store = configureStore({
@@ -59,8 +67,10 @@ export const store = configureStore({
   devTools: isDev,
 });
 
+// Start redux-saga
 sagaMiddleware.run(rootSaga);
 
+// Create persistor for persisting state
 export const persistor = persistStore(store);
 
 export type RootState = ReturnType<typeof store.getState>;

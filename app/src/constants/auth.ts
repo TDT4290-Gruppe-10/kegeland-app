@@ -9,4 +9,7 @@ export enum Token {
   REFRESH_TOKEN = '@refresh_token',
 }
 
+/**
+ * How often to refresh the auth tokens
+ */
 export const REFRESH_INTERVAL_MS = 50 * 60 * 1000; // every 50th minute
