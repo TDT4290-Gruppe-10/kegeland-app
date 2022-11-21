@@ -21,10 +21,16 @@ export type ThemeOverride = Theme['colors'] & {
   };
 };
 
+/**
+ * The base override for theme
+ */
 const baseOverride: Partial<Omit<Theme, 'colors'>> = {
   roundness: 15,
 };
 
+/**
+ * Color overrides for both light- and dark mode
+ */
 const sharedColorOverride: Partial<ThemeOverride> = {
   primary: '#00b0ff',
   status: {
@@ -34,6 +40,9 @@ const sharedColorOverride: Partial<ThemeOverride> = {
   },
 };
 
+/**
+ * Color overrides for light mode
+ */
 const lightColorOverride: Partial<Theme['colors']> = merge(
   cloneDeep(sharedColorOverride),
   {
@@ -44,6 +53,9 @@ const lightColorOverride: Partial<Theme['colors']> = merge(
   } as ThemeOverride,
 );
 
+/**
+ * Color overrides for dark mode
+ */
 const darkColorOverride: Partial<Theme['colors']> = merge(
   cloneDeep(sharedColorOverride),
   {
@@ -54,6 +66,9 @@ const darkColorOverride: Partial<Theme['colors']> = merge(
   } as ThemeOverride,
 );
 
+/**
+ * The app's light theme
+ */
 export const lightTheme: any = merge(
   merge(NavigationLightTheme, PaperLightTheme),
   {
@@ -61,6 +76,10 @@ export const lightTheme: any = merge(
     colors: lightColorOverride,
   },
 );
+
+/**
+ * The app's dark theme
+ */
 export const darkTheme: any = merge(
   merge(PaperDarkTheme, NavigationDarkTheme),
   {

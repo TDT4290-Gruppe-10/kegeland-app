@@ -13,6 +13,12 @@ export type NoDevicePopupProps = {
   deviceName: string;
 };
 
+/**
+ * Component for rendering popup when connection to a device is lost.
+ * @param props the props
+ * @see {@link NoDevicePopupProps}
+ * @see {@link Popup}
+ */
 const NoDevicePopup: React.FC<NoDevicePopupProps> = ({deviceName, visible}) => {
   const nav = useNavigation<NavigationProp<RootTabParamList>>();
 

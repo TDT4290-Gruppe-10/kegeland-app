@@ -26,6 +26,12 @@ export type ListItemProps = Omit<
   }) => React.ReactNode;
 };
 
+/**
+ * Component for rendering a list item.
+ * @param props the props
+ * @see {@link ListItemProps}
+ * @see {@link List.Item}
+ */
 const ListItem: React.FC<ListItemProps> = ({
   icon,
   iconSize,

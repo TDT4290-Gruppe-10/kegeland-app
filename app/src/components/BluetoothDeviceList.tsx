@@ -13,11 +13,17 @@ export type BluetoothDeviceListProps = {
   devices: BluetoothDevice[];
 };
 
+/**
+ * Component for rendering a list of bluetooth devices.
+ * @param props the props
+ * @see {@link BluetoothDeviceListProps}
+ */
 const BluetoothDeviceList: React.FC<BluetoothDeviceListProps> = ({devices}) => {
   const {colors} = useTheme();
   const {isScanning} = useAppSelector((state) => state.bluetooth);
   const render = () => {
     if (!isScanning && devices.length === 0) {
+      // Render a message if the list is empty
       return (
         <View style={styles.errorWrapper}>
           <Icon

@@ -17,6 +17,10 @@ import {SettingsScreenProps} from '~routes/interface';
 import {setAnchorRoute} from '~state/ducks/app/app.reducer';
 import {signOutUser} from '~state/ducks/auth/auth.actions';
 
+/**
+ * SettingsScreen. The view for the application's settings
+ * @see {@link SettingsScreenProps}
+ */
 const SettingsScreen: React.FC<SettingsScreenProps<'Settings'>> = ({
   navigation,
 }) => {

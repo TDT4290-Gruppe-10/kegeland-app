@@ -1,5 +1,8 @@
 import {Dimensions} from 'react-native';
 
+/**
+ * Constants for the femfit game
+ */
 export default {
   MAX_WIDTH: Dimensions.get('screen').width,
   MAX_HEIGHT: Dimensions.get('screen').height,

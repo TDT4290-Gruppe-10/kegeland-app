@@ -5,6 +5,9 @@ import {RootTabParamList} from '~routes/interface';
 import {updateSetting} from './app.actions';
 import {AnchorRoute, AppState} from './app.interface';
 
+/**
+ * The initial app state
+ */
 export const initialState: AppState = {
   anchorRoute: undefined,
   settings: {
@@ -12,6 +15,9 @@ export const initialState: AppState = {
   },
 };
 
+/**
+ * The reducer for settings state
+ */
 export const settingsSlice = createSlice({
   name: 'settings',
   initialState,

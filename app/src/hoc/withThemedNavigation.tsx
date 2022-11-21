@@ -10,9 +10,9 @@ const getTheme = (isDarkMode: boolean) => {
 };
 
 /**
+ * Higher-order component withThemedNavigation.
  * Wraps a component with a themed navigation container
  * @param Component the component to wrap
- * @returns wrapped component
  */
 const withThemedNavigation =
   <P extends object>(Component: React.FC<P>): React.FC<P> =>

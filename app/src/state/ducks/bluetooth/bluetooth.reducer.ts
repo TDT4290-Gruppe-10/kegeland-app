@@ -15,6 +15,9 @@ import {
 } from './bluetooth.helpers';
 import {BluetoothState} from './bluetooth.interface';
 
+/**
+ * The initial bluetooth state
+ */
 export const initialState: BluetoothState = {
   isReady: false,
   isScanning: false,
@@ -24,6 +27,9 @@ export const initialState: BluetoothState = {
   error: undefined,
 };
 
+/**
+ * The reducer for bluetooth state
+ */
 export const bluetoothSlice = createSlice({
   name: 'bluetooth',
   initialState,

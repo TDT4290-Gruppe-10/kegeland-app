@@ -12,8 +12,9 @@ exports[`Test withQuestionnaire-hoc should render correctly 1`] = `
 >
   <View
     answers={Array []}
-    questionnaireEnabled={false}
-    questionnaireLoading={false}
+    hasQuestionnaire={false}
+    loading={false}
+    openQuestionnaire={[Function]}
     testID="content"
   >
     <View
@@ -40,11 +41,11 @@ exports[`Test withQuestionnaire-hoc should render correctly 1`] = `
         accessibilityRole="button"
         accessibilityState={
           Object {
-            "disabled": false,
+            "disabled": true,
           }
         }
         accessible={true}
-        focusable={true}
+        focusable={false}
         onClick={[Function]}
         onResponderGrant={[Function]}
         onResponderMove={[Function]}

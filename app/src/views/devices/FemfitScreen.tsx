@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {SafeAreaView, ScrollView, StyleSheet} from 'react-native';
 import {
   ActivityIndicator,
@@ -9,7 +9,6 @@ import {
 } from 'react-native-paper';
 
 import FemfitGame from '~lib/femfit/game';
-import useAppSelector from '~hooks/useAppSelector';
 import {DeviceScreenProps} from '~routes/interface';
 import {ExerciseScheme} from '~lib/femfit/game/interface';
 import exercises from '~lib/femfit/game/exercises.json';
@@ -18,47 +17,85 @@ import {getEstimatedExerciseDuration} from '~lib/femfit/game/utils';
 import PageWrapper from '~components/PageWrapper';
 import {WithDeviceContext} from '~hoc/withDevice';
 import {WithQuestionnaireContext} from '~hoc/withQuestionnaire';
+import useAppSelector from '~hooks/useAppSelector';
 
 export type FemfitScreenProps = DeviceScreenProps<'Femfit'> &
   WithDeviceContext &
   WithQuestionnaireContext;
 
+/**
+ * FemfitScreen. Screen for exercising with the femfit-sensor.
+ * The screen will display a selection of exercises, and initiate a game once
+ * an exercise is selected.
+ * @see {@link FemfitScreenProps}
+ */
 const FemfitScreen: React.FC<FemfitScreenProps> = ({
   navigation,
+  session,
   answers,
   device,
-  questionnaireEnabled,
-  questionnaireLoading,
-  toggleQuestionnaire,
+  hasQuestionnaire,
+  loading,
+  openQuestionnaire,
 }) => {
-  const {currentSession} = useAppSelector((state) => state.session);
   const [exercise, setExercise] = useState<ExerciseScheme>();
   const [modalItem, setModalItem] = useState<ExerciseScheme>();
+  const {currentSession} = useAppSelector((state) => state.session);
 
-  const shouldRenderGame = () => {
-    if (device && exercise && !questionnaireLoading) {
-      if (questionnaireEnabled) {
-        if (currentSession === undefined && answers.length === 1) {
-          return true;
-        }
-        return false;
-      }
-      return true;
+  /**
+   * Clear the state
+   */
+  const clear = () => {
+    setExercise(undefined);
+    setModalItem(undefined);
+  };
+
+  /**
+   * Clear the state once the current session is undefined
+   */
+  useEffect(() => {
+    if (!currentSession) {
+      clear();
     }
-    return false;
-  };
+  }, [currentSession]);
 
-  const selectExercise = (item: ExerciseScheme) => {
-    setExercise(item);
-    toggleQuestionnaire();
-  };
-
+  /**
+   * Toggle a details modal for selected exercise
+   * @param item the exericse
+   */
   const toggleDetails = (item?: ExerciseScheme) => {
     if (!item) {
       setModalItem(undefined);
     } else {
       setModalItem(item);
     }
+  };
+
+  /**
+   * Select an exercise
+   * Will trigger a questionnaire if enabled, and initiate the game
+   * @param item the exercise
+   */
+  const selectExercise = (item: ExerciseScheme) => {
+    setExercise(item);
+    if (hasQuestionnaire) {
+      openQuestionnaire();
+    }
+  };
+
+  /**
+   * Boolean function to decide whether or not the state allows for the game
+   * to be rendered.
+   * @returns true if game should be rendered
+   */
+  const shouldRenderGame = () => {
+    if (device && exercise && !loading) {
+      if (hasQuestionnaire) {
+        return session === undefined && answers.length === 1;
+      }
+      return true;
+    }
+    return false;
   };
 
   const render = () => {
@@ -72,7 +109,7 @@ const FemfitScreen: React.FC<FemfitScreenProps> = ({
           />
         </SafeAreaView>
       );
-    } else if (questionnaireLoading) {
+    } else if (loading) {
       return (
         <SafeAreaView style={styles.loader}>
           <ActivityIndicator animating={true} />

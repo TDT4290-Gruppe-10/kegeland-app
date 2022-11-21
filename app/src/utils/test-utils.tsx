@@ -14,6 +14,12 @@ type TestWrapperProps = {
   store?: typeof store;
 };
 
+/**
+ * Wrapper component with redux state. Used when testing components
+ * which requires redux.
+ * @param param0 test wrapper props @see {@link TestWrapperProps}
+ * @returns
+ */
 export const TestWrapper: React.FC<TestWrapperProps> = ({
   children,
   ...props
@@ -26,6 +32,13 @@ export const TestWrapper: React.FC<TestWrapperProps> = ({
     </ReduxProvider>
   );
 };
+
+/**
+ * Custom test renderer which wraps components with a redux store provider
+ * @param ui the component to render
+ * @param options renderer options
+ * @returns test rendered componnet
+ */
 export const customRender = <T extends any>(
   ui: React.ReactElement<T>,
   options?: {

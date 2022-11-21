@@ -15,6 +15,11 @@ export type GameOverDialogProps = {
   goBack: () => void;
 };
 
+/**
+ * Component for rendering the game over dialog
+ * @param param0 the props
+ * @see {@link GameOverDialogProps}
+ */
 const GameOverDialog: React.FC<GameOverDialogProps> = ({
   score,
   exercise,

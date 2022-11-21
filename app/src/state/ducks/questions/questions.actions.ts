@@ -8,6 +8,11 @@ import {
   UploadAnswersDto,
 } from './questions.interface';
 
+/**
+ * Thunk action for uploading the answers stored in state to the database
+ * @param data the request params
+ * @see {@link UploadAnswersDto}
+ */
 export const uploadAnswers = createAsyncThunk(
   'questions/uploadAnswers',
   async (data: UploadAnswersDto) => {
@@ -25,6 +30,11 @@ export const uploadAnswers = createAsyncThunk(
   },
 );
 
+/**
+ * Thunk action for retrieving a questionnaire from the database.
+ * @param data the request params
+ * @see {@link FetchQuestionnaireDTO}
+ */
 export const fetchQuestionnaire = createAsyncThunk(
   'questions/fetchQuestionnaire',
   async (data: FetchQuestionnaireDTO) => {

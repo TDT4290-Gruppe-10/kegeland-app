@@ -6,6 +6,10 @@ import PageWrapper from '~components/PageWrapper';
 import ResetPasswordForm from '~components/forms/ResetPasswordForm';
 import {AuthScreenProps} from '~routes/interface';
 
+/**
+ * ForgotPasswordScreen. Screen resetting forgotten password
+ * @see {@link AuthScreenProps}
+ */
 const ForgotPasswordScreen: React.FC<
   AuthScreenProps<'Forgot password'>
 > = () => {

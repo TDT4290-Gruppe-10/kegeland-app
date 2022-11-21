@@ -8,12 +8,18 @@ import {
 
 import {ExerciseSession, SessionState} from './session.interface';
 
+/**
+ * The initial sessions state
+ */
 export const initialState: SessionState = {
   loading: false,
   error: undefined,
   currentSession: undefined,
 };
 
+/**
+ * The reducer for sessions state
+ */
 export const sessionSlice = createSlice({
   name: 'session',
   initialState,

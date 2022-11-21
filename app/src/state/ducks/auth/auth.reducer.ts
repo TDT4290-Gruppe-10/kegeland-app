@@ -15,6 +15,9 @@ import {
 import {signOutReducer, signInReducer} from './auth.helpers';
 import {AuthState} from './auth.interface';
 
+/**
+ * The initial auth state
+ */
 export const initialState: AuthState = {
   ready: false,
   loading: false,
@@ -24,6 +27,9 @@ export const initialState: AuthState = {
   error: undefined,
 };
 
+/**
+ * The reducer for auth state
+ */
 export const authSlice = createSlice({
   name: 'auth',
   initialState,
