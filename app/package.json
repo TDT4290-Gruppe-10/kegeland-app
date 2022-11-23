@@ -10,8 +10,12 @@
     "prepare": "cd .. && husky install ./app/.husky",
     "test:unit": "jest",
     "start:e2e": "cross-env RN_SRC_EXT=e2e.ts,e2e.js NODE_ENV=test react-native start",
+    "start:integration": "cross-env NODE_ENV=integration react-native start",
     "e2e:build-android-local": "detox build -c android.emu.local",
-    "e2e:test-android-local": "detox test -c android.emu.local"
+    "e2e:test-android-local": "detox test -c android.emu.local",
+    "e2e:local": "detox build -c android.emu.local & detox test -c android.emu.local",
+    "test:e2e": "concurrently \"yarn start:e2e\" \"yarn e2e:local\"",
+    "test:integration": "concurrently \"yarn start:integration\" \"yarn e2e:local\""
   },
   "dependencies": {
     "@hookform/resolvers": "^2.9.8",
@@ -21,6 +25,7 @@
     "@react-navigation/stack": "^6.3.1",
     "@reduxjs/toolkit": "^1.8.5",
     "axios": "^0.27.2",
+    "concurrently": "^7.6.0",
     "cross-env": "^7.0.3",
     "detox": "18.20.2",
     "jest-circus": "^26.6.3",

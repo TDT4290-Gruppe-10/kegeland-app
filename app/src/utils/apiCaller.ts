@@ -6,6 +6,11 @@ import {Token} from '~constants/auth';
 import {isApiError} from './isApiError';
 import {retrieveToken} from './storage';
 
+const URL =
+  process.env.NODE_ENV === 'integration'
+    ? 'https://tdt4290-api.herokuapp.com'
+    : API_URL;
+
 // Initiate a base axios-instance for api calls
 export const httpInstance = axios.create({
   timeout: 5000,
@@ -37,7 +42,7 @@ export type ApiCallerProps = Pick<
  */
 export const apiCaller = <T = unknown>(config: ApiCallerProps) =>
   httpInstance
-    .request<T>({baseURL: `${API_URL}/api/`, ...config})
+    .request<T>({baseURL: `${URL}/api/`, ...config})
     .then((res) => res.data)
     .catch((err) => {
       // Check if response is an Error class
