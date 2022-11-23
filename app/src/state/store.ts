@@ -45,7 +45,9 @@ export const rootReducer = combineReducers({
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 // Check if development-environment is enabled
-const isDev = !['production', 'test'].includes(process.env.NODE_ENV || '');
+const isDev = !['production', 'test', 'integration'].includes(
+  process.env.NODE_ENV || '',
+);
 
 export const store = configureStore({
   reducer: persistedReducer,

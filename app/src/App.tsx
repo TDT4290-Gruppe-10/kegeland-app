@@ -14,7 +14,8 @@ import Router from './routes/Router';
 const Wrapper = withAppWrapper(SafeAreaProvider);
 const ThemedRouter = withThemedNavigation(Router);
 
-const isTest = process.env.NODE_ENV === 'test';
+const isTest =
+  process.env.NODE_ENV === 'test' || process.env.NODE_ENV === 'integration';
 
 const store = isTest ? mockStore() : persistedStore;
 
