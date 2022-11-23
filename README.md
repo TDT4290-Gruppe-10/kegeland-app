@@ -48,7 +48,7 @@ Many pages will also use the custom hooks developed to retrieve data relevant fo
 3. Open the `.env`-file in any text-editor you like and replace the field `API_URL` with your local IP-address.
    - On _MacOS_, your IP-address can be found by running the following command:
      ```node
-     Ipconfig getifaddr en1
+     Ipconfig getifaddr en0
      ```
    - On _Windows_, your IP-address can be found by running the following command:
      ```node
