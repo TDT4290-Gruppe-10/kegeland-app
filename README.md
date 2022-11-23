@@ -204,10 +204,29 @@ Unit tests can be ran by using the following command
 
 #### E2E tests
 
-Unit tests can be ran by using the following command. Make sure you have a emulator available as this is needed to run the e2e-tests
+> E2E-tests are currently only supported using the **Android environment**
+
+End-to-end tests can be ran by using the following command. Make sure you have a emulator available as this is needed to run the e2e-tests
 
 ```node
   yarn test:e2e
 ```
 
-> E2E-tests are currently only supported using the Android environment
+The emulator needs to be named **Pixel_4_API_30**. A configuration in **Android Studio** equal to the image displayed below should suffice.
+![Android Studio configuration](/resources/android_emulator.jpg)
+
+
+#### Integration tests
+
+> Integration tests are currently only supported using the **Android environment**
+
+Integration tests can be ran by using the following command. Make sure you have a emulator available as this is needed to run the integration tests
+
+```node
+  yarn test:integration
+```
+
+The emulator needs to be named **Pixel_4_API_30**. A configuration in **Android Studio** equal to the image displayed below should suffice.
+![Android Studio configuration](/resources/android_emulator.jpg)
+
+
